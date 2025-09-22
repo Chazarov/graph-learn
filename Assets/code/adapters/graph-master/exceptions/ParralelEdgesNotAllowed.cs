@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class ParralelEdgesNotAllowed : MonoBehaviour
+namespace GraphMaster
 {
-    // Start is called before the first frame update
-    void Start()
+    public class ParralelEdgesNotAllowed : Exception
     {
-        
+        public ParralelEdgesNotAllowed() : base("Parallel edges are not allowed in this oriented graph")
+        {
+        }
+
+        public ParralelEdgesNotAllowed(string message) : base(message)
+        {
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

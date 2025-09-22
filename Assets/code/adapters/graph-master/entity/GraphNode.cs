@@ -2,35 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GraphNode
-{   
+namespace GraphMaster
+{
 
-    private List<GraphEdge> edges = new List<GraphEdge>();
-
-    private bool hasParralelsEdges = false;
-
-    private int number;
-
-    private string name;
-
-    private string description;
-
-
-    public void AddEdge(GraphEdge edge)
+    public class GraphNode
     {
-        foreach (GraphEdge childEdge in edges)
+
+        private Graph graph;
+
+        private List<GraphEdge> edges = new List<GraphEdge>();
+
+        private bool hasParralelsEdges = false;
+
+        private int number;
+
+        private string name;
+
+        private string description;
+
+
+        GraphNode(Graph graph)
         {
-            if (childEdge.IsParralel(edge)){
-                hasParralelsEdges = true;
-            }
+            this.graph = graph;
         }
-        this.edges.Add(edge);
-    }
+
+        public void AddEdge(GraphEdge edge)
+        {
+            foreach (GraphEdge childEdge in edges)
+            {
+                if (childEdge.IsParralel(edge))
+                {
+                    if (!graph.AllowedParrallelEdges() && graph.IsOriented())
+                    {
+                        throw new ParralelEdgesNotAllowed();
+                    }
+                    hasParralelsEdges = true;
+                }
+            }
+            this.edges.Add(edge);
+        }
 
 
-    public List<GraphEdge> GetEdges()
-    {
-        return edges;
+        public List<GraphEdge> GetEdges()
+        {
+            return edges;
+        }
+
     }
 
 }
