@@ -19,6 +19,7 @@
 *.booproj
 *.svd
 *.pdb
+*.meta
 
 .vs/
 
