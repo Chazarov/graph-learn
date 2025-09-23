@@ -139,6 +139,11 @@ namespace GraphMaster
         {
             throw new NotImplementedException();
         }
+
+        public bool HasParrallelEdges()
+        {
+            return this.hasParralelsEdges;
+        }
     }
 
 }

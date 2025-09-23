@@ -30,14 +30,9 @@ namespace GraphMaster.Examples
                 var node3 = graph.AddNode(3, "Вершина C");
                 
                 // Добавляем ребра
-                var edge1 = new GraphEdge(node1, node2, graph, 0);
-                edge1.SetWeight(5.0f);
-                
-                var edge2 = new GraphEdge(node2, node3, graph, 1);
-                edge2.SetWeight(3.0f);
-                
-                var edge3 = new GraphEdge(node1, node3, graph, 2);
-                edge3.SetWeight(8.0f);
+                var edge1 = new GraphEdge(node1, node2, 5.0f);
+                var edge2 = new GraphEdge(node2, node3, 3.0f);
+                var edge3 = new GraphEdge(node1, node3, 8.0f);
                 
                 Debug.Log($"✓ Граф создан успешно!");
                 Debug.Log($"  - Количество вершин: {graph.GetNodeCount()}");
@@ -69,9 +64,9 @@ namespace GraphMaster.Examples
                 var node3 = graph.AddNode(3, "End");
                 
                 // Добавляем ребра
-                var edge1 = new GraphEdge(node1, node2, graph);
-                var edge2 = new GraphEdge(node2, node3, graph);
-                var edge3 = new GraphEdge(node1, node3, graph);
+                var edge1 = new GraphEdge(node1, node2);
+                var edge2 = new GraphEdge(node2, node3);
+                var edge3 = new GraphEdge(node1, node3);
                 
                 Debug.Log($"Начальное состояние:");
                 Debug.Log($"  - Вершина 1 имеет {node1.GetEdges().Count} ребер");
@@ -116,10 +111,10 @@ namespace GraphMaster.Examples
                 var node4 = graph.AddNode(4, "Node D");
                 
                 // Добавляем ребра
-                var edge1 = new GraphEdge(node1, node2, graph);
-                var edge2 = new GraphEdge(node2, node3, graph);
-                var edge3 = new GraphEdge(node3, node4, graph);
-                var edge4 = new GraphEdge(node1, node4, graph);
+                var edge1 = new GraphEdge(node1, node2);
+                var edge2 = new GraphEdge(node2, node3);
+                var edge3 = new GraphEdge(node3, node4);
+                var edge4 = new GraphEdge(node1, node4);
                 
                 Debug.Log($"Начальное состояние:");
                 Debug.Log($"  - Количество вершин в графе: {graph.GetNodeCount()}");

@@ -15,47 +15,46 @@ namespace GraphMaster
         private GraphNode targetNode;
         private GraphNode sourceNode;
 
-        private void init(GraphNode sourceNode, GraphNode targetNode)
+        // Конструктор для невзвешенного ребра
+        public GraphEdge(GraphNode sourceNode, GraphNode targetNode)
         {
+            InitializeEdge(sourceNode, targetNode);
+            
+            // Проверка совместимости с типом графа
+            if (graph.IsWeighed())
+                throw new WeightRequiredException("Edges for a weighted graph must be created with an indication of the weight.");
+        }
+
+        // Конструктор для взвешенного ребра
+        public GraphEdge(GraphNode sourceNode, GraphNode targetNode, float weight)
+        {
+            InitializeEdge(sourceNode, targetNode);
+
+            // Проверка совместимости с типом графа
+            if (!graph.IsWeighed())
+                throw new WeightNotAllowedException("Edge cannot have weight in an unweighted graph");
+            
+            SetWeight(weight);
+        }
+
+        // Приватный метод для общей инициализации
+        private void InitializeEdge(GraphNode sourceNode, GraphNode targetNode)
+        {
+            // Валидация параметров
             if (sourceNode == null || targetNode == null)
                 throw new InvalidGraphOperationException("Source and target nodes cannot be null");
             if (sourceNode.GetGraph() != targetNode.GetGraph())
                 throw new InvalidGraphOperationException("Vertices of the same edge cannot belong to different graphs");
-            if (sourceNode == targetNode && !graph.AllowedLoops())
-                throw new LoopNotAllowed();
 
             this.sourceNode = sourceNode;
             this.targetNode = targetNode;
             this.graph = targetNode.GetGraph();
 
+            if (sourceNode == targetNode && !graph.AllowedLoops())
+                throw new LoopNotAllowed();
+
             sourceNode.AddEdge(this);
             targetNode.AddEdge(this);
-        }
-
-        private void ValidateWeightUsage(bool isWeighted)
-        {
-            if (graph == null)
-                throw new InvalidGraphOperationException("Graph can't be null");
-
-            if (isWeighted && !graph.IsWeighed())
-                throw new WeightNotAllowedException("Edge cannot have weight in an unweighted graph");
-
-            if (!isWeighted && graph.IsWeighed())
-                throw new WeightRequiredException("Edges for a weighted graph must be created with an indication of the weight.");
-        }
-
-        public GraphEdge(GraphNode sourceNode, GraphNode targetNode)
-        {
-            init(sourceNode, targetNode);
-            ValidateWeightUsage(false);
-            
-        }
-
-        public GraphEdge(GraphNode sourceNode, GraphNode targetNode, float weight)
-        {
-            init(sourceNode, targetNode);
-            ValidateWeightUsage(true);
-            SetWeight(weight);
         }
         public void DeleteEdge()
         {
