@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Domain;
 
 namespace GraphMaster
 {
 
-    public class GraphNode : domain.GraphNodeInterface
+    public class GraphNode : GraphNodeInterface
     {
 
         private Graph graph;
@@ -49,15 +50,6 @@ namespace GraphMaster
                 throw new ArgumentNullException(nameof(edge), "Edge cannot be null");
             }
 
-            // Проверка на взвешенность графа
-            if (graph.IsWeighed() && !edge.HasWeight())
-            {
-                throw new WeightRequiredException("Edge must have weight in weighted graph");
-            }
-            if (!graph.IsWeighed() && edge.HasWeight())
-            {
-                throw new WeightNotAllowedException("Edge cannot have weight in unweighted graph");
-            }
 
             foreach (GraphEdge childEdge in edges)
             {
@@ -75,12 +67,21 @@ namespace GraphMaster
 
         public void DeleteNode()
         {
-            foreach (GraphEdge edge in edges)
+            var edgesCopy = new List<GraphEdgeInterface>(edges);
+            foreach (GraphEdgeInterface edge in edgesCopy)
             {
-                this.DisconnectEdge(edge);
+                if (edge is GraphEdge graphEdge)
+                {
+                    this.DisconnectEdge(graphEdge);
+                }
             }
             this.edges.Clear();
             this.graph.DeleteNode(this.number);
+        }
+
+        public void DisconnectEdge(GraphEdgeInterface edge)
+        {
+            this.edges.Remove(edge);
         }
 
         public void DisconnectEdge(GraphEdge edge)
@@ -89,9 +90,9 @@ namespace GraphMaster
         }
 
 
-        public List<GraphEdge> GetEdges()
+        public List<GraphEdgeInterface> GetEdges()
         {
-            return new List<GraphEdge>(edges); // Возвращаем копию для безопасности
+            return new List<GraphEdgeInterface>(edges); 
         }
 
         public Graph GetGraph()
@@ -124,6 +125,20 @@ namespace GraphMaster
             this.description = description;
         }
 
+        List<GraphEdgeInterface> GraphNodeInterface.GetEdges()
+        {
+            throw new NotImplementedException();
+        }
+
+        GraphInterface GraphNodeInterface.GetGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddEdge(GraphEdgeInterface edge)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

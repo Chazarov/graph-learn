@@ -5,7 +5,7 @@ using System;
 
 namespace GraphMaster
 {
-    public class WeightNotAllowedException : Exception
+    public class WeightNotAllowedException : GraphMasterException
     {
         public WeightNotAllowedException() : base("Weights are not allowed for edges in this unweighted graph")
         {

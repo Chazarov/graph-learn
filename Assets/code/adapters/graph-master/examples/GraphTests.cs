@@ -30,13 +30,13 @@ namespace GraphMaster.Examples
                 var node3 = graph.AddNode(3, "Вершина C");
                 
                 // Добавляем ребра
-                var edge1 = new GraphEdge(node1, node2, graph);
+                var edge1 = new GraphEdge(node1, node2, graph, 0);
                 edge1.SetWeight(5.0f);
                 
-                var edge2 = new GraphEdge(node2, node3, graph);
+                var edge2 = new GraphEdge(node2, node3, graph, 1);
                 edge2.SetWeight(3.0f);
                 
-                var edge3 = new GraphEdge(node1, node3, graph);
+                var edge3 = new GraphEdge(node1, node3, graph, 2);
                 edge3.SetWeight(8.0f);
                 
                 Debug.Log($"✓ Граф создан успешно!");
@@ -49,6 +49,7 @@ namespace GraphMaster.Examples
             catch (Exception ex)
             {
                 Debug.LogError($"✗ Тест 1 провален: {ex.Message}");
+                Debug.LogError($"✗ Тест 1 Stactrase: {ex.StackTrace}");
             }
         }
 
@@ -153,6 +154,7 @@ namespace GraphMaster.Examples
             catch (Exception ex)
             {
                 Debug.LogError($"✗ Тест 3 провален: {ex.Message}");
+                Debug.LogError("StackTrace: " + ex.StackTrace);
             }
         }
 

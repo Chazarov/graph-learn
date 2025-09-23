@@ -5,7 +5,7 @@ using System;
 
 namespace GraphMaster
 {
-    public class EmptyGraphException : Exception
+    public class EmptyGraphException : GraphMasterException
     {
         public EmptyGraphException() : base("Operation cannot be performed on an empty graph")
         {
@@ -15,8 +15,5 @@ namespace GraphMaster
         {
         }
 
-        public EmptyGraphException(string operation) : base($"Cannot perform {operation} on an empty graph")
-        {
-        }
     }
 }

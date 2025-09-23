@@ -5,7 +5,7 @@ using System;
 
 namespace GraphMaster
 {
-    public class NodeNotFoundException : Exception
+    public class NodeNotFoundException : GraphMasterException
     {
         public NodeNotFoundException() : base("The specified node was not found in the graph")
         {

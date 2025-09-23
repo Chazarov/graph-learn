@@ -5,7 +5,7 @@ using System;
 
 namespace GraphMaster
 {
-    public class DuplicateNodeException : Exception
+    public class DuplicateNodeException : GraphMasterException
     {
         public DuplicateNodeException() : base("A node with this identifier already exists in the graph")
         {

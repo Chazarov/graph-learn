@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using domain;
+using Domain;
 using System;
 using System.Linq;
 
 namespace GraphMaster
 {
-    public class Graph : domain.GraphInterface
+    public class Graph : Domain.GraphInterface
     {
         private bool isOriented = false;
         private bool isWeighed = false;

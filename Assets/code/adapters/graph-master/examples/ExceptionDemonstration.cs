@@ -45,7 +45,7 @@ namespace GraphMaster.Examples
                 // НЕ разрешаем отрицательные ребра
                 var node1 = graph.AddNode(1);
                 var node2 = graph.AddNode(2);
-                var edge = new GraphEdge(node1, node2, -5.0f); // Должно выбросить исключение
+                var edge = new GraphEdge(node1, node2, graph, -5.0f); // Должно выбросить исключение
             }
             catch (NegativeEdgeNotAllowed ex)
             {
@@ -58,7 +58,7 @@ namespace GraphMaster.Examples
                 var graph = new Graph();
                 // НЕ разрешаем петли
                 var node1 = graph.AddNode(1);
-                var edge = new GraphEdge(node1, node1); // Должно выбросить исключение
+                var edge = new GraphEdge(node1, node1, graph); // Должно выбросить исключение
             }
             catch (LoopNotAllowed ex)
             {
@@ -72,7 +72,7 @@ namespace GraphMaster.Examples
                 graph.MakeWeighed();
                 var node1 = graph.AddNode(1);
                 var node2 = graph.AddNode(2);
-                var edge = new GraphEdge(node1, node2); // Ребро без веса во взвешенном графе
+                var edge = new GraphEdge(node1, node2, graph); // Ребро без веса во взвешенном графе
                 edge.GetWeight(); // Должно выбросить исключение
             }
             catch (WeightRequiredException ex)
@@ -87,7 +87,7 @@ namespace GraphMaster.Examples
                 // Граф НЕ взвешенный
                 var node1 = graph.AddNode(1);
                 var node2 = graph.AddNode(2);
-                var edge = new GraphEdge(node1, node2, 10.0f); // Должно выбросить исключение
+                var edge = new GraphEdge(node1, node2, graph, 10.0f); // Должно выбросить исключение
             }
             catch (WeightNotAllowedException ex)
             {
@@ -102,8 +102,8 @@ namespace GraphMaster.Examples
                 // НЕ разрешаем параллельные ребра
                 var node1 = graph.AddNode(1);
                 var node2 = graph.AddNode(2);
-                var edge1 = new GraphEdge(node1, node2);
-                var edge2 = new GraphEdge(node1, node2); // Должно выбросить исключение
+                var edge1 = new GraphEdge(node1, node2, graph);
+                var edge2 = new GraphEdge(node1, node2, graph); // Должно выбросить исключение
             }
             catch (ParralelEdgesNotAllowed ex)
             {
@@ -153,9 +153,9 @@ namespace GraphMaster.Examples
             var node2 = graph.AddNode(2, "Middle");
             var node3 = graph.AddNode(3, "End");
 
-            var edge1 = new GraphEdge(node1, node2, 5.0f);
-            var edge2 = new GraphEdge(node2, node3, -2.0f); // Отрицательное ребро разрешено
-            var edge3 = new GraphEdge(node1, node1, 1.0f);  // Петля разрешена
+            var edge1 = new GraphEdge(node1, node2, graph, 5.0f);
+            var edge2 = new GraphEdge(node2, node3, graph, -2.0f); // Отрицательное ребро разрешено
+            var edge3 = new GraphEdge(node1, node1, graph, 1.0f);  // Петля разрешена
 
             Debug.Log($"✓ Граф создан успешно с {graph.GetNodeCount()} вершинами");
             Debug.Log("=== Корректное использование завершено ===");

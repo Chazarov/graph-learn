@@ -5,7 +5,7 @@ using System;
 
 namespace GraphMaster
 {
-    public class InvalidGraphOperationException : Exception
+    public class InvalidGraphOperationException : GraphMasterException
     {
         public InvalidGraphOperationException() : base("Invalid operation for the current graph configuration")
         {

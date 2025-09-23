@@ -5,7 +5,7 @@ using System;
 
 namespace GraphMaster
 {
-    public class NegativeEdgeNotAllowed : Exception
+    public class NegativeEdgeNotAllowed : GraphMasterException
     {
         public NegativeEdgeNotAllowed() : base("Negative edge weights are not allowed in this graph")
         {

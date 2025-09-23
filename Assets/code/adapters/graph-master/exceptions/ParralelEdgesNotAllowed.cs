@@ -5,7 +5,7 @@ using System;
 
 namespace GraphMaster
 {
-    public class ParralelEdgesNotAllowed : Exception
+    public class ParralelEdgesNotAllowed : GraphMasterException
     {
         public ParralelEdgesNotAllowed() : base("Parallel edges are not allowed in this oriented graph")
         {

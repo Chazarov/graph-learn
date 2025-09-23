@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Domain;
 
 namespace GraphMaster
 {
-    public class GraphEdge : domain.GraphEdgeInterface
+    public class GraphEdge : GraphEdgeInterface
     {
         private float weight;
         private bool hasWeight = false;
@@ -14,29 +15,52 @@ namespace GraphMaster
         private GraphNode targetNode;
         private GraphNode sourceNode;
 
-        public GraphEdge(GraphNode sourceNode, GraphNode targetNode, Graph graph)
+        private void init(GraphNode sourceNode, GraphNode targetNode)
         {
-            if(sourceNode == null || targetNode == null)
-            {
-                throw new ArgumentNullException("Source and target nodes cannot be null");
-            }
+            if (sourceNode == null || targetNode == null)
+                throw new InvalidGraphOperationException("Source and target nodes cannot be null");
+            if (sourceNode.GetGraph() != targetNode.GetGraph())
+                throw new InvalidGraphOperationException("Vertices of the same edge cannot belong to different graphs");
+            if (sourceNode == targetNode && !graph.AllowedLoops())
+                throw new LoopNotAllowed();
 
             this.sourceNode = sourceNode;
             this.targetNode = targetNode;
-            this.graph = graph;
-
-            // Проверка на петли
-            if (sourceNode == targetNode && !graph.AllowedLoops())
-            {
-                throw new LoopNotAllowed();
-            }
+            this.graph = targetNode.GetGraph();
 
             sourceNode.AddEdge(this);
+            targetNode.AddEdge(this);
         }
 
-        public GraphEdge(GraphNode sourceNode, GraphNode targetNode, float weight) : this(sourceNode, targetNode)
+        private void ValidateWeightUsage(bool isWeighted)
         {
+            if (graph == null)
+                throw new InvalidGraphOperationException("Graph can't be null");
+
+            if (isWeighted && !graph.IsWeighed())
+                throw new WeightNotAllowedException("Edge cannot have weight in an unweighted graph");
+
+            if (!isWeighted && graph.IsWeighed())
+                throw new WeightRequiredException("Edges for a weighted graph must be created with an indication of the weight.");
+        }
+
+        public GraphEdge(GraphNode sourceNode, GraphNode targetNode)
+        {
+            init(sourceNode, targetNode);
+            ValidateWeightUsage(false);
+            
+        }
+
+        public GraphEdge(GraphNode sourceNode, GraphNode targetNode, float weight)
+        {
+            init(sourceNode, targetNode);
+            ValidateWeightUsage(true);
             SetWeight(weight);
+        }
+        public void DeleteEdge()
+        {
+            this.GetSourceNode().DisconnectEdge(this);
+            this.GetTargetNode().DisconnectEdge(this);
         }
    
         public float GetWeight()
@@ -66,25 +90,25 @@ namespace GraphMaster
             this.hasWeight = true;
         }
 
+
         public bool HasWeight()
         {
             return hasWeight;
         }
 
-        public GraphNode GetSourceNode()
+        public GraphNodeInterface GetSourceNode()
         {
             return this.sourceNode;
         }
 
-        public GraphNode GetTargetNode()
+        public GraphNodeInterface GetTargetNode()
         {
             return this.targetNode;
         }
 
-        public bool IsParralel(GraphEdge other)
+        public bool IsParralel(GraphEdgeInterface other)
         {
             if (other == null) return false;
-            // Параллельные ребра - это ребра, которые соединяют одни и те же вершины
             return other.GetTargetNode() == this.GetTargetNode() && 
                    other.GetSourceNode() == this.GetSourceNode();
         }

@@ -5,7 +5,7 @@ using System;
 
 namespace GraphMaster
 {
-    public class WeightRequiredException : Exception
+    public class WeightRequiredException : GraphMasterException
     {
         public WeightRequiredException() : base("Weight is required for edges in this weighted graph")
         {
