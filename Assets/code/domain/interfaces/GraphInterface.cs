@@ -1,3 +1,4 @@
+using GraphMaster;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Domain
         public bool AllowedLoops();
         public bool IsOriented();
         public bool IsWeighed();
+        public bool HasNodes();
 
         public void MakeOriented();
         public void MakeParralel();
@@ -18,12 +20,19 @@ namespace Domain
         public void AllowNegative();
         public void AllowLoops();
 
+        public List<GraphNodeInterface> GetNodes();
+
+        public int GetNodeCount();
+
+        public GraphNodeInterface AddNode(GraphNodeInterface node);
+
+        public GraphNodeInterface AddNode(string name);
+
+        public GraphNodeInterface AddNode(string name, string description);
+
+
         public void DeleteNode(int nodeNumber);
 
-        // Методы для работы с алгоритмами
-        public List<GraphMaster.GraphNode> MakeDijkstra();
-        public List<GraphMaster.GraphNode> MakeBreadth();
-        public List<GraphMaster.GraphNode> MakeDepth();
-        public List<GraphMaster.GraphNode> MakeBF();
+        
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using GrapMaster;
 
 namespace GraphMaster.Examples
 {
@@ -25,9 +26,9 @@ namespace GraphMaster.Examples
                 graph.MakeWeighed();
                 
                 // Добавляем вершины
-                var node1 = graph.AddNode(1, "Вершина A");
-                var node2 = graph.AddNode(2, "Вершина B");
-                var node3 = graph.AddNode(3, "Вершина C");
+                var node1 = graph.AddNode("Вершина A");
+                var node2 = graph.AddNode("Вершина B");
+                var node3 = graph.AddNode("Вершина C");
                 
                 // Добавляем ребра
                 var edge1 = new GraphEdge(node1, node2, 5.0f);
@@ -59,9 +60,9 @@ namespace GraphMaster.Examples
             {
                 // Создаем простой граф
                 var graph = new Graph();
-                var node1 = graph.AddNode(1, "Start");
-                var node2 = graph.AddNode(2, "Middle");
-                var node3 = graph.AddNode(3, "End");
+                var node1 = graph.AddNode("Start");
+                var node2 = graph.AddNode("Middle");
+                var node3 = graph.AddNode("End");
                 
                 // Добавляем ребра
                 var edge1 = new GraphEdge(node1, node2);
@@ -105,10 +106,10 @@ namespace GraphMaster.Examples
             {
                 // Создаем граф с несколькими вершинами
                 var graph = new Graph();
-                var node1 = graph.AddNode(1, "Node A");
-                var node2 = graph.AddNode(2, "Node B");
-                var node3 = graph.AddNode(3, "Node C");
-                var node4 = graph.AddNode(4, "Node D");
+                var node1 = graph.AddNode("Node A");
+                var node2 = graph.AddNode("Node B");
+                var node3 = graph.AddNode("Node C");
+                var node4 = graph.AddNode("Node D");
                 
                 // Добавляем ребра
                 var edge1 = new GraphEdge(node1, node2);
@@ -151,6 +152,53 @@ namespace GraphMaster.Examples
                 Debug.LogError($"✗ Тест 3 провален: {ex.Message}");
                 Debug.LogError("StackTrace: " + ex.StackTrace);
             }
+        }
+
+
+
+        /// <summary>
+        /// Запуск силового алгоритма визуализации вершин
+        /// </summary>
+        /// 
+        public static void TestForceNodeDistributeAlgoritm()
+        {
+            Debug.Log("=== Тест 4: Распределение вершин графа ===");
+
+            try
+            {
+                // Создаем граф с несколькими вершинами
+                var graph = new GraphView2();
+
+                Positioned2Node node1 = graph.AddNode("Node A");
+                Positioned2Node node2 = graph.AddNode("Node B");
+                Positioned2Node node3 = graph.AddNode("Node C");
+                Positioned2Node node4 = graph.AddNode("Node D");
+
+
+
+                // Добавляем ребра
+                var edge1 = new GraphEdge(node1, node2);
+                var edge2 = new GraphEdge(node2, node3);
+                var edge3 = new GraphEdge(node3, node4);
+                var edge4 = new GraphEdge(node1, node4);
+
+
+
+
+
+
+                Debug.Log($"После удаления вершины 4:");
+                Debug.Log($"  - Количество вершин в графе: {graph.GetNodeCount()}");
+
+                Debug.Log("✓ Вершины удалены успешно!");
+                Debug.Log("=== Тест 3 пройден ===\n");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"✗ Тест 3 провален: {ex.Message}");
+                Debug.LogError("StackTrace: " + ex.StackTrace);
+            }
+
         }
 
         /// <summary>

@@ -11,12 +11,12 @@ namespace GraphMaster
         private float weight;
         private bool hasWeight = false;
 
-        private Graph graph;
-        private GraphNode targetNode;
-        private GraphNode sourceNode;
+        private GraphInterface graph;
+        private GraphNodeInterface targetNode;
+        private GraphNodeInterface sourceNode;
 
         // Конструктор для невзвешенного ребра
-        public GraphEdge(GraphNode sourceNode, GraphNode targetNode)
+        public GraphEdge(GraphNodeInterface sourceNode, GraphNodeInterface targetNode)
         {
             InitializeEdge(sourceNode, targetNode);
             
@@ -26,7 +26,7 @@ namespace GraphMaster
         }
 
         // Конструктор для взвешенного ребра
-        public GraphEdge(GraphNode sourceNode, GraphNode targetNode, float weight)
+        public GraphEdge(GraphNodeInterface sourceNode, GraphNodeInterface targetNode, float weight)
         {
             InitializeEdge(sourceNode, targetNode);
 
@@ -37,8 +37,7 @@ namespace GraphMaster
             SetWeight(weight);
         }
 
-        // Приватный метод для общей инициализации
-        private void InitializeEdge(GraphNode sourceNode, GraphNode targetNode)
+        private void InitializeEdge(GraphNodeInterface sourceNode, GraphNodeInterface targetNode)
         {
             // Валидация параметров
             if (sourceNode == null || targetNode == null)

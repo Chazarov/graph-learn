@@ -10,7 +10,7 @@ namespace GraphMaster
     public class GraphNode : GraphNodeInterface
     {
 
-        private Graph graph;
+        private GraphInterface graph;
 
         private List<GraphEdgeInterface> edges = new List<GraphEdgeInterface>();
 
@@ -23,22 +23,23 @@ namespace GraphMaster
         private string description;
 
 
-        public GraphNode(Graph graph, int number)
+        public GraphNode(GraphInterface graph)
         {
             if (graph == null)
             {
                 throw new ArgumentNullException(nameof(graph), "Graph cannot be null");
             }
+            graph.AddNode(this);
             this.graph = graph;
-            this.number = number;
+            this.number = graph.GetNodeCount() + 1;
         }
 
-        public GraphNode(Graph graph, int number, string name) : this(graph, number)
+        public GraphNode(Graph graph, string name) : this(graph)
         {
             this.name = name;
         }
 
-        public GraphNode(Graph graph, int number, string name, string description) : this(graph, number, name)
+        public GraphNode(Graph graph, string name, string description) : this(graph, name)
         {
             this.description = description;
         }
@@ -95,7 +96,7 @@ namespace GraphMaster
             return new List<GraphEdgeInterface>(edges); 
         }
 
-        public Graph GetGraph()
+        public GraphInterface GetGraph()
         {
             return graph;
         }
