@@ -11,10 +11,11 @@ namespace Domain
 
         public void DisconnectEdge(GraphEdgeInterface edge);
         public List<GraphEdgeInterface> GetEdges();
-        public GraphInterface GetGraph();
         public void AddEdge(GraphEdgeInterface edge);
         public void DeleteNode();
         public void SetName(string name);
         public void SetDescription(string description);
+
+        public GraphInterface<GraphNodeInterface> GetGraph();
     }
 }

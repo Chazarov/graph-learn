@@ -1,4 +1,5 @@
 using Domain;
+using GrapMaster;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
@@ -8,21 +9,21 @@ namespace GraphMaster
     public class Positioned2Node: GraphNodeInterface
     {
         private Vector2 position;
-        private GraphNodeInterface node;
+        private GraphNode node;
 
 
-        public Positioned2Node(Vector2 position, GraphNodeInterface node)
+        public Positioned2Node(Vector2 position, GraphNode node)
         {
             this.position = position;
             this.node = node;
 
         }
 
-        public Positioned2Node(Vector2 position, GraphInterface graph): this(position, new GraphNode(graph))
+        public Positioned2Node(Vector2 position, GraphView2 graph): this(position, new GraphNode(graph.getBase()))
         { }
 
 
-        public Positioned2Node(GraphNodeInterface node) : this(Vector2.Zero, node)
+        public Positioned2Node(GraphNode node) : this(Vector2.Zero, node)
         { }
 
         public Vector2 GetPosition()
@@ -40,9 +41,9 @@ namespace GraphMaster
             return this.node;
         }
 
-        public GraphInterface GetGraph()
+        public GraphInterface<Positioned2Node> GetGraph()
         {
-            return this.node.GetGraph();
+            return this.GetGraph();
         }
 
         public List<GraphEdgeInterface> GetNodeEdges()
@@ -103,6 +104,11 @@ namespace GraphMaster
         public void SetDescription(string description)
         {
             this.SetDescription(description);
+        }
+
+        internal GraphNode getOriginal()
+        {
+            return this.node;
         }
     }
 }

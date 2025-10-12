@@ -11,7 +11,7 @@ namespace GraphMaster
         private float weight;
         private bool hasWeight = false;
 
-        private GraphInterface graph;
+        private GraphInterface<GraphNodeInterface> graph;
         private GraphNodeInterface targetNode;
         private GraphNodeInterface sourceNode;
 

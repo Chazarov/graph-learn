@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace GraphMaster
 {
-    public class Graph : Domain.GraphInterface
+    public class Graph : Domain.GraphInterface<GraphNode>
     {
         private bool isOriented = false;
         private bool isWeighed = false;
@@ -17,7 +17,7 @@ namespace GraphMaster
         private bool allowNegativeEdges = false;
         private bool allowLoops = false;
 
-        private List<GraphNodeInterface> nodes = new List<GraphNodeInterface>();
+        private List<GraphNode> nodes = new List<GraphNode>();
 
         public bool AllowedParrallelEdges()
         {
@@ -69,7 +69,7 @@ namespace GraphMaster
             allowLoops = true;
         }
 
-        public void AddNode(GraphNodeInterface node)
+        internal GraphNode addNode(GraphNodeInterface node)
         {
             if (nodes.Any(n => n == node))
             {
@@ -77,6 +77,7 @@ namespace GraphMaster
             }
 
             nodes.Add(node);
+            return node;
         }
 
         public GraphNode AddNode(string name, string description)
@@ -92,13 +93,6 @@ namespace GraphMaster
             nodes.Add(node);
             return node;
         }
-        
-        public GraphNode AddNode()
-        {
-            var node = new GraphNode(this);
-            nodes.Add(node);
-            return node;
-        }
 
         public void DeleteNode(int nodeNumber)
         {
@@ -110,7 +104,7 @@ namespace GraphMaster
             this.nodes.Remove(node);
         }
 
-        public GraphNodeInterface GetNode(int number)
+        public GraphNode GetNode(int number)
         {
             var node = nodes.FirstOrDefault(n => n.GetNumber() == number);
             if (node == null)
@@ -120,9 +114,9 @@ namespace GraphMaster
             return node;
         }
 
-        public List<GraphNodeInterface> GetNodes()
+        public List<GraphNode> GetNodes()
         {
-            return new List<GraphNodeInterface>(this.nodes);
+            return new List<GraphNode>(this.nodes);
         }
 
         public bool HasNodes()
@@ -135,6 +129,7 @@ namespace GraphMaster
             return nodes.Count;
         }
 
+       
     }
 }
 

@@ -10,7 +10,7 @@ namespace GraphMaster
     public class GraphNode : GraphNodeInterface
     {
 
-        private GraphInterface graph;
+        private GraphInterface<GraphNodeInterface> graph;
 
         private List<GraphEdgeInterface> edges = new List<GraphEdgeInterface>();
 
@@ -23,28 +23,28 @@ namespace GraphMaster
         private string description;
 
 
-        public GraphNode(GraphInterface graph)
+        public GraphNode(GraphInterface<GraphNodeInterface> graph)
         {
             if (graph == null)
             {
                 throw new ArgumentNullException(nameof(graph), "Graph cannot be null");
             }
-            graph.AddNode(this);
+            graph.addNode(this);
             this.graph = graph;
             this.number = graph.GetNodeCount() + 1;
         }
 
-        public GraphNode(Graph graph, string name) : this(graph)
+        public GraphNode(GraphInterface<GraphNodeInterface> graph, string name) : this(graph)
         {
             this.name = name;
         }
 
-        public GraphNode(Graph graph, string name, string description) : this(graph, name)
+        public GraphNode(GraphInterface<GraphNodeInterface> graph, string name, string description) : this(graph, name)
         {
             this.description = description;
         }
 
-        public void AddEdge(GraphEdge edge)
+        public void AddEdge(GraphEdgeInterface edge)
         {
             if (edge == null)
             {
@@ -96,7 +96,7 @@ namespace GraphMaster
             return new List<GraphEdgeInterface>(edges); 
         }
 
-        public GraphInterface GetGraph()
+        public GraphInterface<GraphNodeInterface> GetGraph()
         {
             return graph;
         }
@@ -126,21 +126,7 @@ namespace GraphMaster
             this.description = description;
         }
 
-        List<GraphEdgeInterface> GraphNodeInterface.GetEdges()
-        {
-            throw new NotImplementedException();
-        }
-
-        GraphInterface GraphNodeInterface.GetGraph()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddEdge(GraphEdgeInterface edge)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public bool HasParrallelEdges()
         {
             return this.hasParralelsEdges;

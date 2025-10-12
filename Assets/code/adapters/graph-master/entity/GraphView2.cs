@@ -8,11 +8,11 @@ using System.Linq;
 using System.Numerics;
 
 namespace GrapMaster {
-    public class GraphView2: GraphInterface
+    public class GraphView2: Graph
     {
         private List<Positioned2Node> nodes = new List<Positioned2Node>();
 
-        private GraphInterface graph;
+        private Graph graph;
 
 
         public GraphView2(Graph graph)
@@ -181,10 +181,6 @@ namespace GrapMaster {
             graph.AllowLoops();
         }
 
-        List<GraphNodeInterface> GraphInterface.GetNodes()
-        {
-            return graph.GetNodes();
-        }
 
         public int GetNodeCount()
         {
@@ -197,9 +193,10 @@ namespace GrapMaster {
             graph.DeleteNode(nodeNumber);
         }
 
-        GraphNodeInterface AddNode(GraphNodeInterface node)
+        internal GraphNodeInterface addNode(Positioned2Node node)
         {
-            GraphNodeInterface node1 =  graph.AddNode(node);
+
+            GraphNodeInterface node1 =  graph.addNode(node);
             return new Positioned2Node(node1);
         }
 
@@ -210,9 +207,15 @@ namespace GrapMaster {
 
         public GraphNodeInterface AddNode(string name, string description)
         {
-            GraphNodeInterface node = new GraphNode(this.graph);
+            GraphNode baseN = new GraphNode(this, name, description);
+            Positioned2Node node = new Positioned2Node(baseN);
 
             return this.AddNode(node);
+        }
+
+        internal Graph getBase()
+        {
+            return graph;
         }
     } 
 

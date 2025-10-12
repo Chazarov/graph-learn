@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Domain
 {
-    public interface GraphInterface
+    public interface GraphInterface< TNode> where TNode : GraphNodeInterface
     {
         public bool AllowedParrallelEdges();
         public bool AllowedNegativeEdges();
@@ -20,15 +20,16 @@ namespace Domain
         public void AllowNegative();
         public void AllowLoops();
 
-        public List<GraphNodeInterface> GetNodes();
+        public List<TNode> GetNodes();
 
         public int GetNodeCount();
 
-        public GraphNodeInterface AddNode(GraphNodeInterface node);
 
-        public GraphNodeInterface AddNode(string name);
+        public TNode AddNode(string name);
 
-        public GraphNodeInterface AddNode(string name, string description);
+        public TNode AddNode(string name, string description);
+
+        internal TNode addNode(GraphNodeInterface node);
 
 
         public void DeleteNode(int nodeNumber);
