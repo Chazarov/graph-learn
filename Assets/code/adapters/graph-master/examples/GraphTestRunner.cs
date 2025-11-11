@@ -4,9 +4,6 @@ using UnityEngine;
 
 namespace GraphMaster.Examples
 {
-    /// <summary>
-    /// Компонент для запуска тестов графа в Unity
-    /// </summary>
     public class GraphTestRunner : MonoBehaviour
     {
         [Header("Настройки тестов")]
@@ -14,6 +11,7 @@ namespace GraphMaster.Examples
         [SerializeField] private bool runTestCreation = true;
         [SerializeField] private bool runTestEdgeDeletion = true;
         [SerializeField] private bool runTestNodeDeletion = true;
+        [SerializeField] private bool runTestCompleteCleanup = true;
 
         void Start()
         {
@@ -23,9 +21,6 @@ namespace GraphMaster.Examples
             }
         }
 
-        /// <summary>
-        /// Запуск выбранных тестов
-        /// </summary>
         public void RunSelectedTests()
         {
             Debug.Log("=== ЗАПУСК ТЕСТОВ ГРАФА ===");
@@ -45,43 +40,42 @@ namespace GraphMaster.Examples
                 GraphTests.TestNodeDeletion();
             }
 
+            if (runTestCompleteCleanup)
+            {
+                GraphTests.TestCompleteCleanup();
+            }
+
             Debug.Log("=== ТЕСТЫ ЗАВЕРШЕНЫ ===");
         }
 
-        /// <summary>
-        /// Запуск всех тестов (можно вызвать из Inspector)
-        /// </summary>
         [ContextMenu("Запустить все тесты")]
         public void RunAllTests()
         {
             GraphTests.RunAllTests();
         }
 
-        /// <summary>
-        /// Запуск только теста создания графа
-        /// </summary>
         [ContextMenu("Тест: Создание графа")]
         public void RunCreationTest()
         {
             GraphTests.TestGraphCreation();
         }
 
-        /// <summary>
-        /// Запуск только теста удаления ребер
-        /// </summary>
         [ContextMenu("Тест: Удаление ребер")]
         public void RunEdgeDeletionTest()
         {
             GraphTests.TestEdgeDeletion();
         }
 
-        /// <summary>
-        /// Запуск только теста удаления вершин
-        /// </summary>
         [ContextMenu("Тест: Удаление вершин")]
         public void RunNodeDeletionTest()
         {
             GraphTests.TestNodeDeletion();
+        }
+
+        [ContextMenu("Тест: Полная очистка")]
+        public void RunCompleteCleanupTest()
+        {
+            GraphTests.TestCompleteCleanup();
         }
     }
 }

@@ -4,9 +4,6 @@ using UnityEditor;
 
 namespace GraphMaster.Examples
 {
-    /// <summary>
-    /// Editor-скрипт для запуска тестов через меню Unity
-    /// </summary>
     public static class GraphTestsEditor
     {
         [MenuItem("Graph Tests/Запустить все тесты")]
@@ -35,6 +32,13 @@ namespace GraphMaster.Examples
         {
             Debug.Log("Запуск теста удаления вершин...");
             GraphTests.TestNodeDeletion();
+        }
+
+        [MenuItem("Graph Tests/Тест полной очистки")]
+        public static void RunCompleteCleanupTest()
+        {
+            Debug.Log("Запуск теста полной очистки...");
+            GraphTests.TestCompleteCleanup();
         }
 
         [MenuItem("Graph Tests/Очистить консоль")]
