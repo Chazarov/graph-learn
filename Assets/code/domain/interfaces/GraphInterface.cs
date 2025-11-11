@@ -5,34 +5,25 @@ using UnityEngine;
 
 namespace Domain
 {
-    public interface GraphInterface< TNode> where TNode : GraphNodeInterface
+    public interface GraphInterface <TNode, TEdge> where TNode : GraphNodeInterface where TEdge : GraphEdgeInterface
     {
-        public bool AllowedParrallelEdges();
-        public bool AllowedNegativeEdges();
-        public bool AllowedLoops();
-        public bool IsOriented();
-        public bool IsWeighed();
         public bool HasNodes();
 
-        public void MakeOriented();
-        public void MakeParralel();
-        public void MakeWeighed();
-        public void AllowNegative();
-        public void AllowLoops();
 
         public List<TNode> GetNodes();
+        public List<TEdge> GetEdges();
+
+        public TNode GetNode(string name);
 
         public int GetNodeCount();
 
 
-        public TNode AddNode(string name);
 
-        public TNode AddNode(string name, string description);
+        public TNode AddNode(TNode node);
+        
+        public TEdge AddEdge(TEdge edge);
 
-        internal TNode addNode(GraphNodeInterface node);
-
-
-        public void DeleteNode(int nodeNumber);
+        public void DeleteNode(string name);
 
         
     }

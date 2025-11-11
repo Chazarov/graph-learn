@@ -6,24 +6,27 @@ using System.Numerics;
 
 namespace GraphMaster
 {
-    public class Positioned2Node: GraphNodeInterface
+    public class Positioned2Node: GraphNode
     {
         private Vector2 position;
-        private GraphNode node;
 
 
-        public Positioned2Node(Vector2 position, GraphNode node)
+        public Positioned2Node(Vector2 position, IMutableGraph<GraphNodeInterface> graph, string name, string description) : base(graph, name, description)
         {
             this.position = position;
-            this.node = node;
-
         }
 
-        public Positioned2Node(Vector2 position, GraphView2 graph): this(position, new GraphNode(graph.getBase()))
-        { }
+        public Positioned2Node(Vector2 position, IMutableGraph<GraphNodeInterface> graph, string name) : base(graph, name)
+        {
+            this.position = position;
+        }
 
+        public Positioned2Node(Vector2 position, IMutableGraph<GraphNodeInterface> graph): base(graph)
+        {
+            this.position = position;
+        }
 
-        public Positioned2Node(GraphNode node) : this(Vector2.Zero, node)
+        public Positioned2Node(IMutableGraph<GraphNodeInterface> graph) : this(Vector2.Zero, graph)
         { }
 
         public Vector2 GetPosition()
@@ -36,80 +39,8 @@ namespace GraphMaster
             this.position = position;
         }
 
-        public GraphNodeInterface GetGraphNode()
-        {
-            return this.node;
-        }
 
-        public GraphInterface<Positioned2Node> GetGraph()
-        {
-            return this.GetGraph();
-        }
 
-        public List<GraphEdgeInterface> GetNodeEdges()
-        {
-            return this.node.GetEdges();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || obj.GetType() != this.GetType())
-                return false;
-
-            Positioned2Node other = (Positioned2Node)obj;
-
-            return this.GetGraphNode().Equals(other.GetGraphNode());
-        }
-
-        public int GetNumber()
-        {
-            return this.node.GetNumber();
-        }
-
-        public string GetName()
-        {
-            return this.node.GetName();
-        }
-
-        public string GetDescription()
-        {
-            return this.node.GetDescription();
-        }
-
-        public void DisconnectEdge(GraphEdgeInterface edge)
-        {
-            this.node.DisconnectEdge(edge);
-        }
-
-        public List<GraphEdgeInterface> GetEdges()
-        {
-            return this.node.GetEdges();
-        }
-
-        public void AddEdge(GraphEdgeInterface edge)
-        {
-            this.AddEdge(edge);
-        }
-
-        public void DeleteNode()
-        {
-            this.node.DeleteNode();
-        }
-
-        public void SetName(string name)
-        {
-            this.SetName(name);
-        }
-
-        public void SetDescription(string description)
-        {
-            this.SetDescription(description);
-        }
-
-        internal GraphNode getOriginal()
-        {
-            return this.node;
-        }
     }
 }
 

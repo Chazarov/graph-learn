@@ -9,37 +9,23 @@ namespace GraphMaster
 
     public class GraphNode : GraphNodeInterface
     {
-
-        private GraphInterface<GraphNodeInterface> graph;
-
         private List<GraphEdgeInterface> edges = new List<GraphEdgeInterface>();
 
         private bool hasParralelsEdges = false;
 
-        private int number;
 
         private string name;
 
         private string description;
 
 
-        public GraphNode(GraphInterface<GraphNodeInterface> graph)
-        {
-            if (graph == null)
-            {
-                throw new ArgumentNullException(nameof(graph), "Graph cannot be null");
-            }
-            graph.addNode(this);
-            this.graph = graph;
-            this.number = graph.GetNodeCount() + 1;
-        }
 
-        public GraphNode(GraphInterface<GraphNodeInterface> graph, string name) : this(graph)
+        public GraphNode(string name)
         {
             this.name = name;
         }
 
-        public GraphNode(GraphInterface<GraphNodeInterface> graph, string name, string description) : this(graph, name)
+        public GraphNode(string name, string description) : this(name)
         {
             this.description = description;
         }
@@ -51,41 +37,10 @@ namespace GraphMaster
                 throw new ArgumentNullException(nameof(edge), "Edge cannot be null");
             }
 
-
-            foreach (GraphEdge childEdge in edges)
-            {
-                if (childEdge.IsParralel(edge))
-                {
-                    if (!graph.AllowedParrallelEdges() && graph.IsOriented())
-                    {
-                        throw new ParralelEdgesNotAllowed();
-                    }
-                    hasParralelsEdges = true;
-                }
-            }
             this.edges.Add(edge);
         }
 
-        public void DeleteNode()
-        {
-            var edgesCopy = new List<GraphEdgeInterface>(edges);
-            foreach (GraphEdgeInterface edge in edgesCopy)
-            {
-                if (edge is GraphEdge graphEdge)
-                {
-                    this.DisconnectEdge(graphEdge);
-                }
-            }
-            this.edges.Clear();
-            this.graph.DeleteNode(this.number);
-        }
-
         public void DisconnectEdge(GraphEdgeInterface edge)
-        {
-            this.edges.Remove(edge);
-        }
-
-        public void DisconnectEdge(GraphEdge edge)
         {
             this.edges.Remove(edge);
         }
@@ -94,16 +49,6 @@ namespace GraphMaster
         public List<GraphEdgeInterface> GetEdges()
         {
             return new List<GraphEdgeInterface>(edges); 
-        }
-
-        public GraphInterface<GraphNodeInterface> GetGraph()
-        {
-            return graph;
-        }
-
-        public int GetNumber()
-        {
-            return number;
         }
 
         public string GetName()

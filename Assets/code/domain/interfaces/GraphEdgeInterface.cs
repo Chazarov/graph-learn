@@ -8,7 +8,6 @@ namespace Domain
         public GraphNodeInterface GetSourceNode();
         public GraphNodeInterface GetTargetNode();
 
-        public void DeleteEdge();
         public bool IsParralel(GraphEdgeInterface other);
     }
 }

@@ -1,14 +1,12 @@
 using Domain;
 using GraphMaster;
-using JetBrains.Annotations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 
-namespace GrapMaster {
-    public class GraphView2: Graph
+namespace GrapMaster
+{
+    public class GraphView2: IMutableGraph<Positioned2Node>
     {
         private List<Positioned2Node> nodes = new List<Positioned2Node>();
 
@@ -22,14 +20,6 @@ namespace GrapMaster {
 
         public GraphView2(): this(new Graph())
         { }
-
-        public List<Positioned2Node> GetNodes()
-        {
-            return this.nodes; 
-        }
-
-
-
 
         //  ¬нимательно сделать конструкторы
 
@@ -72,12 +62,12 @@ namespace GrapMaster {
                 // ¬ычисл€ем прит€гивающие силы дл€ вершин, св€занных ребрами
                 for (int v = 0; v < this.nodes.Count; v++)
                 {
-                    var edges = this.nodes[v].GetNodeEdges();
+                    var edges = this.nodes[v].GetEdges();
                     foreach (var edge in edges)
                     {
-                        var otherNode = edge.GetSourceNode() == this.nodes[v].GetGraphNode() ?
+                        var otherNode = edge.GetSourceNode() == this.nodes[v].Get() ?
                             edge.GetTargetNode() : edge.GetSourceNode();
-
+                        ???????????????????/
                         int u = this.nodes.FindIndex(n => n.GetGraphNode() == otherNode);
                         if (u < 0) continue;
 
@@ -193,29 +183,29 @@ namespace GrapMaster {
             graph.DeleteNode(nodeNumber);
         }
 
-        internal GraphNodeInterface addNode(Positioned2Node node)
-        {
 
-            GraphNodeInterface node1 =  graph.addNode(node);
-            return new Positioned2Node(node1);
-        }
-
-        public GraphNodeInterface AddNode(string name)
+        public Positioned2Node AddNode(string name)
         {
             return this.AddNode(name, "");
         }
 
-        public GraphNodeInterface AddNode(string name, string description)
+        public Positioned2Node AddNode(string name, string description)
         {
-            GraphNode baseN = new GraphNode(this, name, description);
-            Positioned2Node node = new Positioned2Node(baseN);
+            Positioned2Node node = new Positioned2Node(System.Numerics.Vector2.Zero, (IMutableGraph<GraphNodeInterface>)this, name);
 
             return this.AddNode(node);
         }
 
-        internal Graph getBase()
+
+        public List<Positioned2Node> GetNodes()
         {
-            return graph;
+            return this.nodes;
+        }
+
+        public Positioned2Node AddNode(Positioned2Node node)
+        {
+            GraphNodeInterface node1 = graph.AddNode(node);
+            return new Positioned2Node((IMutableGraph<GraphNodeInterface>)this);
         }
     } 
 

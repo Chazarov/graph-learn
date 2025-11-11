@@ -6,10 +6,11 @@ using System;
 using System.Linq;
 using Unity.VisualScripting;
 using System.Xml.Linq;
+using Unity.Collections;
 
 namespace GraphMaster
 {
-    public class Graph : Domain.GraphInterface<GraphNode>
+    public class MyGraph<TNode, TEdge> : GraphInterface<TNode, TEdge> where TNode : Domain.GraphNodeInterface where TEdge : Domain.GraphEdgeInterface
     {
         private bool isOriented = false;
         private bool isWeighed = false;
@@ -17,106 +18,74 @@ namespace GraphMaster
         private bool allowNegativeEdges = false;
         private bool allowLoops = false;
 
-        private List<GraphNode> nodes = new List<GraphNode>();
+        private List<TNode> nodes = new List<TNode>();
+        private List<TEdge> edges = new List<TEdge>();
+        private Dictionary<string, TNode> nodesMap = new Dictionary<string, TNode>();
 
-        public bool AllowedParrallelEdges()
+
+
+
+        public TNode GetNode(string name)
         {
-            return allowParallelEdges;
-        }
-
-        public bool AllowedNegativeEdges()
-        {
-            return allowNegativeEdges;
-        }
-
-        public bool AllowedLoops()
-        {
-            return allowLoops;
-        }
-
-        public bool IsOriented()
-        {
-            return isOriented;
-        }
-
-        public bool IsWeighed()
-        {
-            return isWeighed;
-        }
-
-        public void MakeOriented()
-        {
-            isOriented = true;
-        }
-
-        public void MakeParralel()
-        {
-            allowParallelEdges = true;
-        }
-
-        public void MakeWeighed()
-        {
-            isWeighed = true;
-        }
-
-        public void AllowNegative()
-        {
-            allowNegativeEdges = true;
-        }
-
-        public void AllowLoops()
-        {
-            allowLoops = true;
-        }
-
-        internal GraphNode addNode(GraphNodeInterface node)
-        {
-            if (nodes.Any(n => n == node))
-            {
-                throw new DuplicateNodeException(node.ToString());
-            }
-
-            nodes.Add(node);
-            return node;
-        }
-
-        public GraphNode AddNode(string name, string description)
-        {
-            var node = new GraphNode(this, name, description);
-            nodes.Add(node);
-            return node;
-        }
-
-        public GraphNode AddNode(string name)
-        {
-            var node = new GraphNode(this, name);
-            nodes.Add(node);
-            return node;
-        }
-
-        public void DeleteNode(int nodeNumber)
-        {
-            var node = nodes.FirstOrDefault(n => n.GetNumber() == nodeNumber);
+            var node = nodesMap[name];
             if (node == null)
             {
-                throw new NodeNotFoundException(nodeNumber);
+                throw new NodeNotFoundException(name);
+            }
+            return node;
+        }
+
+        public List<TNode> GetNodes()
+        {
+            return new List<TNode>(this.nodes);
+        }
+
+        public List<TEdge> GetEdges()
+        {
+            return new List<TEdge>(this.edges);
+        }
+
+
+        public TEdge AddEdge(TEdge edge)
+        {
+            if (edges.Contains(edge))
+            {
+                throw new DublicateException("It is not possible to add the same edge twice.");
+            }
+            edges.Add(edge);
+            return edge;
+        }
+
+        public TNode AddNode(TNode node)
+        {
+            if (nodes.Contains(node))
+            {
+                throw new DublicateException("It is not possible to add the same node twice.");
+            }
+            if (nodesMap[node.GetName()] != null)
+            {
+                throw new DublicateException("It is not possible to add the node with same name twice.");
+            }
+            nodesMap.Add(node.GetName(), node);
+            nodes.Add(node);
+            return node;
+        }
+
+
+        public void DeleteNode(string name)
+        {
+            var node = nodesMap[name];
+            if (node == null) {
+                throw new NodeNotFoundException(name);
+            }
+            List<GraphEdgeInterface> nodeEdges = node.GetEdges();
+            foreach (var edge in nodeEdges)
+            {
+                // Возможно оптимизировать
+                edge.GetSourceNode().DisconnectEdge(edge);
+                edge.GetTargetNode().DisconnectEdge(edge);
             }
             this.nodes.Remove(node);
-        }
-
-        public GraphNode GetNode(int number)
-        {
-            var node = nodes.FirstOrDefault(n => n.GetNumber() == number);
-            if (node == null)
-            {
-                throw new NodeNotFoundException(number);
-            }
-            return node;
-        }
-
-        public List<GraphNode> GetNodes()
-        {
-            return new List<GraphNode>(this.nodes);
         }
 
         public bool HasNodes()
@@ -129,7 +98,6 @@ namespace GraphMaster
             return nodes.Count;
         }
 
-       
     }
 }
 

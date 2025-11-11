@@ -170,7 +170,7 @@ namespace GraphMaster.Examples
                 // Создаем граф с несколькими вершинами
                 var graph = new GraphView2();
 
-                Positioned2Node node1 = new Positioned2Node(new Numerics.Vector2(0, 0), graph);
+                Positioned2Node node1 = new Positioned2Node(new System.Numerics.Vector2(0, 0), graph);
                 Positioned2Node node2 = graph.AddNode("Node B");
                 Positioned2Node node3 = graph.AddNode("Node C");
                 Positioned2Node node4 = graph.AddNode("Node D");

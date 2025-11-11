@@ -7,7 +7,7 @@ namespace GraphMaster
 {
     public class AlghoritmMaster 
     {
-        public List<GraphNode> MakeDijkstra(Domain.GraphInterface graph)
+        public List<GraphNode> MakeDijkstra(Domain.IMutableGraph graph)
         {
             if (!graph.HasNodes())
             {
@@ -35,7 +35,7 @@ namespace GraphMaster
             return new List<GraphNode>();
         }
 
-        public List<GraphNode> MakeBreadth(Domain.GraphInterface graph)
+        public List<GraphNode> MakeBreadth(Domain.IMutableGraph graph)
         {
             if (!graph.HasNodes())
             {
@@ -45,7 +45,7 @@ namespace GraphMaster
             return new List<GraphNode>();
         }
 
-        public List<GraphNode> MakeDepth(Domain.GraphInterface graph)
+        public List<GraphNode> MakeDepth(Domain.IMutableGraph graph)
         {
             if (!graph.HasNodes())
             {
@@ -55,7 +55,7 @@ namespace GraphMaster
             return new List<GraphNode>();
         }
 
-        public List<GraphNode> MakeBF(Domain.GraphInterface graph)
+        public List<GraphNode> MakeBF(Domain.IMutableGraph graph)
         {
             if (!graph.HasNodes())
             {
