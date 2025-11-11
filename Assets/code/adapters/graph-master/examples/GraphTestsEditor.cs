@@ -41,6 +41,27 @@ namespace GraphMaster.Examples
             GraphTests.TestCompleteCleanup();
         }
 
+        [MenuItem("Graph Tests/Тест силового распределения линии")]
+        public static void RunForceDirectedLineTest()
+        {
+            Debug.Log("Запуск теста силового распределения линии...");
+            GraphTests.TestForceDirectedLine();
+        }
+
+        [MenuItem("Graph Tests/Тест силового распределения кольца")]
+        public static void RunForceDirectedRingTest()
+        {
+            Debug.Log("Запуск теста силового распределения кольца...");
+            GraphTests.TestForceDirectedRingWithDiagonal();
+        }
+
+        [MenuItem("Graph Tests/Тест уникальных позиций")]
+        public static void RunForceDirectedUniqueTest()
+        {
+            Debug.Log("Запуск теста уникальных позиций...");
+            GraphTests.TestForceDirectedUniquePositions();
+        }
+
         [MenuItem("Graph Tests/Очистить консоль")]
         public static void ClearConsole()
         {

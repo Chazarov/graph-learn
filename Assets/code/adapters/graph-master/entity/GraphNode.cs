@@ -13,7 +13,7 @@ namespace GraphMaster
 
         private string name;
 
-        private string description;
+        private string description = "";
 
 
 

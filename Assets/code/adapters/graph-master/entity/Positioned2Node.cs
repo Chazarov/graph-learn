@@ -6,41 +6,66 @@ using System.Numerics;
 
 namespace GraphMaster
 {
-    public class Positioned2Node: GraphNode
+    public class Positioned2Node: GraphNodeInterface
     {
         private Vector2 position;
 
+        private GraphNode baseNode;
 
-        public Positioned2Node(Vector2 position, IMutableGraph<GraphNodeInterface> graph, string name, string description) : base(graph, name, description)
+        public Positioned2Node(Vector2 position,  string name, string description)
         {
             this.position = position;
+            baseNode = new GraphNode(name, description);
+
         }
 
-        public Positioned2Node(Vector2 position, IMutableGraph<GraphNodeInterface> graph, string name) : base(graph, name)
+        public Positioned2Node(Vector2 position, string name) : this(position, name, "") { }
+
+
+        public void AddEdge(GraphEdgeInterface edge)
         {
-            this.position = position;
+            baseNode.AddEdge(edge);
         }
 
-        public Positioned2Node(Vector2 position, IMutableGraph<GraphNodeInterface> graph): base(graph)
+        public void DisconnectEdge(GraphEdgeInterface edge)
         {
-            this.position = position;
+            baseNode.DisconnectEdge(edge);
         }
 
-        public Positioned2Node(IMutableGraph<GraphNodeInterface> graph) : this(Vector2.Zero, graph)
-        { }
+        public string GetDescription()
+        {
+            return baseNode.GetDescription();
+        }
+
+        public List<GraphEdgeInterface> GetEdges()
+        {
+            return baseNode.GetEdges();
+        }
+
+        public string GetName()
+        {
+            return baseNode.GetName();
+        }
+
+        public void SetDescription(string description)
+        {
+            baseNode.SetDescription(description);
+        }
+
+        public void SetName(string name)
+        {
+            baseNode.SetName(name);
+        }
 
         public Vector2 GetPosition()
         {
-            return this.position;
+            return new Vector2(position.X, position.Y);
         }
 
         public void SetPosition(Vector2 position)
         {
             this.position = position;
         }
-
-
-
     }
 }
 

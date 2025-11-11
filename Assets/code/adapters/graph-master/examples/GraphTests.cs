@@ -303,6 +303,179 @@ namespace GraphMaster.Examples
             }
         }
 
+        public static void TestForceDirectedLine()
+        {
+            Debug.Log("=== Тест 5: Силовое распределение линии ===");
+
+            try
+            {
+                var graph = new MyGraph<Positioned2Node, GraphEdge>();
+                
+                var node1 = new Positioned2Node(System.Numerics.Vector2.Zero, "A");
+                var node2 = new Positioned2Node(System.Numerics.Vector2.Zero, "B");
+                var node3 = new Positioned2Node(System.Numerics.Vector2.Zero, "C");
+                var node4 = new Positioned2Node(System.Numerics.Vector2.Zero, "D");
+                var node5 = new Positioned2Node(System.Numerics.Vector2.Zero, "E");
+                
+                graph.AddNode(node1);
+                graph.AddNode(node2);
+                graph.AddNode(node3);
+                graph.AddNode(node4);
+                graph.AddNode(node5);
+                
+                var edge1 = new GraphEdge(node1, node2);
+                var edge2 = new GraphEdge(node2, node3);
+                var edge3 = new GraphEdge(node3, node4);
+                var edge4 = new GraphEdge(node4, node5);
+                
+                graph.AddEdge(edge1);
+                graph.AddEdge(edge2);
+                graph.AddEdge(edge3);
+                graph.AddEdge(edge4);
+                
+                var algorithm = new AlghoritmMaster();
+                algorithm.MakeForceDirectedDistribution(graph);
+                
+                var pos1 = node1.GetPosition();
+                var pos5 = node5.GetPosition();
+                var pos2 = node2.GetPosition();
+                var pos3 = node3.GetPosition();
+                
+                float distanceEnds = System.Numerics.Vector2.Distance(pos1, pos5);
+                float distanceCenter = System.Numerics.Vector2.Distance(pos2, pos3);
+                
+                if (distanceEnds <= distanceCenter)
+                {
+                    throw new TestFailedException($"Расстояние между крайними узлами ({distanceEnds}) должно быть больше расстояния между центральными ({distanceCenter})");
+                }
+                
+                Debug.Log("=== Тест 5 пройден ===\n");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Тест 5 провален: {ex.Message}");
+                Debug.LogError($"StackTrace: {ex.StackTrace}");
+            }
+        }
+
+        public static void TestForceDirectedRingWithDiagonal()
+        {
+            Debug.Log("=== Тест 6: Силовое распределение кольца с диагональю ===");
+
+            try
+            {
+                var graph = new MyGraph<Positioned2Node, GraphEdge>();
+                
+                var nodeA = new Positioned2Node(System.Numerics.Vector2.Zero, "A");
+                var nodeB = new Positioned2Node(System.Numerics.Vector2.Zero, "B");
+                var nodeC = new Positioned2Node(System.Numerics.Vector2.Zero, "C");
+                var nodeD = new Positioned2Node(System.Numerics.Vector2.Zero, "D");
+                
+                graph.AddNode(nodeA);
+                graph.AddNode(nodeB);
+                graph.AddNode(nodeC);
+                graph.AddNode(nodeD);
+                
+                var edge1 = new GraphEdge(nodeA, nodeB);
+                var edge2 = new GraphEdge(nodeB, nodeC);
+                var edge3 = new GraphEdge(nodeC, nodeD);
+                var edge4 = new GraphEdge(nodeD, nodeA);
+                var edgeDiagonal = new GraphEdge(nodeA, nodeC);
+                
+                graph.AddEdge(edge1);
+                graph.AddEdge(edge2);
+                graph.AddEdge(edge3);
+                graph.AddEdge(edge4);
+                graph.AddEdge(edgeDiagonal);
+                
+                var algorithm = new AlghoritmMaster();
+                algorithm.MakeForceDirectedDistribution(graph);
+                
+                var posA = nodeA.GetPosition();
+                var posB = nodeB.GetPosition();
+                var posC = nodeC.GetPosition();
+                var posD = nodeD.GetPosition();
+                
+                float distanceBD = System.Numerics.Vector2.Distance(posB, posD);
+                float distanceAB = System.Numerics.Vector2.Distance(posA, posB);
+                float distanceBC = System.Numerics.Vector2.Distance(posB, posC);
+                float distanceCD = System.Numerics.Vector2.Distance(posC, posD);
+                float distanceDA = System.Numerics.Vector2.Distance(posD, posA);
+                float distanceAC = System.Numerics.Vector2.Distance(posA, posC);
+                
+                if (distanceBD <= distanceAB || distanceBD <= distanceBC || 
+                    distanceBD <= distanceCD || distanceBD <= distanceDA || distanceBD <= distanceAC)
+                {
+                    throw new TestFailedException($"Расстояние B-D ({distanceBD}) должно быть максимальным");
+                }
+                
+                Debug.Log("=== Тест 6 пройден ===\n");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Тест 6 провален: {ex.Message}");
+                Debug.LogError($"StackTrace: {ex.StackTrace}");
+            }
+        }
+
+        public static void TestForceDirectedUniquePositions()
+        {
+            Debug.Log("=== Тест 7: Все узлы имеют уникальные позиции ===");
+
+            try
+            {
+                var graph = new MyGraph<Positioned2Node, GraphEdge>();
+                
+                var node1 = new Positioned2Node(System.Numerics.Vector2.Zero, "N1");
+                var node2 = new Positioned2Node(System.Numerics.Vector2.Zero, "N2");
+                var node3 = new Positioned2Node(System.Numerics.Vector2.Zero, "N3");
+                var node4 = new Positioned2Node(System.Numerics.Vector2.Zero, "N4");
+                
+                graph.AddNode(node1);
+                graph.AddNode(node2);
+                graph.AddNode(node3);
+                graph.AddNode(node4);
+                
+                var edge1 = new GraphEdge(node1, node2);
+                var edge2 = new GraphEdge(node2, node3);
+                var edge3 = new GraphEdge(node3, node4);
+                
+                graph.AddEdge(edge1);
+                graph.AddEdge(edge2);
+                graph.AddEdge(edge3);
+                
+                var algorithm = new AlghoritmMaster();
+                algorithm.MakeForceDirectedDistribution(graph);
+                
+                var positions = new List<System.Numerics.Vector2>
+                {
+                    node1.GetPosition(),
+                    node2.GetPosition(),
+                    node3.GetPosition(),
+                    node4.GetPosition()
+                };
+                
+                for (int i = 0; i < positions.Count; i++)
+                {
+                    for (int j = i + 1; j < positions.Count; j++)
+                    {
+                        float distance = System.Numerics.Vector2.Distance(positions[i], positions[j]);
+                        if (distance < 0.1f)
+                        {
+                            throw new TestFailedException($"Узлы {i} и {j} имеют слишком близкие позиции (расстояние {distance})");
+                        }
+                    }
+                }
+                
+                Debug.Log("=== Тест 7 пройден ===\n");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Тест 7 провален: {ex.Message}");
+                Debug.LogError($"StackTrace: {ex.StackTrace}");
+            }
+        }
+
         public static void RunAllTests()
         {
             Debug.Log("========== ЗАПУСК ТЕСТОВ ГРАФА ==========");
@@ -311,6 +484,9 @@ namespace GraphMaster.Examples
             TestEdgeDeletion();
             TestNodeDeletion();
             TestCompleteCleanup();
+            TestForceDirectedLine();
+            TestForceDirectedRingWithDiagonal();
+            TestForceDirectedUniquePositions();
             
             Debug.Log("========== ВСЕ ТЕСТЫ ЗАВЕРШЕНЫ ==========");
         }

@@ -12,11 +12,7 @@ namespace GraphMaster
 {
     public class MyGraph<TNode, TEdge> : GraphInterface<TNode, TEdge> where TNode : Domain.GraphNodeInterface where TEdge : Domain.GraphEdgeInterface
     {
-        private bool isOriented = false;
-        private bool isWeighed = false;
-        private bool allowParallelEdges = false;
-        private bool allowNegativeEdges = false;
-        private bool allowLoops = false;
+
 
         private List<TNode> nodes = new List<TNode>();
         private List<TEdge> edges = new List<TEdge>();

@@ -12,6 +12,9 @@ namespace GraphMaster.Examples
         [SerializeField] private bool runTestEdgeDeletion = true;
         [SerializeField] private bool runTestNodeDeletion = true;
         [SerializeField] private bool runTestCompleteCleanup = true;
+        [SerializeField] private bool runTestForceDirectedLine = true;
+        [SerializeField] private bool runTestForceDirectedRing = true;
+        [SerializeField] private bool runTestForceDirectedUnique = true;
 
         void Start()
         {
@@ -45,6 +48,21 @@ namespace GraphMaster.Examples
                 GraphTests.TestCompleteCleanup();
             }
 
+            if (runTestForceDirectedLine)
+            {
+                GraphTests.TestForceDirectedLine();
+            }
+
+            if (runTestForceDirectedRing)
+            {
+                GraphTests.TestForceDirectedRingWithDiagonal();
+            }
+
+            if (runTestForceDirectedUnique)
+            {
+                GraphTests.TestForceDirectedUniquePositions();
+            }
+
             Debug.Log("=== ТЕСТЫ ЗАВЕРШЕНЫ ===");
         }
 
@@ -76,6 +94,24 @@ namespace GraphMaster.Examples
         public void RunCompleteCleanupTest()
         {
             GraphTests.TestCompleteCleanup();
+        }
+
+        [ContextMenu("Тест: Силовое распределение линии")]
+        public void RunForceDirectedLineTest()
+        {
+            GraphTests.TestForceDirectedLine();
+        }
+
+        [ContextMenu("Тест: Силовое распределение кольца")]
+        public void RunForceDirectedRingTest()
+        {
+            GraphTests.TestForceDirectedRingWithDiagonal();
+        }
+
+        [ContextMenu("Тест: Уникальные позиции")]
+        public void RunForceDirectedUniqueTest()
+        {
+            GraphTests.TestForceDirectedUniquePositions();
         }
     }
 }
