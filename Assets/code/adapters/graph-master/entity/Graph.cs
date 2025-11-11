@@ -27,8 +27,7 @@ namespace GraphMaster
 
         public TNode GetNode(string name)
         {
-            var node = nodesMap[name];
-            if (node == null)
+            if (!nodesMap.TryGetValue(name, out var node))
             {
                 throw new NodeNotFoundException(name);
             }
@@ -53,6 +52,8 @@ namespace GraphMaster
                 throw new DublicateException("It is not possible to add the same edge twice.");
             }
             edges.Add(edge);
+            edge.GetSourceNode().AddEdge(edge);
+            edge.GetTargetNode().AddEdge(edge);
             return edge;
         }
 
@@ -62,7 +63,7 @@ namespace GraphMaster
             {
                 throw new DublicateException("It is not possible to add the same node twice.");
             }
-            if (nodesMap[node.GetName()] != null)
+            if (nodesMap.ContainsKey(node.GetName()))
             {
                 throw new DublicateException("It is not possible to add the node with same name twice.");
             }
@@ -74,18 +75,19 @@ namespace GraphMaster
 
         public void DeleteNode(string name)
         {
-            var node = nodesMap[name];
-            if (node == null) {
+            if (!nodesMap.TryGetValue(name, out var node))
+            {
                 throw new NodeNotFoundException(name);
             }
             List<GraphEdgeInterface> nodeEdges = node.GetEdges();
             foreach (var edge in nodeEdges)
             {
-                // Возможно оптимизировать
                 edge.GetSourceNode().DisconnectEdge(edge);
                 edge.GetTargetNode().DisconnectEdge(edge);
+                this.edges.Remove((TEdge)edge);
             }
             this.nodes.Remove(node);
+            this.nodesMap.Remove(name);
         }
 
         public bool HasNodes()

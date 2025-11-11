@@ -11,9 +11,6 @@ namespace GraphMaster
     {
         private List<GraphEdgeInterface> edges = new List<GraphEdgeInterface>();
 
-        private bool hasParralelsEdges = false;
-
-
         private string name;
 
         private string description;
@@ -69,12 +66,6 @@ namespace GraphMaster
         public void SetDescription(string description)
         {
             this.description = description;
-        }
-
-        
-        public bool HasParrallelEdges()
-        {
-            return this.hasParralelsEdges;
         }
     }
 
