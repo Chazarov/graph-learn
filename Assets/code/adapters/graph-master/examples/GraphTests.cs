@@ -14,7 +14,7 @@ namespace GraphMaster.Examples
             
             try
             {
-                var graph = new MyGraph<GraphNode, GraphEdge>();
+                var graph = new Graph<GraphNode, GraphEdge>();
                 
                 var node1 = new GraphNode("A");
                 var node2 = new GraphNode("B");
@@ -76,7 +76,7 @@ namespace GraphMaster.Examples
             
             try
             {
-                var graph = new MyGraph<GraphNode, GraphEdge>();
+                var graph = new Graph<GraphNode, GraphEdge>();
                 
                 var node1 = new GraphNode("Start");
                 var node2 = new GraphNode("Middle");
@@ -136,7 +136,7 @@ namespace GraphMaster.Examples
             
             try
             {
-                var graph = new MyGraph<GraphNode, GraphEdge>();
+                var graph = new Graph<GraphNode, GraphEdge>();
                 
                 var node1 = new GraphNode("A");
                 var node2 = new GraphNode("B");
@@ -218,7 +218,7 @@ namespace GraphMaster.Examples
 
             try
             {
-                var graph = new MyGraph<GraphNode, GraphEdge>();
+                var graph = new Graph<GraphNode, GraphEdge>();
                 
                 var node1 = new GraphNode("N1");
                 var node2 = new GraphNode("N2");
@@ -309,7 +309,7 @@ namespace GraphMaster.Examples
 
             try
             {
-                var graph = new MyGraph<Positioned2Node, GraphEdge>();
+                var graph = new Graph<Positioned2Node, GraphEdge>();
                 
                 var node1 = new Positioned2Node(System.Numerics.Vector2.Zero, "A");
                 var node2 = new Positioned2Node(System.Numerics.Vector2.Zero, "B");
@@ -364,7 +364,7 @@ namespace GraphMaster.Examples
 
             try
             {
-                var graph = new MyGraph<Positioned2Node, GraphEdge>();
+                var graph = new Graph<Positioned2Node, GraphEdge>();
                 
                 var nodeA = new Positioned2Node(System.Numerics.Vector2.Zero, "A");
                 var nodeB = new Positioned2Node(System.Numerics.Vector2.Zero, "B");
@@ -424,7 +424,7 @@ namespace GraphMaster.Examples
 
             try
             {
-                var graph = new MyGraph<Positioned2Node, GraphEdge>();
+                var graph = new Graph<Positioned2Node, GraphEdge>();
                 
                 var node1 = new Positioned2Node(System.Numerics.Vector2.Zero, "N1");
                 var node2 = new Positioned2Node(System.Numerics.Vector2.Zero, "N2");

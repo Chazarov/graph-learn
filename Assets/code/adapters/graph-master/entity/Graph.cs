@@ -10,7 +10,7 @@ using Unity.Collections;
 
 namespace GraphMaster
 {
-    public class MyGraph<TNode, TEdge> : GraphInterface<TNode, TEdge> where TNode : Domain.GraphNodeInterface where TEdge : Domain.GraphEdgeInterface
+    public class Graph<TNode, TEdge> : GraphInterface<TNode, TEdge> where TNode : Domain.GraphNodeInterface where TEdge : Domain.GraphEdgeInterface
     {
 
 
