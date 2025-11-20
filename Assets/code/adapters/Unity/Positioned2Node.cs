@@ -8,7 +8,7 @@ namespace GraphMaster.UnityAdapter
     public class Positioned2Node : MonoBehaviour, GraphNodeInterface
     {
 
-        private GraphMaster.Positioned2Node sourse = new GraphMaster.Positioned2Node(new System.Numerics.Vector2(0, 0), "no name");
+        private GraphMaster.Positioned2Node sourse = new GraphMaster.Positioned2Node(new System.Numerics.Vector2(0, 0), "");
 
         [SerializeField] private string nodeName;
 
@@ -68,7 +68,7 @@ namespace GraphMaster.UnityAdapter
         public void SetName(string name)
         {
             nodeName = name;
-            this.name = "Node" + name;
+            this.name = "Node " + name;
             sourse.SetName(name);
         }
 
