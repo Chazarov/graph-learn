@@ -31,6 +31,7 @@ namespace GraphMaster.UnityAdapter
             Positioned2Node component = instance.AddComponent<Positioned2Node>();
             component.Initialize(name);
             sourse.AddNode(component);
+            oldNodes.Add(name);
 
             return instance;
         }
@@ -48,7 +49,7 @@ namespace GraphMaster.UnityAdapter
             {
                 string currentNode = nodes[i];
                 if (currentNode == ""){
-                    nodes[i] =  i.ToString(); 
+                    nodes[i] =  ""+ i; 
                     break;
                 }
             }
