@@ -18,14 +18,14 @@ namespace GraphMaster.UnityAdapter.UI
         [SerializeField] private SpriteRenderer nodeSpriteRenderer;
 
 
-
         GraphMaster.UnityAdapter.Positioned2Node sourse;
         public event Action IsSelected; 
         private bool isSelected = false;
+        private bool drag = false;
+        private Vector2 startDragPosition;
     
         void Start()
         {
-        
         }
 
         void Update()
@@ -33,8 +33,12 @@ namespace GraphMaster.UnityAdapter.UI
         
         }
 
+
         private void OnMouseDown()
         {
+            drag = true;
+            startDragPosition = Input.mousePosition;
+
             if (!isSelected)
             {
                 isSelected = true;
@@ -47,6 +51,22 @@ namespace GraphMaster.UnityAdapter.UI
                 isSelected = false;
             }
         
+        }
+
+        private void OnMouseDrag()
+        {
+            if (drag)
+            {
+                Vector2 deltaDrag = startDragPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                Debug.Log(sourse == null);
+                sourse.SetPosition(startDragPosition - deltaDrag);
+            }
+        }
+
+
+        private void OnMouseUp()
+        {
+            drag = false;
         }
 
         private void selectAnimation()
