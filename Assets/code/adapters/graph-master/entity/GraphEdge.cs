@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Domain;
+using UnityEditor.Experimental.GraphView;
 
 namespace GraphMaster
 {
-    public class GraphEdge : GraphEdgeInterface
+    public class GraphEdge: Domain.GraphEdgeInterface
     {
         private float weight;
         private bool hasWeight = false;
@@ -62,8 +63,8 @@ namespace GraphMaster
         public bool IsParralel(GraphEdgeInterface other)
         {
             if (other == null) return false;
-            return other.GetTargetNode() == this.GetTargetNode() && 
-                   other.GetSourceNode() == this.GetSourceNode();
+            return other.GetTargetNode().Equals(GetTargetNode()) &&
+       other.GetSourceNode().Equals(GetSourceNode());
         }
     }
 

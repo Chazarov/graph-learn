@@ -16,6 +16,7 @@ namespace GraphMaster.UnityAdapter
     {
         [SerializeField] private GameObject nodePrefab;
 
+        private int nameSequense = 0;
 
         private GraphMaster.Graph<GraphMaster.UnityAdapter.Positioned2Node, GraphMaster.GraphEdge> sourse = new Graph<GraphMaster.UnityAdapter.Positioned2Node, GraphEdge>();
 
@@ -28,14 +29,17 @@ namespace GraphMaster.UnityAdapter
         }
 
 
-        public GameObject CreateNodeObject(string name)
+        public void CreateNodeObject()
         {
+
             GameObject instance = Instantiate(nodePrefab);
             Positioned2Node component = instance.AddComponent<Positioned2Node>();
-            component.Initialize(name);
-            sourse.AddNode(component);
+            Vector2 vector2 = new Vector2(Random.Range(3, -3), Random.Range(3, -3));
 
-            return instance;
+            component.Initialize(nameSequense.ToString(), vector2);
+            sourse.AddNode(component);
+            nameSequense++;
+
         }
 
 
