@@ -35,6 +35,18 @@ namespace GraphMaster.UnityAdapter
             CheckTheNodePrefabContent(nodePrefab);
         }
 
+        private string NumberToLetters(int number)
+        {
+            string result = "";
+            while (number > 0)
+            {
+                number--;
+                result = (char)('A' + (number % 26)) + result;
+                number /= 26;
+            }
+            return result;
+        }
+
         public void  CheckTheNodePrefabContent(GameObject nodePrefab)
         {
             if (nodePrefab == null)
@@ -86,9 +98,9 @@ namespace GraphMaster.UnityAdapter
                 if (this.selectedNodes.Count == 1)
                 {
                     this.CreateEdgeObject(this.selectedNodes[0], node);
-                    node.DeselectThisNode();
                     this.selectedNodes[0].DeselectThisNode();
                     this.selectedNodes.Clear();
+                    this.selectedNodes.Add(node);
                     this.addEdgeStarted = false;
                 }
 
@@ -127,7 +139,7 @@ namespace GraphMaster.UnityAdapter
         {
             CheckTheEdgePrefabContent(edgePrefab);
 
-            string edgeName = "" + this.edgeNameSequense;
+            string edgeName = NumberToLetters(this.edgeNameSequense);
 
             try
             {
@@ -158,7 +170,7 @@ namespace GraphMaster.UnityAdapter
             UIComponent.IsSelected += OnAnyNodeSelected;
             UIComponent.IsDeselected += OnAnyNodeDeselected;
 
-            UIComponent.Initialize(nodeNameSequense.ToString(), vector2);
+            UIComponent.Initialize(NumberToLetters(nodeNameSequense), vector2);
             sourse.AddNode(UIComponent);
             nodeNameSequense++;
 
