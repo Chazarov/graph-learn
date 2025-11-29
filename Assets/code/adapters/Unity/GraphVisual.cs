@@ -20,7 +20,8 @@ namespace GraphMaster.UnityAdapter
         [SerializeField] private GameObject nodePrefab;
         [SerializeField] private GameObject edgePrefab;
 
-        private int nameSequense = 1;
+        private int nodeNameSequense = 1;
+        private int edgeNameSequense = 1;
 
         private GraphMaster.Graph<GraphMaster.UnityAdapter.UI.UIPositioned2Node, GraphMaster.GraphEdge> sourse = new Graph<GraphMaster.UnityAdapter.UI.UIPositioned2Node, GraphEdge>();
 
@@ -123,9 +124,11 @@ namespace GraphMaster.UnityAdapter
         {
             CheckTheEdgePrefabContent(edgePrefab);
 
+            string edgeName = "" + this.edgeNameSequense;
+
             try
             {
-                this.sourse.CheckPossibilityOfAddingAnEdge(sourse.GetName(), target.GetName());
+                this.sourse.CheckPossibilityOfAddingAnEdge(sourse.GetName(), target.GetName(), edgeName);
             }
             catch (ParralelEdgesNotAllowed e)
             {
@@ -136,6 +139,7 @@ namespace GraphMaster.UnityAdapter
             GameObject instance = Instantiate(edgePrefab);
             EdgeVisual edgeVisualComponent = instance.GetComponent<EdgeVisual>();
             edgeVisualComponent.Initialize(sourse, target);
+            edgeNameSequense += 1;
         }
 
         
@@ -151,9 +155,9 @@ namespace GraphMaster.UnityAdapter
             UIComponent.IsSelected += OnAnyNodeSelected;
             UIComponent.IsDeselected += OnAnyNodeDeselected;
 
-            UIComponent.Initialize(nameSequense.ToString(), vector2);
+            UIComponent.Initialize(nodeNameSequense.ToString(), vector2);
             sourse.AddNode(UIComponent);
-            nameSequense++;
+            nodeNameSequense++;
 
         }
 

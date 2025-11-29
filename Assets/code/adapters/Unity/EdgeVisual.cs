@@ -28,16 +28,16 @@ namespace GraphMaster.UnityAdapter
             }
         }
 
-        public void Initialize(UIPositioned2Node sourse, UIPositioned2Node target)
+        public void Initialize(UIPositioned2Node sourseNode, UIPositioned2Node targetNode, string edgeName)
         {
-            GraphEdgeInterface edge = new GraphEdge(sourse, target);
+            GraphEdgeInterface edge = new GraphEdge(sourseNode, targetNode);
+            
             this.sourse = edge;
-            this.sourceNode = sourse;
-            this.targetNode = target;
+            this.sourse.SetName(edgeName);
 
             line.positionCount = 2;
-            line.SetPosition(0, sourse.transform.position);
-            line.SetPosition(1, target.transform.position);
+            line.SetPosition(0, sourseNode.transform.position);
+            line.SetPosition(1, targetNode.transform.position);
         }
 
         public GraphNodeInterface GetSourceNode()
@@ -70,9 +70,27 @@ namespace GraphMaster.UnityAdapter
             sourse.SetWeight(weight);
         }
 
-       
+        public string GetName()
+        {
+            return sourse.GetName();
+        }
 
-        
+        public void SetName(string name)
+        {
+            sourse.SetName(name);
+        }
+
+        public void SetSourseNode(UIPositioned2Node node)
+        {
+            this.sourceNode = node;
+            sourse.SetSourseNode(node);
+        }
+
+        public void SetTargetNode(GraphNodeInterface node)
+        {
+            this.targetNode = node;
+            sourse.SetTargetNode(node);
+        }
     }
 
 }
