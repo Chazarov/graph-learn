@@ -16,7 +16,7 @@ namespace GraphMaster.UnityAdapter
 {
     public class GraphVisual: MonoBehaviour 
     {
-        // Создает ноды. Управляет именованием. Управляет удалением. 
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. 
         [SerializeField] private GameObject nodePrefab;
         [SerializeField] private GameObject edgePrefab;
 
@@ -91,6 +91,18 @@ namespace GraphMaster.UnityAdapter
                     this.selectedNodes.Clear();
                 }
 
+            }
+            else
+            {
+                if (this.selectedNodes.Count > 0)
+                {
+                    for (int i = this.selectedNodes.Count - 1; i >= 0; i--)
+                    {
+                        this.selectedNodes[i].DeselectThisNode();
+                    }
+                    this.selectedNodes.Clear();
+                }
+                this.selectedNodes.Add(node);
             }
         }
 

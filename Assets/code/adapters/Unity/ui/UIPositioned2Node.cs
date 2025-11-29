@@ -22,8 +22,6 @@ namespace GraphMaster.UnityAdapter.UI
         public event Action<string> IsSelected;
         public event Action<string> IsDeselected;
         private bool isSelected = false;
-        private bool drag = false;
-        private Vector2 startDragPosition;
     
         void Start()
         {
@@ -46,9 +44,6 @@ namespace GraphMaster.UnityAdapter.UI
 
         private void OnMouseDown()
         {
-            drag = true;
-            startDragPosition = Input.mousePosition;
-
             if (!isSelected)
             {
                 this.SelectThisNode();
@@ -57,23 +52,15 @@ namespace GraphMaster.UnityAdapter.UI
             {
                 this.DeselectThisNode();
             }
-        
         }
 
         private void OnMouseDrag()
         {
-            //if (drag)
-            //{
-            //    Vector2 deltaDrag = startDragPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            //    sourse.SetPosition(startDragPosition - deltaDrag);
-            //}
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0;
+            sourse.SetPosition(mousePosition);
         }
 
-
-        private void OnMouseUp()
-        {
-            drag = false;
-        }
 
         public void SelectThisNode()
         {
