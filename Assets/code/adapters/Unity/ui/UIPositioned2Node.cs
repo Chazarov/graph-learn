@@ -16,16 +16,26 @@ namespace GraphMaster.UnityAdapter.UI
         [SerializeField] private Vector2 defaultScale;
         [SerializeField] private Vector2 selectedScale;
         [SerializeField] private SpriteRenderer nodeSpriteRenderer;
+        [SerializeField] private GraphMaster.UnityAdapter.Positioned2Node sourse;
+        
 
-
-        GraphMaster.UnityAdapter.Positioned2Node sourse;
-        public event Action IsSelected; 
+        public event Action<string> IsSelected;
+        public event Action<string> IsDeselected;
         private bool isSelected = false;
         private bool drag = false;
         private Vector2 startDragPosition;
     
         void Start()
         {
+
+        }
+
+        public void CheckGameobgectContent()
+        {
+            if (sourse == null)
+            {
+                throw new System.Exception("sourse can't be a null. Please add a sourse Positioned2NodeComponent ");
+            }
         }
 
         void Update()
@@ -41,32 +51,46 @@ namespace GraphMaster.UnityAdapter.UI
 
             if (!isSelected)
             {
-                isSelected = true;
-                selectAnimation();
-                IsSelected?.Invoke();
+                this.SelectThisNode();
             }
             else
             {
-                deselectionAnimation();
-                isSelected = false;
+                this.DeselectThisNode();
             }
         
         }
 
         private void OnMouseDrag()
         {
-            if (drag)
-            {
-                Vector2 deltaDrag = startDragPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                Debug.Log(sourse == null);
-                sourse.SetPosition(startDragPosition - deltaDrag);
-            }
+            //if (drag)
+            //{
+            //    Vector2 deltaDrag = startDragPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            //    sourse.SetPosition(startDragPosition - deltaDrag);
+            //}
         }
 
 
         private void OnMouseUp()
         {
             drag = false;
+        }
+
+        public void SelectThisNode()
+        {
+            isSelected = true;
+            selectAnimation();
+            IsSelected?.Invoke(this.GetName());
+        }
+
+        public void DeselectThisNode()
+        {
+            if (isSelected)
+            {
+                deselectionAnimation();
+                isSelected = false;
+                IsDeselected?.Invoke(this.GetName());
+            }
+            
         }
 
         private void selectAnimation()

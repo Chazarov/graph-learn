@@ -1,4 +1,5 @@
 using Domain;
+using GraphMaster.UnityAdapter.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,10 +23,14 @@ namespace GraphMaster.UnityAdapter
 
         }
 
-        public void Initialize(Positioned2Node sourse, Positioned2Node target)
+        public void Initialize(UIPositioned2Node sourse, UIPositioned2Node target)
         {
             GraphEdgeInterface edge = new GraphEdge(sourse, target);
             this.sourse = edge;
+
+            line.positionCount = 2;
+            line.SetPosition(0, sourse.transform.position);
+            line.SetPosition(1, target.transform.position);
         }
 
         public GraphNodeInterface GetSourceNode()

@@ -7,6 +7,7 @@ namespace GraphMaster.UnityAdapter
 {
     public class Positioned2Node : MonoBehaviour, GraphNodeInterface
     {
+        // Отвечает за визуализацию ноды . Размер , позицию. Анимации Связанные с представлением ее базовых параметров - веса, позиции
 
         private GraphMaster.Positioned2Node sourse = new GraphMaster.Positioned2Node(new System.Numerics.Vector2(0, 0), "");
 
@@ -15,7 +16,7 @@ namespace GraphMaster.UnityAdapter
 
         private void Start()
         {
-            SynchronizePosition(true);
+           
         }
         
 
@@ -25,8 +26,7 @@ namespace GraphMaster.UnityAdapter
             {
                 return;
             }
-
-            SynchronizePosition();
+            SetPosition(transform.position);
  
             sourse.SetName(this.nodeName);
         }
@@ -35,7 +35,7 @@ namespace GraphMaster.UnityAdapter
         public void Initialize(string name)
         {
             SetName(name);
-            SynchronizePosition();
+            SetPosition(new Vector2 (0, 0));
         }
 
 
@@ -45,23 +45,12 @@ namespace GraphMaster.UnityAdapter
             SetPosition(position);
         }
 
-        private void SynchronizePosition(bool fromSourse = false)
-        {
-            if (!fromSourse)
-            {
-                Vector2 newPosition = transform.position;
-                sourse.SetPosition(new System.Numerics.Vector2(newPosition.x, newPosition.y));
-            }
-            else
-            {
-                transform.position = new Vector2(sourse.GetPosition().X, sourse.GetPosition().Y);
-            }
-        }
 
         public void SetPosition(Vector2 position)
         {
             transform.position = position;
-            SynchronizePosition();
+            Vector2 newPosition = transform.position;
+            sourse.SetPosition(new System.Numerics.Vector2(newPosition.x, newPosition.y));
         }
 
 

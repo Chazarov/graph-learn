@@ -11,11 +11,8 @@ namespace GraphMaster
         {
         }
 
-        public NodeNotFoundException(string message) : base(message)
-        {
-        }
 
-        public NodeNotFoundException(int nodeId) : base($"Node with ID {nodeId} was not found in the graph")
+        public NodeNotFoundException(string nodeName) : base($"Node with name {nodeName} was not found in the graph")
         {
         }
     }
