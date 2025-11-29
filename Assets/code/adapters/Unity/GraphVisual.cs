@@ -121,8 +121,20 @@ namespace GraphMaster.UnityAdapter
 
         public void CreateEdgeObject(UIPositioned2Node sourse, UIPositioned2Node target)
         {
-            Debug.Log(" Edge create");
             CheckTheEdgePrefabContent(edgePrefab);
+
+            GraphEdge newEdge = new GraphEdge(sourse, target);
+
+            try
+            {
+                this.sourse.AddEdge(newEdge);
+            }
+            catch (ParralelEdgesNotAllowed ex)
+            {
+                Debug.LogWarning(ex.Message);
+                return;
+            }
+
             GameObject instance = Instantiate(edgePrefab);
             EdgeVisual edgeVisualComponent = instance.GetComponent<EdgeVisual>();
             edgeVisualComponent.Initialize(sourse, target);
