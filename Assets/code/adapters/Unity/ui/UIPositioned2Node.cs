@@ -27,21 +27,12 @@ namespace GraphMaster.UnityAdapter.UI
         {
 
         }
-
-        public void CheckGameobgectContent()
-        {
-            if (sourse == null)
-            {
-                throw new System.Exception("sourse can't be a null. Please add a sourse Positioned2NodeComponent ");
-            }
-        }
-
+        
         void Update()
         {
         
         }
-
-
+        
         private void OnMouseDown()
         {
             if (!isSelected)
@@ -61,6 +52,25 @@ namespace GraphMaster.UnityAdapter.UI
             sourse.SetPosition(mousePosition);
         }
 
+
+        public void Initialize(string name, Vector2 position)
+        {
+            SetName(name);
+            SetPosition(position);
+        }
+
+        public void CheckGameobgectContent()
+        {
+            if (sourse == null)
+            {
+                throw new System.Exception("sourse can't be a null. Please add a sourse Positioned2NodeComponent ");
+            }
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            sourse.SetPosition(position);
+        }
 
         public void SelectThisNode()
         {
@@ -91,9 +101,6 @@ namespace GraphMaster.UnityAdapter.UI
             nodeSpriteRenderer.color = defaultColor;
             transform.localScale = defaultScale;
         }
-
-
-
 
         public string GetName()
         {

@@ -18,6 +18,8 @@ namespace GraphMaster
         private List<TEdge> edges = new List<TEdge>();
         private Dictionary<string, TNode> nodesMap = new Dictionary<string, TNode>();
 
+        private bool parralelEdgesAreAllowed = false;
+
 
 
 

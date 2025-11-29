@@ -20,7 +20,7 @@ namespace GraphMaster.UnityAdapter
         [SerializeField] private GameObject nodePrefab;
         [SerializeField] private GameObject edgePrefab;
 
-        private int nameSequense = 0;
+        private int nameSequense = 1;
 
         private GraphMaster.Graph<GraphMaster.UnityAdapter.UI.UIPositioned2Node, GraphMaster.GraphEdge> sourse = new Graph<GraphMaster.UnityAdapter.UI.UIPositioned2Node, GraphEdge>();
 
@@ -89,6 +89,7 @@ namespace GraphMaster.UnityAdapter
                     node.DeselectThisNode();
                     this.selectedNodes[0].DeselectThisNode();
                     this.selectedNodes.Clear();
+                    this.addEdgeStarted = false;
                 }
 
             }
@@ -120,6 +121,7 @@ namespace GraphMaster.UnityAdapter
 
         public void CreateEdgeObject(UIPositioned2Node sourse, UIPositioned2Node target)
         {
+            Debug.Log(" Edge create");
             CheckTheEdgePrefabContent(edgePrefab);
             GameObject instance = Instantiate(edgePrefab);
             EdgeVisual edgeVisualComponent = instance.GetComponent<EdgeVisual>();
@@ -133,14 +135,13 @@ namespace GraphMaster.UnityAdapter
         {
             CheckTheNodePrefabContent(nodePrefab);
             GameObject instance = Instantiate(nodePrefab);
-            Positioned2Node component = instance.GetComponent<Positioned2Node>();
             Vector2 vector2 = new Vector2(Random.Range(3, -3), Random.Range(3, -3));
 
             UIPositioned2Node UIComponent = instance.GetComponent<UIPositioned2Node>();
             UIComponent.IsSelected += OnAnyNodeSelected;
             UIComponent.IsDeselected += OnAnyNodeDeselected;
 
-            component.Initialize(nameSequense.ToString(), vector2);
+            UIComponent.Initialize(nameSequense.ToString(), vector2);
             sourse.AddNode(UIComponent);
             nameSequense++;
 

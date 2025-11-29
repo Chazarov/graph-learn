@@ -8,10 +8,11 @@ namespace GraphMaster.UnityAdapter
 {
     public class EdgeVisual : MonoBehaviour, Domain.GraphEdgeInterface
     {
-
         [SerializeField] LineRenderer line;
 
         GraphEdgeInterface sourse;
+        private UIPositioned2Node sourceNode;
+        private UIPositioned2Node targetNode;
 
         void Start()
         {
@@ -20,13 +21,19 @@ namespace GraphMaster.UnityAdapter
 
         void Update()
         {
-
+            if (sourceNode != null && targetNode != null)
+            {
+                line.SetPosition(0, sourceNode.transform.position);
+                line.SetPosition(1, targetNode.transform.position);
+            }
         }
 
         public void Initialize(UIPositioned2Node sourse, UIPositioned2Node target)
         {
             GraphEdgeInterface edge = new GraphEdge(sourse, target);
             this.sourse = edge;
+            this.sourceNode = sourse;
+            this.targetNode = target;
 
             line.positionCount = 2;
             line.SetPosition(0, sourse.transform.position);
