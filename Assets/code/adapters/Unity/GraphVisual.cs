@@ -16,14 +16,13 @@ namespace GraphMaster.UnityAdapter
 {
     public class GraphVisual: MonoBehaviour 
     {
-        // ������� ����. ��������� �����������. ��������� ���������. 
         [SerializeField] private GameObject nodePrefab;
         [SerializeField] private GameObject edgePrefab;
 
         private int nodeNameSequense = 1;
         private int edgeNameSequense = 1;
 
-        private GraphMaster.Graph<GraphMaster.UnityAdapter.UI.UIPositioned2Node, GraphMaster.GraphEdge> sourse = new Graph<GraphMaster.UnityAdapter.UI.UIPositioned2Node, GraphEdge>();
+        private GraphMaster.Graph<GraphMaster.UnityAdapter.UI.UIPositioned2Node, GraphMaster.GraphEdge<UIPositioned2Node>> sourse = new Graph<UIPositioned2Node, GraphEdge<UIPositioned2Node>>();
 
 
         private List<UIPositioned2Node> selectedNodes = new List<UIPositioned2Node>();
@@ -100,7 +99,11 @@ namespace GraphMaster.UnityAdapter
                 {
                     for (int i = this.selectedNodes.Count - 1; i >= 0; i--)
                     {
-                        this.selectedNodes[i].DeselectThisNode();
+                        if (this.selectedNodes[i].GetName() != nodeName)
+                        {
+                            this.selectedNodes[i].DeselectThisNode();
+                        }
+                        
                     }
                     this.selectedNodes.Clear();
                 }
@@ -138,7 +141,7 @@ namespace GraphMaster.UnityAdapter
 
             GameObject instance = Instantiate(edgePrefab);
             EdgeVisual edgeVisualComponent = instance.GetComponent<EdgeVisual>();
-            edgeVisualComponent.Initialize(sourse, target);
+            edgeVisualComponent.Initialize(sourse, target, edgeName);
             edgeNameSequense += 1;
         }
 

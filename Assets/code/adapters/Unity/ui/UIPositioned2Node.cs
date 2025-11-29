@@ -35,14 +35,7 @@ namespace GraphMaster.UnityAdapter.UI
         
         private void OnMouseDown()
         {
-            if (!isSelected)
-            {
-                this.SelectThisNode();
-            }
-            else
-            {
-                this.DeselectThisNode();
-            }
+            this.SelectThisNode();
         }
 
         private void OnMouseDrag()
@@ -110,21 +103,6 @@ namespace GraphMaster.UnityAdapter.UI
         public string GetDescription()
         {
             return sourse.GetDescription();
-        }
-
-        public void DisconnectEdge(GraphEdgeInterface edge)
-        {
-            sourse.DisconnectEdge(edge);
-        }
-
-        public List<GraphEdgeInterface> GetEdges()
-        {
-            return sourse.GetEdges();
-        }
-
-        public void AddEdge(GraphEdgeInterface edge)
-        {
-            sourse.AddEdge(edge);
         }
 
         public void SetName(string name)

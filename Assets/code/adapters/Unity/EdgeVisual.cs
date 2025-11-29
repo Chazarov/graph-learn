@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace GraphMaster.UnityAdapter
 {
-    public class EdgeVisual : MonoBehaviour, Domain.GraphEdgeInterface
+    public class EdgeVisual : MonoBehaviour, Domain.GraphEdgeInterface<UIPositioned2Node>
     {
         [SerializeField] LineRenderer line;
 
-        GraphEdgeInterface sourse;
+        GraphEdgeInterface<UIPositioned2Node> sourse;
         private UIPositioned2Node sourceNode;
         private UIPositioned2Node targetNode;
 
@@ -26,28 +26,36 @@ namespace GraphMaster.UnityAdapter
                 line.SetPosition(0, sourceNode.transform.position);
                 line.SetPosition(1, targetNode.transform.position);
             }
+            else
+            {
+                Debug.Log("Boo");
+            }
         }
 
         public void Initialize(UIPositioned2Node sourseNode, UIPositioned2Node targetNode, string edgeName)
         {
-            GraphEdgeInterface edge = new GraphEdge(sourseNode, targetNode);
+            GraphEdgeInterface<UIPositioned2Node> edge = new GraphEdge<UIPositioned2Node>(sourseNode, targetNode);
             
             this.sourse = edge;
+            this.name = $"Edge {edgeName}";
             this.sourse.SetName(edgeName);
+
+            this.SetSourseNode(sourseNode);
+            this.SetTargetNode(targetNode);
 
             line.positionCount = 2;
             line.SetPosition(0, sourseNode.transform.position);
             line.SetPosition(1, targetNode.transform.position);
         }
 
-        public GraphNodeInterface GetSourceNode()
+        public UIPositioned2Node GetSourceNode()
         {
-            return sourse.GetSourceNode();
+            return sourceNode;
         }
 
-        public GraphNodeInterface GetTargetNode()
+        public UIPositioned2Node GetTargetNode()
         {
-            return sourse.GetTargetNode();
+            return targetNode;
         }
 
         public float GetWeight()
@@ -60,10 +68,6 @@ namespace GraphMaster.UnityAdapter
             return sourse.HasWeight();
         }
 
-        public bool IsParralel(GraphEdgeInterface other)
-        {
-            return sourse.IsParralel(other);
-        }
 
         public void SetWeight(float weight)
         {
@@ -86,7 +90,7 @@ namespace GraphMaster.UnityAdapter
             sourse.SetSourseNode(node);
         }
 
-        public void SetTargetNode(GraphNodeInterface node)
+        public void SetTargetNode(UIPositioned2Node node)
         {
             this.targetNode = node;
             sourse.SetTargetNode(node);

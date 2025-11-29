@@ -1,20 +1,14 @@
 namespace Domain
 {
-    public interface GraphEdgeInterface
+    public interface GraphEdgeInterface<TNode>:GraphEdgeBaseInterface where TNode : GraphNodeInterface
     {
-        public float GetWeight();
-        public void SetWeight(float weight);
-        public bool HasWeight();
+       
+        public TNode GetSourceNode();
+        public TNode GetTargetNode();
 
-        public string GetName();
-        public void SetName(string name);
-        public GraphNodeInterface GetSourceNode();
-        public GraphNodeInterface GetTargetNode();
+        public void SetSourseNode(TNode node);
 
-        public void SetSourseNode(GraphNodeInterface node);
+        public void SetTargetNode(TNode node);
 
-        public void SetTargetNode(GraphNodeInterface node);
-
-        public bool IsParralel(GraphEdgeInterface other);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Domain
 {
-    public interface GraphInterface <TNode, TEdge> where TNode : GraphNodeInterface where TEdge : GraphEdgeInterface
+    public interface GraphInterface <TNode, TEdge> where TNode : GraphNodeInterface where TEdge : GraphEdgeBaseInterface
     {
         public bool HasNodes();
 

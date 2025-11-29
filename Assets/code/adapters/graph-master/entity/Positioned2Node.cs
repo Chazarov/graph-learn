@@ -21,25 +21,12 @@ namespace GraphMaster
         public Positioned2Node(Vector2 position, string name) : this(position, name, "") { }
 
 
-        public void AddEdge(GraphEdgeInterface edge)
-        {
-            baseNode.AddEdge(edge);
-        }
-
-        public void DisconnectEdge(GraphEdgeInterface edge)
-        {
-            baseNode.DisconnectEdge(edge);
-        }
 
         public string GetDescription()
         {
             return baseNode.GetDescription();
         }
 
-        public List<GraphEdgeInterface> GetEdges()
-        {
-            return baseNode.GetEdges();
-        }
 
         public string GetName()
         {

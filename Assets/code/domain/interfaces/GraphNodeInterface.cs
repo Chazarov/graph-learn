@@ -9,9 +9,6 @@ namespace Domain
         public string GetDescription();
 
 
-        public void DisconnectEdge(GraphEdgeInterface edge);
-        public List<GraphEdgeInterface> GetEdges();
-        public void AddEdge(GraphEdgeInterface edge);
 
 
         public void SetName(string name);

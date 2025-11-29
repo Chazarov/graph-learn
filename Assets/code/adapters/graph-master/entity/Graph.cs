@@ -10,7 +10,7 @@ using Unity.Collections;
 
 namespace GraphMaster
 {
-    public class Graph<TNode, TEdge> : GraphInterface<TNode, TEdge> where TNode : Domain.GraphNodeInterface where TEdge : Domain.GraphEdgeInterface
+    public class Graph<TNode, TEdge> : GraphInterface<TNode, TEdge> where TNode : Domain.GraphNodeInterface where TEdge : Domain.GraphEdgeInterface<TNode>
     {
 
 
@@ -97,7 +97,7 @@ namespace GraphMaster
             NodePair pair = new NodePair(sourseName, targetName);
             if (!this.parralelEdgesAreAllowed)
             {
-                if (!nodesPairMap.ContainsKey(pair))
+                if (nodesPairMap.ContainsKey(pair))
                 {
                     throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
                 }
@@ -126,23 +126,6 @@ namespace GraphMaster
             if (!nodesMap.TryGetValue(name, out var node))
             {
                 throw new NotFoundException("Node", name, "Graph");
-            }
-            List<GraphEdgeInterface> nodeEdges = node.GetEdges();
-            foreach (var edge in nodeEdges)
-            {
-                edge.GetSourceNode().DisconnectEdge(edge);
-                edge.GetTargetNode().DisconnectEdge(edge);
-                this.edges.Remove((TEdge)edge);
-
-                NodePair pair = new NodePair(edge.GetSourceNode().GetName(), edge.GetTargetNode().GetName());
-                if (nodesPairMap.ContainsKey(pair))
-                {
-                    nodesPairMap[pair].Remove((TEdge)edge);
-                    if (nodesPairMap[pair].Count == 0)
-                    {
-                        nodesPairMap.Remove(pair);
-                    }
-                }
             }
             this.nodes.Remove(node);
             this.nodesMap.Remove(name);

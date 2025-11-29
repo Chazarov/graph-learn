@@ -7,7 +7,6 @@ namespace GraphMaster.UnityAdapter
 {
     public class Positioned2Node : MonoBehaviour, GraphNodeInterface
     {
-        // Отвечает за визуализацию ноды . Размер , позицию. Анимации Связанные с представлением ее базовых параметров - веса, позиции
 
         private GraphMaster.Positioned2Node sourse = new GraphMaster.Positioned2Node(new System.Numerics.Vector2(0, 0), "");
 
@@ -68,21 +67,6 @@ namespace GraphMaster.UnityAdapter
         }
 
         public string GetDescription()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void DisconnectEdge(GraphEdgeInterface edge)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public List<GraphEdgeInterface> GetEdges()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void AddEdge(GraphEdgeInterface edge)
         {
             throw new System.NotImplementedException();
         }

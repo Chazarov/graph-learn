@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8639328328069343421}
-  - component: {fileID: 6242596238228508523}
   - component: {fileID: -6606600826378720394}
+  - component: {fileID: 3250888383957205000}
   m_Layer: 0
   m_Name: EdgePrefab
   m_TagString: Untagged
@@ -33,19 +33,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6242596238228508523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6805337557755957020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe7e92fdf4460ee4db8a524087b3743e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  line: {fileID: -6606600826378720394}
 --- !u!120 &-6606600826378720394
 LineRenderer:
   serializedVersion: 2
@@ -152,3 +139,16 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &3250888383957205000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6805337557755957020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe7e92fdf4460ee4db8a524087b3743e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  line: {fileID: -6606600826378720394}

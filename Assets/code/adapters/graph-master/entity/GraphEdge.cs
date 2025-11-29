@@ -7,17 +7,17 @@ using UnityEditor.Experimental.GraphView;
 
 namespace GraphMaster
 {
-    public class GraphEdge: Domain.GraphEdgeInterface
+    public class GraphEdge<TNode>: Domain.GraphEdgeInterface<TNode> where TNode : GraphNodeInterface
     {
         private float weight;
         private bool hasWeight = false;
         private string name;
 
-        private GraphNodeInterface targetNode;
-        private GraphNodeInterface sourceNode;
+        private TNode targetNode;
+        private TNode sourceNode;
 
         // Конструктор для невзвешенного ребра
-        public GraphEdge(GraphNodeInterface sourceNode, GraphNodeInterface targetNode)
+        public GraphEdge(TNode sourceNode, TNode targetNode)
         {
             this.targetNode = targetNode;
             this.sourceNode = sourceNode;
@@ -26,7 +26,7 @@ namespace GraphMaster
 
         // Конструктор для взвешенного ребра
         // 1: 
-        public GraphEdge(GraphNodeInterface sourceNode, GraphNodeInterface targetNode, float weight)
+        public GraphEdge(TNode sourceNode, TNode targetNode, float weight)
         {
             this.targetNode = targetNode;
             this.sourceNode = sourceNode;
@@ -51,21 +51,14 @@ namespace GraphMaster
             return hasWeight;
         }
 
-        public GraphNodeInterface GetSourceNode()
+        public TNode GetSourceNode()
         {
             return this.sourceNode;
         }
 
-        public GraphNodeInterface GetTargetNode()
+        public TNode GetTargetNode()
         {
             return this.targetNode;
-        }
-
-        public bool IsParralel(GraphEdgeInterface other)
-        {
-            if (other == null) return false;
-            return other.GetTargetNode().Equals(GetTargetNode()) &&
-       other.GetSourceNode().Equals(GetSourceNode());
         }
 
         public string GetName()
@@ -76,6 +69,16 @@ namespace GraphMaster
         public void SetName(string name)
         {
             this.name = name;
+        }
+
+        public void SetSourseNode(TNode node)
+        {
+            this.sourceNode = node;
+        }
+
+        public void SetTargetNode(TNode node)
+        {
+            this.targetNode= node;
         }
     }
 

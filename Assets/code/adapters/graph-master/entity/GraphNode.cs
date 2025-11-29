@@ -9,7 +9,6 @@ namespace GraphMaster
 
     public class GraphNode : GraphNodeInterface
     {
-        private List<GraphEdgeInterface> edges = new List<GraphEdgeInterface>();
 
         private string name;
 
@@ -27,26 +26,6 @@ namespace GraphMaster
             this.description = description;
         }
 
-        public void AddEdge(GraphEdgeInterface edge)
-        {
-            if (edge == null)
-            {
-                throw new ArgumentNullException(nameof(edge), "Edge cannot be null");
-            }
-
-            this.edges.Add(edge);
-        }
-
-        public void DisconnectEdge(GraphEdgeInterface edge)
-        {
-            this.edges.Remove(edge);
-        }
-
-
-        public List<GraphEdgeInterface> GetEdges()
-        {
-            return new List<GraphEdgeInterface>(edges); 
-        }
 
         public string GetName()
         {
