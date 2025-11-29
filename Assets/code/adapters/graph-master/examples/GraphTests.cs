@@ -187,7 +187,7 @@ namespace GraphMaster.Examples
                     graph.GetNode("B");
                     throw new TestFailedException("Неудалось удалить вершину. Вершина B все еще существует");
                 }
-                catch (NodeNotFoundException)
+                catch (NotFoundException)
                 {
                 }
                 

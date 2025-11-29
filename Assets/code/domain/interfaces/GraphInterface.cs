@@ -15,7 +15,11 @@ namespace Domain
 
         public TNode GetNode(string name);
 
+        public TEdge GetEdge(string name);
+
         public int GetNodeCount();
+
+        public void CheckPossibilityOfAddingAnEdge(string sourseName, string targetName, string edgeName);
 
 
 
@@ -24,6 +28,8 @@ namespace Domain
         public TEdge AddEdge(TEdge edge);
 
         public void DeleteNode(string name);
+
+        public void DeleteEdge(TEdge edge);
 
         
     }

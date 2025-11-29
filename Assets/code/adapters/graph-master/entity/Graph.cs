@@ -17,9 +17,10 @@ namespace GraphMaster
         private List<TNode> nodes = new List<TNode>();
         private List<TEdge> edges = new List<TEdge>();
         private Dictionary<string, TNode> nodesMap = new Dictionary<string, TNode>();
+        private Dictionary<string, TEdge> edgesMap = new Dictionary<string, TEdge>();
 
         //A separate edgesMap structure is needed to track parallel edges.
-        private Dictionary<NodePair, List<TEdge>> edgesMap = new Dictionary<NodePair, List<TEdge>>();
+        private Dictionary<NodePair, List<TEdge>> nodesPairMap = new Dictionary<NodePair, List<TEdge>>();
 
         private bool parralelEdgesAreAllowed = false;
 
@@ -37,9 +38,18 @@ namespace GraphMaster
         {
             if (!nodesMap.TryGetValue(name, out var node))
             {
-                throw new NodeNotFoundException(name);
+                throw new NotFoundException("Node", name, "Graph");
             }
             return node;
+        }
+
+        public TEdge GetEdge(string name)
+        {
+            if (!edgesMap.TryGetValue(name, out var edge))
+            {
+                throw new NotFoundException("Edge", name, "Graph");
+            }
+            return edge;
         }
 
         public List<TNode> GetNodes()
@@ -59,35 +69,40 @@ namespace GraphMaster
             {
                 throw new DublicateException("It is not possible to add the same edge twice.");
             }
+
+            CheckPossibilityOfAddingAnEdge(edge.GetSourceNode().GetName(), edge.GetTargetNode().GetName(), edge.GetName());
             
-            if (!parralelEdgesAreAllowed)
-            {
-                if (CheckParrallel(edge))
-                {
-                    throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {edge.GetSourceNode().GetName()} and {edge.GetTargetNode().GetName()}");
-                }
-            }
 
             edges.Add(edge);
 
             NodePair pair = new NodePair(edge.GetSourceNode().GetName(), edge.GetTargetNode().GetName());
-            if (!edgesMap.ContainsKey(pair))
+            if (!nodesPairMap.ContainsKey(pair))
             {
-                edgesMap[pair] = new List<TEdge>();
+                nodesPairMap[pair] = new List<TEdge>();
             }
-            edgesMap[pair].Add(edge);
+            nodesPairMap[pair].Add(edge);
+            edgesMap[edge.GetName()] = edge;
 
             return edge;
         }
 
-        public bool CheckParrallel(TEdge edge)
+        public void CheckPossibilityOfAddingAnEdge(string sourseName, string targetName, string edgeName)
         {
-            string sourseName = edge.GetSourceNode().GetName();
-            string targetName = edge.GetTargetNode().GetName();
+
+            if (this.edgesMap.ContainsKey(edgeName))
+            {
+                throw new DublicateException("It is not possible to add the edge with same name twice.");
+            }
 
             NodePair pair = new NodePair(sourseName, targetName);
-
-            return this.edgesMap.ContainsKey(pair);
+            if (!this.parralelEdgesAreAllowed)
+            {
+                if (!nodesPairMap.ContainsKey(pair))
+                {
+                    throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
+                }
+                
+            }  
         }
 
         public TNode AddNode(TNode node)
@@ -110,7 +125,7 @@ namespace GraphMaster
         {
             if (!nodesMap.TryGetValue(name, out var node))
             {
-                throw new NodeNotFoundException(name);
+                throw new NotFoundException("Node", name, "Graph");
             }
             List<GraphEdgeInterface> nodeEdges = node.GetEdges();
             foreach (var edge in nodeEdges)
@@ -120,12 +135,12 @@ namespace GraphMaster
                 this.edges.Remove((TEdge)edge);
 
                 NodePair pair = new NodePair(edge.GetSourceNode().GetName(), edge.GetTargetNode().GetName());
-                if (edgesMap.ContainsKey(pair))
+                if (nodesPairMap.ContainsKey(pair))
                 {
-                    edgesMap[pair].Remove((TEdge)edge);
-                    if (edgesMap[pair].Count == 0)
+                    nodesPairMap[pair].Remove((TEdge)edge);
+                    if (nodesPairMap[pair].Count == 0)
                     {
-                        edgesMap.Remove(pair);
+                        nodesPairMap.Remove(pair);
                     }
                 }
             }
@@ -141,6 +156,11 @@ namespace GraphMaster
         public int GetNodeCount()
         {
             return nodes.Count;
+        }
+
+        public void DeleteEdge(TEdge edge)
+        {
+            throw new NotImplementedException();
         }
 
         public struct NodePair : IEquatable<NodePair>

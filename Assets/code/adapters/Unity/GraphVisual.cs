@@ -123,17 +123,15 @@ namespace GraphMaster.UnityAdapter
         {
             CheckTheEdgePrefabContent(edgePrefab);
 
-            GraphEdge newEdge = new GraphEdge(sourse, target);
-
             try
             {
-                this.sourse.AddEdge(newEdge);
+                this.sourse.CheckPossibilityOfAddingAnEdge(sourse.GetName(), target.GetName());
             }
-            catch (ParralelEdgesNotAllowed ex)
+            catch (ParralelEdgesNotAllowed e)
             {
-                Debug.LogWarning(ex.Message);
-                return;
+                Debug.Log(e.Message);
             }
+            
 
             GameObject instance = Instantiate(edgePrefab);
             EdgeVisual edgeVisualComponent = instance.GetComponent<EdgeVisual>();

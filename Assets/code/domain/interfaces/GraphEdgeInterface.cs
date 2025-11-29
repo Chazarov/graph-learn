@@ -5,6 +5,9 @@ namespace Domain
         public float GetWeight();
         public void SetWeight(float weight);
         public bool HasWeight();
+
+        public string GetName();
+        public void SetName(string name);
         public GraphNodeInterface GetSourceNode();
         public GraphNodeInterface GetTargetNode();
 

@@ -11,6 +11,7 @@ namespace GraphMaster
     {
         private float weight;
         private bool hasWeight = false;
+        private string name;
 
         private GraphNodeInterface targetNode;
         private GraphNodeInterface sourceNode;
@@ -65,6 +66,16 @@ namespace GraphMaster
             if (other == null) return false;
             return other.GetTargetNode().Equals(GetTargetNode()) &&
        other.GetSourceNode().Equals(GetSourceNode());
+        }
+
+        public string GetName()
+        {
+            return name;
+        }
+
+        public void SetName(string name)
+        {
+            this.name = name;
         }
     }
 
