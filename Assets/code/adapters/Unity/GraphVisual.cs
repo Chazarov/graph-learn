@@ -22,11 +22,11 @@ namespace GraphMaster.UnityAdapter
         private int nodeNameSequense = 1;
         private int edgeNameSequense = 1;
 
-        private GraphMaster.Graph<GraphMaster.UnityAdapter.UI.UIPositioned2Node, GraphMaster.GraphEdge<UIPositioned2Node>> sourse = new Graph<UIPositioned2Node, GraphEdge<UIPositioned2Node>>();
+        private GraphMaster.Graph<GraphMaster.UnityAdapter.UI.UIPositioned2Node, EdgeVisual> sourse = new Graph<UIPositioned2Node, EdgeVisual>();
 
 
         private List<UIPositioned2Node> selectedNodes = new List<UIPositioned2Node>();
-        private bool addEdgeStarted = false;
+        private bool addEdgesMode = false;
 
 
         private void Start()
@@ -78,30 +78,49 @@ namespace GraphMaster.UnityAdapter
             }
         }
 
-        public  void StartAddEdge()
+        public  void SetAddEdgesMode()
         {
-            if(selectedNodes.Count > 0)
-            {
-                addEdgeStarted = true;
-            }
-            else
-            {
-                throw new NodeNotSelectedException();
-            }
+            if (addEdgesMode) { this.addEdgesMode = false; }
+            else { this.addEdgesMode = true; }
         }
 
         private void OnAnyNodeSelected(string nodeName)
         {
             UIPositioned2Node node = this.sourse.GetNode(nodeName);
-            if (addEdgeStarted)
+            if (addEdgesMode)
             {
+
                 if (this.selectedNodes.Count == 1)
                 {
-                    this.CreateEdgeObject(this.selectedNodes[0], node);
-                    this.selectedNodes[0].DeselectThisNode();
-                    this.selectedNodes.Clear();
+                    try
+                    {
+                        Debug.Log("Try creaate nodes more them 1");
+                        this.CreateEdgeObject(this.selectedNodes[0], node);
+                    }
+                    catch (ParralelEdgesNotAllowed e)
+                    {
+                        Debug.LogWarning(e.Message);
+                        return;
+                    }
+                    catch (LoopsNotAllowed e)
+                    {
+                        Debug.LogWarning(e.Message);
+                        return;
+                    }
+                    finally
+                    {
+                        if (this.selectedNodes[0].GetName() != nodeName)
+                        {
+                            this.selectedNodes[0].DeselectThisNode();
+                            this.selectedNodes.Clear();
+                            this.selectedNodes.Add(node);
+                        }
+                    }
+                }
+                if(this.selectedNodes.Count == 0)
+                {
+                    Debug.Log($"Add node in list count :{selectedNodes.Count}");
                     this.selectedNodes.Add(node);
-                    this.addEdgeStarted = false;
                 }
 
             }
@@ -135,25 +154,21 @@ namespace GraphMaster.UnityAdapter
             
         }
 
-        public void CreateEdgeObject(UIPositioned2Node sourse, UIPositioned2Node target)
+        public void CreateEdgeObject(UIPositioned2Node sourseNode, UIPositioned2Node targetNode)
         {
             CheckTheEdgePrefabContent(edgePrefab);
 
             string edgeName = NumberToLetters(this.edgeNameSequense);
 
-            try
-            {
-                this.sourse.CheckPossibilityOfAddingAnEdge(sourse.GetName(), target.GetName(), edgeName);
-            }
-            catch (ParralelEdgesNotAllowed e)
-            {
-                Debug.Log(e.Message);
-            }
+            
+            this.sourse.CheckPossibilityOfAddingAnEdge(sourseNode.GetName(), targetNode.GetName(), edgeName);
+           
             
 
             GameObject instance = Instantiate(edgePrefab);
             EdgeVisual edgeVisualComponent = instance.GetComponent<EdgeVisual>();
-            edgeVisualComponent.Initialize(sourse, target, edgeName);
+            edgeVisualComponent.Initialize(sourseNode, targetNode, edgeName);
+            this.sourse.AddEdge(edgeVisualComponent);
             edgeNameSequense += 1;
         }
 

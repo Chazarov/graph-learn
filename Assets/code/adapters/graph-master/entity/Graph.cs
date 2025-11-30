@@ -23,6 +23,7 @@ namespace GraphMaster
         private Dictionary<NodePair, List<TEdge>> nodesPairMap = new Dictionary<NodePair, List<TEdge>>();
 
         private bool parralelEdgesAreAllowed = false;
+        private bool loopsAreAllowed = false;
 
         public void SetParralelEdgesAllowed(bool allowed)
         {
@@ -70,12 +71,17 @@ namespace GraphMaster
                 throw new DublicateException("It is not possible to add the same edge twice.");
             }
 
-            CheckPossibilityOfAddingAnEdge(edge.GetSourceNode().GetName(), edge.GetTargetNode().GetName(), edge.GetName());
+            string sourseName = edge.GetSourceNode().GetName();
+            string targetName = edge.GetTargetNode().GetName();
+            string edgeName = edge.GetName();
+
+
+            CheckPossibilityOfAddingAnEdge(sourseName, targetName, edgeName);
             
 
             edges.Add(edge);
 
-            NodePair pair = new NodePair(edge.GetSourceNode().GetName(), edge.GetTargetNode().GetName());
+            NodePair pair = new NodePair(sourseName, targetName);
             if (!nodesPairMap.ContainsKey(pair))
             {
                 nodesPairMap[pair] = new List<TEdge>();
@@ -92,6 +98,14 @@ namespace GraphMaster
             if (this.edgesMap.ContainsKey(edgeName))
             {
                 throw new DublicateException("It is not possible to add the edge with same name twice.");
+            }
+
+            if (sourseName == targetName)
+            {
+                if(!this.loopsAreAllowed)
+                {
+                    throw new LoopsNotAllowed($"it is impossible to create an edge that starts and ends at the same vertex. Loops are not  allowed");
+                }
             }
 
             NodePair pair = new NodePair(sourseName, targetName);
