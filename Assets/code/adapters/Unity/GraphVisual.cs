@@ -27,6 +27,7 @@ namespace GraphMaster.UnityAdapter
 
         private List<UIPositioned2Node> selectedNodes = new List<UIPositioned2Node>();
         private bool addEdgesMode = false;
+        private bool deletingMode = false;
 
 
         private void Start()
@@ -84,6 +85,12 @@ namespace GraphMaster.UnityAdapter
             else { this.addEdgesMode = true; }
         }
 
+        public void SetDeletingMode()
+        {
+            if (deletingMode) { this.deletingMode = false; }
+            else { this.deletingMode = true; }
+        }
+
         private void OnAnyNodeSelected(string nodeName)
         {
             UIPositioned2Node node = this.sourse.GetNode(nodeName);
@@ -94,7 +101,6 @@ namespace GraphMaster.UnityAdapter
                 {
                     try
                     {
-                        Debug.Log("Try creaate nodes more them 1");
                         this.CreateEdgeObject(this.selectedNodes[0], node);
                     }
                     catch (ParralelEdgesNotAllowed e)
@@ -152,6 +158,16 @@ namespace GraphMaster.UnityAdapter
                 }
             }
             
+        }
+
+        private void OnAnyEdgeSelected(EdgeVisual edge)
+        {
+            .....
+        }
+
+        private void OnAnyEdgeDeselected(EdgeVisual edge)
+        {
+            .....
         }
 
         public void CreateEdgeObject(UIPositioned2Node sourseNode, UIPositioned2Node targetNode)
