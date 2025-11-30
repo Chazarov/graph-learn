@@ -157,7 +157,26 @@ namespace GraphMaster
 
         public void DeleteEdge(TEdge edge)
         {
-            throw new NotImplementedException();
+            if (!edges.Contains(edge))
+            {
+                throw new NotFoundException("Edge", edge.GetName(), "Graph");
+            }
+            
+            edges.Remove(edge);
+            edgesMap.Remove(edge.GetName());
+            
+            string sourseName = edge.GetSourceNode().GetName();
+            string targetName = edge.GetTargetNode().GetName();
+            NodePair pair = new NodePair(sourseName, targetName);
+            
+            if (nodesPairMap.ContainsKey(pair))
+            {
+                nodesPairMap[pair].Remove(edge);
+                if (nodesPairMap[pair].Count == 0)
+                {
+                    nodesPairMap.Remove(pair);
+                }
+            }
         }
 
         public struct NodePair : IEquatable<NodePair>

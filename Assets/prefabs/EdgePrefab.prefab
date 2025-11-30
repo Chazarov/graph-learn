@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   line: {fileID: -6606600826378720394}
   edgeCollider: {fileID: 1393656597070005156}
+  isSelected: 0
 --- !u!68 &1393656597070005156
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -170,7 +171,7 @@ EdgeCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: -1
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295

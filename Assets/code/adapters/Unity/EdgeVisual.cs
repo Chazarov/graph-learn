@@ -16,6 +16,8 @@ namespace GraphMaster.UnityAdapter
         private UIPositioned2Node sourceNode;
         private UIPositioned2Node targetNode;
 
+        public bool isSelected = false;
+
         public event Action<EdgeVisual> IsSelected;
         public event Action<EdgeVisual> IsDeselected;
 
@@ -37,17 +39,34 @@ namespace GraphMaster.UnityAdapter
 
         private void OnMouseDown()
         {
-            ......
+            if (!isSelected)
+            {
+                SelectThisEdge();
+                isSelected = true;
+            }
+            else
+            {
+                isSelected = false;
+                DeselectThisEdge();
+            }
         }
 
         private void SelectThisEdge()
         {
-            .......
+            line.startColor = Color.yellow;
+            line.endColor = Color.yellow;
+            line.startWidth = 0.15f;
+            line.endWidth = 0.15f;
+            IsSelected?.Invoke(this);
         }
 
         private void DeselectThisEdge()
         {
-            .......
+            line.startColor = Color.white;
+            line.endColor = Color.white;
+            line.startWidth = 0.1f;
+            line.endWidth = 0.1f;
+            IsDeselected?.Invoke(this);
         }
 
         public void Initialize(UIPositioned2Node sourseNode, UIPositioned2Node targetNode, string edgeName)
