@@ -116,6 +116,7 @@ namespace GraphMaster.UnityAdapter
 
             this.SetSourseNode(sourseNode);
             this.SetTargetNode(targetNode);
+            this.SetWeight(sourse.GetWeight());
 
             activeLine.positionCount = 2;
             activeLine.SetPosition(0, sourseNode.transform.position);
