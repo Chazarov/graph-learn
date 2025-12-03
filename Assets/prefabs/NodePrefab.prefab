@@ -337,6 +337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameVisual: {fileID: 7922480532095966600}
+  nodeToolBar: {fileID: 7537153058417728020}
   selectedColor: {r: 0.4308473, g: 0.8867924, b: 0.54640543, a: 1}
   defaultColor: {r: 0.2991723, g: 0.7830189, b: 0.7014062, a: 1}
   defaultScale: {x: 1, y: 1}

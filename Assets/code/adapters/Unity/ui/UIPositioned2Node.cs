@@ -11,6 +11,7 @@ namespace GraphMaster.UnityAdapter.UI
     public class UIPositioned2Node : MonoBehaviour, Domain.GraphNodeInterface
     {
         [SerializeField] private TextMeshProUGUI nameVisual;
+        [SerializeField] private Canvas nodeToolBar;
         [SerializeField] private Color selectedColor;
         [SerializeField] private Color defaultColor;
         [SerializeField] private Vector2 defaultScale;
@@ -46,10 +47,17 @@ namespace GraphMaster.UnityAdapter.UI
         }
 
 
-        public void Initialize(string name, Vector3 position)
+        public void Initialize(string name, Vector3 position, int squenseCount)
         {
             SetName(name);
             SetPosition(position);
+            setVisualLayer(squenseCount);
+        }
+
+        private void setVisualLayer(int graphEdgesSequenseCount)
+        {
+            nodeToolBar.sortingOrder = graphEdgesSequenseCount * 2 + 1;
+            nodeSpriteRenderer.sortingOrder = graphEdgesSequenseCount * 2;
         }
 
         public void CheckGameobgectContent()

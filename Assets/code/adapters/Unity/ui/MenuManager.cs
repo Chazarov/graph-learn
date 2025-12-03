@@ -10,10 +10,26 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private TMP_InputField setWeightInput;
     [SerializeField] private GraphVisual graphVisual;
 
+    private void OnEnable()
+    {
+        graphVisual.EdgeSelected.AddListener(EdgeSelected);
+    }
+
     public void SetEdgeWeightByInput()
     {
         float value = float.Parse(setWeightInput.text);
         graphVisual.SetSelectedEdgesWeight(value);
+    }
+
+    void EdgeSelected(string edgeName)
+    {
+        EdgeVisual edge = graphVisual.GetEdge(edgeName);
+        setWeightInput.SetTextWithoutNotify(edge.GetWeight().ToString());
+    }
+
+    private void OnDisable()
+    {
+        graphVisual.EdgeSelected.RemoveListener(EdgeSelected);
     }
 
 }

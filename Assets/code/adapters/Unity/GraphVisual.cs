@@ -1,10 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GraphMaster;
-using Domain;
-using System.Linq;
-using System.ComponentModel;
 using GraphMaster.UnityAdapter.UI;
 using UnityEngine.Events;
 
@@ -140,7 +135,6 @@ namespace GraphMaster.UnityAdapter
                 }
                 if(this.selectedNodes.Count == 0)
                 {
-                    Debug.Log($"Add node in list count :{selectedNodes.Count}");
                     this.selectedNodes.Add(node);
                 }
 
@@ -179,7 +173,17 @@ namespace GraphMaster.UnityAdapter
 
         private void OnAnyEdgeSelected(EdgeVisual edge)
         {
-            
+
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            string temp = "";
+            foreach (var ed in this.selectedEdges)
+            {
+                temp += "----" + ed.GetName();
+            }
+            Debug.Log($" Selected Edges: {temp}");
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
             if (deletingMode)
             {
                 DeleteEdge(edge.GetName());
@@ -205,7 +209,6 @@ namespace GraphMaster.UnityAdapter
 
         public void SetSelectedEdgesWeight(float weight)
         {
-            Debug.Log($" Set selected weight {weight}");
             foreach (var edge in selectedEdges)
             {
                 edge.SetWeight(weight);
@@ -251,7 +254,7 @@ namespace GraphMaster.UnityAdapter
             UIComponent.IsSelected += OnAnyNodeSelected;
             UIComponent.IsDeselected += OnAnyNodeDeselected;
 
-            UIComponent.Initialize(NumberToLetters(nodeNameSequense), instancePosition);
+            UIComponent.Initialize(NumberToLetters(nodeNameSequense), instancePosition, nodeNameSequense);
             sourse.AddNode(UIComponent);
             nodeNameSequense++;
 
@@ -286,11 +289,20 @@ namespace GraphMaster.UnityAdapter
 
         public void DeleteEdge(string edgeName)
         {
+
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            Debug.Log($"delete edge {edgeName}");
             EdgeVisual edge = sourse.GetEdge(edgeName);
+            this.selectedEdges.Remove(edge);
             sourse.DeleteEdge(edge);
             Destroy(edge.gameObject);
         }
 
+
+        public EdgeVisual GetEdge(string name)
+        {
+            return sourse.GetEdge(name);
+        }
 
 
     }
