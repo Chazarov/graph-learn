@@ -14,13 +14,15 @@ namespace GraphMaster
     {
 
 
-        private List<TNode> nodes = new List<TNode>();
-        private List<TEdge> edges = new List<TEdge>();
         private Dictionary<string, TNode> nodesMap = new Dictionary<string, TNode>();
         private Dictionary<string, TEdge> edgesMap = new Dictionary<string, TEdge>();
 
-        //A separate edgesMap structure is needed to track parallel edges.
-        private Dictionary<NodePair, List<TEdge>> nodesPairMap = new Dictionary<NodePair, List<TEdge>>();
+
+        // Algorithms with an undirected graph
+        private Dictionary<string, List<string>> nodesEdgesMap = new();
+
+        // Algoritms with a weighed graph 
+        public Dictionary<string, List<(string to, float weight, string edgeName)>> adjacencyMap = new();
 
         private bool parralelEdgesAreAllowed = false;
         private bool loopsAreAllowed = false;
@@ -55,42 +57,69 @@ namespace GraphMaster
 
         public List<TNode> GetNodes()
         {
-            return new List<TNode>(this.nodes);
+            return new List<TNode>(this.nodesMap.Values);
         }
 
         public List<TEdge> GetEdges()
         {
-            return new List<TEdge>(this.edges);
+            return new List<TEdge>(this.edgesMap.Values);
         }
 
 
         public TEdge AddEdge(TEdge edge)
         {
-            if (edges.Contains(edge))
-            {
-                throw new DublicateException("It is not possible to add the same edge twice.");
-            }
 
             string sourseName = edge.GetSourceNode().GetName();
             string targetName = edge.GetTargetNode().GetName();
             string edgeName = edge.GetName();
+            float edgeWeight = edge.GetWeight();
 
 
             CheckPossibilityOfAddingAnEdge(sourseName, targetName, edgeName);
             
+            edgesMap[edgeName] = edge;
 
-            edges.Add(edge);
+            if (!nodesEdgesMap[sourseName].Contains(edgeName)) nodesEdgesMap[sourseName] = new List<string>();
+            if (!nodesEdgesMap[targetName].Contains(edgeName)) nodesEdgesMap[targetName] = new List<string>();
+            nodesEdgesMap[sourseName].Add(edgeName);
+            nodesEdgesMap[targetName].Add(edgeName);
 
-            NodePair pair = new NodePair(sourseName, targetName);
-            if (!nodesPairMap.ContainsKey(pair))
-            {
-                nodesPairMap[pair] = new List<TEdge>();
-            }
-            nodesPairMap[pair].Add(edge);
-            edgesMap[edge.GetName()] = edge;
+
+            if (!adjacencyMap[sourseName].Contains((targetName, edgeWeight, edgeName))) adjacencyMap[sourseName] = new List<(string, float, string)>();
+            adjacencyMap[sourseName].Add((targetName, edgeWeight, edgeName));
 
             return edge;
         }
+        public void DeleteEdge(string name)
+        {
+            var edge = this.GetEdge(name);
+            DeleteEdge(edge);
+        }
+        public void DeleteEdge(TEdge edge)
+        {
+            if (!edgesMap.ContainsKey(edge.GetName()))
+            {
+                throw new NotFoundException("Edge", edge.GetName(), "Graph");
+            }
+
+
+
+            string edgeName = edge.GetName();
+            float edgeWeight = edge.GetWeight();
+            string sourceName = edge.GetSourceNode().GetName();
+            string targetName = edge.GetTargetNode().GetName();
+
+            edgesMap.Remove(edgeName);
+
+
+            nodesEdgesMap[targetName].Remove(edgeName);
+            nodesEdgesMap[sourceName].Remove(edgeName);
+
+
+            adjacencyMap[sourceName].Remove((targetName, edgeWeight, edgeName));
+        }
+
+       
 
         public void CheckPossibilityOfAddingAnEdge(string sourseName, string targetName, string edgeName)
         {
@@ -108,10 +137,10 @@ namespace GraphMaster
                 }
             }
 
-            NodePair pair = new NodePair(sourseName, targetName);
             if (!this.parralelEdgesAreAllowed)
             {
-                if (nodesPairMap.ContainsKey(pair))
+                bool occuerence =  nodesEdgesMap[sourseName].FindAll(item => item == targetName).Count != 0;
+                if (occuerence)
                 {
                     throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
                 }
@@ -121,16 +150,12 @@ namespace GraphMaster
 
         public TNode AddNode(TNode node)
         {
-            if (nodes.Contains(node))
-            {
-                throw new DublicateException("It is not possible to add the same node twice.");
-            }
             if (nodesMap.ContainsKey(node.GetName()))
             {
                 throw new DublicateException("It is not possible to add the node with same name twice.");
             }
             nodesMap.Add(node.GetName(), node);
-            nodes.Add(node);
+
             return node;
         }
 
@@ -141,61 +166,37 @@ namespace GraphMaster
             {
                 throw new NotFoundException("Node", name, "Graph");
             }
-            this.nodes.Remove(node);
-            this.nodesMap.Remove(name);
+
+            
+
+            nodesMap.Remove(name);
+
+            var edgesToDelete = nodesEdgesMap[name];
+            for(int i = 0; i < edgesToDelete.Count; i++)
+            {
+                string edge = edgesToDelete[i];
+                this.DeleteEdge(edge);
+
+            }
+
+            nodesEdgesMap.Remove(name);
+
+
+            adjacencyMap.Remove(name);
         }
 
         public bool HasNodes()
         {
-            return nodes.Count > 0;
+            return nodesMap.Values.Count > 0;
         }
 
         public int GetNodeCount()
         {
-            return nodes.Count;
+            return nodesMap.Values.Count;
         }
 
-        public void DeleteEdge(TEdge edge)
-        {
-            if (!edges.Contains(edge))
-            {
-                throw new NotFoundException("Edge", edge.GetName(), "Graph");
-            }
-            
-            edges.Remove(edge);
-            edgesMap.Remove(edge.GetName());
-            
-            string sourseName = edge.GetSourceNode().GetName();
-            string targetName = edge.GetTargetNode().GetName();
-            NodePair pair = new NodePair(sourseName, targetName);
-            
-            if (nodesPairMap.ContainsKey(pair))
-            {
-                nodesPairMap[pair].Remove(edge);
-                if (nodesPairMap[pair].Count == 0)
-                {
-                    nodesPairMap.Remove(pair);
-                }
-            }
-        }
+        
 
-        public struct NodePair : IEquatable<NodePair>
-        {
-            public string First { get; }
-            public string Second { get; }
-
-            public NodePair(string a, string b)
-            {
-                First = string.CompareOrdinal(a, b) < 0 ? a : b;
-                Second = string.CompareOrdinal(a, b) < 0 ? b : a;
-            }
-
-            public override int GetHashCode() => HashCode.Combine(First, Second);
-
-            public override bool Equals(object obj) => obj is NodePair other && Equals(other);
-
-            public bool Equals(NodePair other) => First == other.First && Second == other.Second;
-        }
 
     }
 }
