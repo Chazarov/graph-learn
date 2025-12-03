@@ -186,7 +186,7 @@ namespace GraphMaster.UnityAdapter
 
             if (deletingMode)
             {
-                DeleteEdge(edge.GetName());
+                DeleteEdge(edge);
             }
             else if (selectedEdges.Count == 1)
             {
@@ -276,7 +276,7 @@ namespace GraphMaster.UnityAdapter
             
             foreach (EdgeVisual edge in edgesToDelete)
             {
-                sourse.DeleteEdge(edge);
+                DeleteEdge(edge);
                 Destroy(edge.gameObject);
             }
             
@@ -290,9 +290,12 @@ namespace GraphMaster.UnityAdapter
         public void DeleteEdge(string edgeName)
         {
 
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            Debug.Log($"delete edge {edgeName}");
             EdgeVisual edge = sourse.GetEdge(edgeName);
+            DeleteEdge(edge);
+        }
+
+        public void DeleteEdge(EdgeVisual edge)
+        {
             this.selectedEdges.Remove(edge);
             sourse.DeleteEdge(edge);
             Destroy(edge.gameObject);
