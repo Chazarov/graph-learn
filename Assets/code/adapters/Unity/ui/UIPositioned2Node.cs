@@ -41,12 +41,12 @@ namespace GraphMaster.UnityAdapter.UI
         private void OnMouseDrag()
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePosition.z = 0;
+            mousePosition.z = transform.position.z;
             sourse.SetPosition(mousePosition);
         }
 
 
-        public void Initialize(string name, Vector2 position)
+        public void Initialize(string name, Vector3 position)
         {
             SetName(name);
             SetPosition(position);
@@ -60,7 +60,7 @@ namespace GraphMaster.UnityAdapter.UI
             }
         }
 
-        public void SetPosition(Vector2 position)
+        public void SetPosition(Vector3 position)
         {
             sourse.SetPosition(position);
         }

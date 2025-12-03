@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9003311517785401854}
   - component: {fileID: 8423033711220352203}
   - component: {fileID: 7922480532095966600}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: NodeNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 7537153058417728020}
   - component: {fileID: 8501844063867122610}
   - component: {fileID: 30689933862575670}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -249,7 +249,7 @@ GameObject:
   - component: {fileID: 1394269402225191795}
   - component: {fileID: -8864676273580272040}
   - component: {fileID: 8350196607987080010}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NodePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,7 +265,7 @@ Transform:
   m_GameObject: {fileID: 6115264197397747076}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.931, y: -0.157, z: 0}
+  m_LocalPosition: {x: -6.931, y: -0.157, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -372,7 +372,7 @@ CircleCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 10
+  m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -386,7 +386,7 @@ CircleCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2

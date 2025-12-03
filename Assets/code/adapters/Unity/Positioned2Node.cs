@@ -38,14 +38,14 @@ namespace GraphMaster.UnityAdapter
         }
 
 
-        public void Initialize(string name, Vector2 position)
+        public void Initialize(string name, Vector3 position)
         {
             SetName(name);
             SetPosition(position);
         }
 
 
-        public void SetPosition(Vector2 position)
+        public void SetPosition(Vector3 position)
         {
             transform.position = position;
             Vector2 newPosition = transform.position;

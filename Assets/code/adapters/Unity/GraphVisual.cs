@@ -6,6 +6,9 @@ using Domain;
 using System.Linq;
 using System.ComponentModel;
 using GraphMaster.UnityAdapter.UI;
+using UnityEngine.Events;
+
+
 
 
 #if UNITY_EDITOR
@@ -26,8 +29,14 @@ namespace GraphMaster.UnityAdapter
 
 
         private List<UIPositioned2Node> selectedNodes = new List<UIPositioned2Node>();
+        private List<EdgeVisual> selectedEdges = new List<EdgeVisual>();
         private bool addEdgesMode = false;
         private bool deletingMode = false;
+
+
+        [SerializeField] public  UnityEvent<string> EdgeSelected;
+        [SerializeField] public  UnityEvent<string> EdgeDeselected;
+
 
 
         private void Start()
@@ -90,6 +99,7 @@ namespace GraphMaster.UnityAdapter
             if (deletingMode) { this.deletingMode = false; }
             else { this.deletingMode = true; }
         }
+
 
         private void OnAnyNodeSelected(string nodeName)
         {
@@ -165,17 +175,47 @@ namespace GraphMaster.UnityAdapter
             
         }
 
+
+
         private void OnAnyEdgeSelected(EdgeVisual edge)
         {
+            
             if (deletingMode)
             {
                 DeleteEdge(edge.GetName());
+            }
+            else if (selectedEdges.Count == 1)
+            {
+                if (edge != selectedEdges[0])
+                {
+                    selectedEdges[0].DeselectThisEdge();
+                }
+                
+                selectedEdges.Clear();
+                selectedEdges.Add(edge);
+                EdgeSelected.Invoke(edge.GetName());
+            }
+            else if (selectedEdges.Count == 0)
+            {
+                selectedEdges.Add(edge);
+                EdgeSelected.Invoke(edge.GetName());
+            }
+            
+        }
+
+        public void SetSelectedEdgesWeight(float weight)
+        {
+            Debug.Log($" Set selected weight {weight}");
+            foreach (var edge in selectedEdges)
+            {
+                edge.SetWeight(weight);
+                
             }
         }
 
         private void OnAnyEdgeDeselected(EdgeVisual edge)
         {
-            
+            EdgeDeselected.Invoke(edge.GetName());
         }
 
         public void CreateEdgeObject(UIPositioned2Node sourseNode, UIPositioned2Node targetNode)
@@ -205,13 +245,13 @@ namespace GraphMaster.UnityAdapter
         {
             CheckTheNodePrefabContent(nodePrefab);
             GameObject instance = Instantiate(nodePrefab);
-            Vector2 vector2 = new Vector2(Random.Range(3, -3), Random.Range(3, -3));
+            Vector3 instancePosition = new Vector3(UnityEngine.Random.Range(3, -3), UnityEngine.Random.Range(3, -3), instance.transform.position.z);
 
             UIPositioned2Node UIComponent = instance.GetComponent<UIPositioned2Node>();
             UIComponent.IsSelected += OnAnyNodeSelected;
             UIComponent.IsDeselected += OnAnyNodeDeselected;
 
-            UIComponent.Initialize(NumberToLetters(nodeNameSequense), vector2);
+            UIComponent.Initialize(NumberToLetters(nodeNameSequense), instancePosition);
             sourse.AddNode(UIComponent);
             nodeNameSequense++;
 
@@ -221,6 +261,22 @@ namespace GraphMaster.UnityAdapter
         public void DeleteNode(string nodeName)
         {
             UIPositioned2Node instance = sourse.GetNode(nodeName);
+            
+            List<EdgeVisual> edgesToDelete = new List<EdgeVisual>();
+            foreach (EdgeVisual edge in sourse.GetEdges())
+            {
+                if (edge.GetSourceNode().GetName() == nodeName || edge.GetTargetNode().GetName() == nodeName)
+                {
+                    edgesToDelete.Add(edge);
+                }
+            }
+            
+            foreach (EdgeVisual edge in edgesToDelete)
+            {
+                sourse.DeleteEdge(edge);
+                Destroy(edge.gameObject);
+            }
+            
             sourse.DeleteNode(nodeName);
             selectedNodes.Remove(instance);
 

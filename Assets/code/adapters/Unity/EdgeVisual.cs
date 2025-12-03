@@ -51,8 +51,9 @@ namespace GraphMaster.UnityAdapter
             }
         }
 
-        private void SelectThisEdge()
+        public void SelectThisEdge()
         {
+            Debug.Log("Selected Edge");
             line.startColor = Color.yellow;
             line.endColor = Color.yellow;
             line.startWidth = 0.15f;
@@ -60,7 +61,7 @@ namespace GraphMaster.UnityAdapter
             IsSelected?.Invoke(this);
         }
 
-        private void DeselectThisEdge()
+        public void DeselectThisEdge()
         {
             line.startColor = Color.white;
             line.endColor = Color.white;
