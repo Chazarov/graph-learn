@@ -4,15 +4,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace GraphMaster.UnityAdapter
 {
     public class EdgeVisual : MonoBehaviour, Domain.GraphEdgeInterface<UIPositioned2Node>
     {
-        [SerializeField] LineRenderer line;
-        [SerializeField] EdgeCollider2D edgeCollider;
+        [SerializeField] private LineRenderer line;
+        private LineRenderer baseLine;
+        [SerializeField] private LineRenderer selectedLine;
+        [SerializeField] private EdgeCollider2D edgeCollider;
+        [SerializeField] private TextMeshProUGUI weightText;
+        [SerializeField] private Canvas edgeToolBar;
 
-        GraphEdgeInterface<UIPositioned2Node> sourse;
+
+        private GraphEdgeInterface<UIPositioned2Node> sourse;
         private UIPositioned2Node sourceNode;
         private UIPositioned2Node targetNode;
 
@@ -31,10 +37,33 @@ namespace GraphMaster.UnityAdapter
         {
             if (sourceNode != null && targetNode != null)
             {
-                line.SetPosition(0, sourceNode.transform.position);
-                line.SetPosition(1, targetNode.transform.position);
+                baseLine.SetPosition(0, sourceNode.transform.position);
+                baseLine.SetPosition(1, targetNode.transform.position);
                 edgeCollider.SetPoints(new List<Vector2> { sourceNode.transform.position, targetNode.transform.position });
+                
+                UpdateWeightTextPosition();
             }
+        }
+
+        private void UpdateWeightTextPosition()
+        {
+            if (edgeToolBar == null || sourceNode == null || targetNode == null) return;
+
+            Vector3 sourcePos = sourceNode.transform.position;
+            Vector3 targetPos = targetNode.transform.position;
+            Vector3 centerPos = (sourcePos + targetPos) / 2f;
+
+            edgeToolBar.transform.position = centerPos;
+
+            Vector3 direction = (targetPos - sourcePos).normalized;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            if (angle > 90f || angle < -90f)
+            {
+                angle += 180f;
+            }
+
+            edgeToolBar.transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
         private void OnMouseDown()
@@ -54,19 +83,19 @@ namespace GraphMaster.UnityAdapter
         public void SelectThisEdge()
         {
             Debug.Log("Selected Edge");
-            line.startColor = Color.yellow;
-            line.endColor = Color.yellow;
-            line.startWidth = 0.15f;
-            line.endWidth = 0.15f;
+            baseLine.startColor = Color.yellow;
+            baseLine.endColor = Color.yellow;
+            baseLine.startWidth = 0.15f;
+            baseLine.endWidth = 0.15f;
             IsSelected?.Invoke(this);
         }
 
         public void DeselectThisEdge()
         {
-            line.startColor = Color.white;
-            line.endColor = Color.white;
-            line.startWidth = 0.1f;
-            line.endWidth = 0.1f;
+            baseLine.startColor = Color.white;
+            baseLine.endColor = Color.white;
+            baseLine.startWidth = 0.1f;
+            baseLine.endWidth = 0.1f;
             IsDeselected?.Invoke(this);
         }
 
@@ -82,9 +111,9 @@ namespace GraphMaster.UnityAdapter
             this.SetSourseNode(sourseNode);
             this.SetTargetNode(targetNode);
 
-            line.positionCount = 2;
-            line.SetPosition(0, sourseNode.transform.position);
-            line.SetPosition(1, targetNode.transform.position);
+            baseLine.positionCount = 2;
+            baseLine.SetPosition(0, sourseNode.transform.position);
+            baseLine.SetPosition(1, targetNode.transform.position);
 
 
             edgeCollider.SetPoints(new List<Vector2> { sourseNode.transform.position , targetNode.transform.position });
@@ -93,7 +122,7 @@ namespace GraphMaster.UnityAdapter
 
         public void CheckGameObjectContent()
         {
-            if (line == null)
+            if (baseLine == null)
             {
                 throw new System.Exception(" Line Renderer can't be a null");
             }
@@ -101,6 +130,16 @@ namespace GraphMaster.UnityAdapter
             if (edgeCollider == null)
             {
                 throw new System.Exception(" EdgeCollider2D  edgeCollider can't be a null");
+            }
+
+            if (weightText == null)
+            {
+                throw new System.Exception(" TextMeshPro weightText can't be a null");
+            }
+
+            if (edgeToolBar == null)
+            {
+                throw new System.Exception(" Canvas edgeToolBar can't be a null");
             }
         }
 
@@ -128,6 +167,10 @@ namespace GraphMaster.UnityAdapter
         public void SetWeight(float weight)
         {
             sourse.SetWeight(weight);
+            if (weightText != null)
+            {
+                weightText.text = weight.ToString();
+            }
         }
 
         public string GetName()
