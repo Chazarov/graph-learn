@@ -38,8 +38,12 @@ namespace GraphMaster.UnityAdapter
         {
             if (sourceNode != null && targetNode != null)
             {
-                activeLine.SetPosition(0, sourceNode.transform.position);
-                activeLine.SetPosition(1, targetNode.transform.position);
+                Vector3 soursePosition = sourceNode.transform.position;
+                Vector3 targetPosition = targetNode.transform.position;
+                targetPosition.z = soursePosition.z = transform.position.z;
+
+                activeLine.SetPosition(0, soursePosition);
+                activeLine.SetPosition(1, targetPosition);
                 edgeCollider.SetPoints(new List<Vector2> { sourceNode.transform.position, targetNode.transform.position });
                 
                 UpdateWeightTextPosition();
@@ -97,11 +101,14 @@ namespace GraphMaster.UnityAdapter
             IsDeselected?.Invoke(this);
         }
 
-        public void Initialize(UIPositioned2Node sourseNode, UIPositioned2Node targetNode, string edgeName)
+        public void Initialize(UIPositioned2Node sourseNode, UIPositioned2Node targetNode, string edgeName, int graphEdgesSequenseCount)
         {
+            // Число уже созданных ребер необходимо, чтобы выставить порядок отображения текста на ребрах (чтобы текст не просвечивал через несколько ребер)
             CheckGameObjectContent();
+            setVisualLayer(graphEdgesSequenseCount);
             activeLine = line;
             GraphEdgeInterface<UIPositioned2Node> edge = new GraphEdge<UIPositioned2Node>(sourseNode, targetNode);
+
             
             this.sourse = edge;
             this.name = $"Edge {edgeName}";
@@ -118,6 +125,13 @@ namespace GraphMaster.UnityAdapter
 
 
             edgeCollider.SetPoints(new List<Vector2> { sourseNode.transform.position , targetNode.transform.position });
+        }
+
+        private void setVisualLayer(int graphEdgesSequenseCount)
+        {
+            edgeToolBar.sortingOrder = -graphEdgesSequenseCount * 2 + 1;
+            line.sortingOrder = -graphEdgesSequenseCount * 2;
+            selectedLine.sortingOrder = -graphEdgesSequenseCount * 2;
         }
 
 

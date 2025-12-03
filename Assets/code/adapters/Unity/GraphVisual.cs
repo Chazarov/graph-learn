@@ -233,7 +233,7 @@ namespace GraphMaster.UnityAdapter
             EdgeVisual edgeVisualComponent = instance.GetComponent<EdgeVisual>();
             edgeVisualComponent.IsSelected += OnAnyEdgeSelected;
             edgeVisualComponent.IsDeselected += OnAnyEdgeDeselected;
-            edgeVisualComponent.Initialize(sourseNode, targetNode, edgeName);
+            edgeVisualComponent.Initialize(sourseNode, targetNode, edgeName, edgeNameSequense);
             this.sourse.AddEdge(edgeVisualComponent);
             edgeNameSequense += 1;
         }
