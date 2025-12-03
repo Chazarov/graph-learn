@@ -11,13 +11,13 @@ namespace GraphMaster.UnityAdapter
     public class EdgeVisual : MonoBehaviour, Domain.GraphEdgeInterface<UIPositioned2Node>
     {
         [SerializeField] private LineRenderer line;
-        private LineRenderer baseLine;
+        
         [SerializeField] private LineRenderer selectedLine;
         [SerializeField] private EdgeCollider2D edgeCollider;
         [SerializeField] private TextMeshProUGUI weightText;
         [SerializeField] private Canvas edgeToolBar;
 
-
+        private LineRenderer activeLine;
         private GraphEdgeInterface<UIPositioned2Node> sourse;
         private UIPositioned2Node sourceNode;
         private UIPositioned2Node targetNode;
@@ -29,7 +29,8 @@ namespace GraphMaster.UnityAdapter
 
         void Start()
         {
-
+            activeLine = line;
+            selectedLine.gameObject.SetActive(false);
         }
 
 
@@ -37,8 +38,8 @@ namespace GraphMaster.UnityAdapter
         {
             if (sourceNode != null && targetNode != null)
             {
-                baseLine.SetPosition(0, sourceNode.transform.position);
-                baseLine.SetPosition(1, targetNode.transform.position);
+                activeLine.SetPosition(0, sourceNode.transform.position);
+                activeLine.SetPosition(1, targetNode.transform.position);
                 edgeCollider.SetPoints(new List<Vector2> { sourceNode.transform.position, targetNode.transform.position });
                 
                 UpdateWeightTextPosition();
@@ -82,26 +83,24 @@ namespace GraphMaster.UnityAdapter
 
         public void SelectThisEdge()
         {
-            Debug.Log("Selected Edge");
-            baseLine.startColor = Color.yellow;
-            baseLine.endColor = Color.yellow;
-            baseLine.startWidth = 0.15f;
-            baseLine.endWidth = 0.15f;
+            line.gameObject.SetActive(false);
+            selectedLine.gameObject.SetActive(true);
+            activeLine = selectedLine;
             IsSelected?.Invoke(this);
         }
 
         public void DeselectThisEdge()
         {
-            baseLine.startColor = Color.white;
-            baseLine.endColor = Color.white;
-            baseLine.startWidth = 0.1f;
-            baseLine.endWidth = 0.1f;
+            selectedLine.gameObject.SetActive(false);
+            line.gameObject.SetActive(true);
+            activeLine = line;
             IsDeselected?.Invoke(this);
         }
 
         public void Initialize(UIPositioned2Node sourseNode, UIPositioned2Node targetNode, string edgeName)
         {
             CheckGameObjectContent();
+            activeLine = line;
             GraphEdgeInterface<UIPositioned2Node> edge = new GraphEdge<UIPositioned2Node>(sourseNode, targetNode);
             
             this.sourse = edge;
@@ -111,9 +110,11 @@ namespace GraphMaster.UnityAdapter
             this.SetSourseNode(sourseNode);
             this.SetTargetNode(targetNode);
 
-            baseLine.positionCount = 2;
-            baseLine.SetPosition(0, sourseNode.transform.position);
-            baseLine.SetPosition(1, targetNode.transform.position);
+            activeLine.positionCount = 2;
+            activeLine.SetPosition(0, sourseNode.transform.position);
+            activeLine.SetPosition(1, targetNode.transform.position);
+            
+            selectedLine.positionCount = 2;
 
 
             edgeCollider.SetPoints(new List<Vector2> { sourseNode.transform.position , targetNode.transform.position });
@@ -122,9 +123,15 @@ namespace GraphMaster.UnityAdapter
 
         public void CheckGameObjectContent()
         {
-            if (baseLine == null)
+            if (line == null)
             {
                 throw new System.Exception(" Line Renderer can't be a null");
+            }
+
+
+            if (selectedLine == null)
+            {
+                throw new System.Exception(" SelectedLine Renderer can't be a null");
             }
 
             if (edgeCollider == null)
