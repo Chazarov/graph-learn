@@ -18,7 +18,21 @@ public class MenuManager : MonoBehaviour
     public void SetEdgeWeightByInput()
     {
         float value = float.Parse(setWeightInput.text);
+        if (value < 0f) {
+            value *= -1;
+            setWeightInput.text = "" + value;
+        }
         graphVisual.SetSelectedEdgesWeight(value);
+    }
+
+
+    public void OnlyPositiveInputCheck()
+    {
+        float value = float.Parse(setWeightInput.text);
+        if (value < 0f)
+        {
+            setWeightInput.SetTextWithoutNotify("" + (-value));
+        }
     }
 
     void EdgeSelected(string edgeName)
