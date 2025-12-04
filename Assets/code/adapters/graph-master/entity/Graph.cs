@@ -150,11 +150,18 @@ namespace GraphMaster
 
         public TNode AddNode(TNode node)
         {
-            if (nodesMap.ContainsKey(node.GetName()))
+            string nodeName = node.GetName();
+            if (nodesMap.ContainsKey(nodeName))
             {
                 throw new DublicateException("It is not possible to add the node with same name twice.");
             }
-            nodesMap.Add(node.GetName(), node);
+            nodesMap.Add(nodeName, node);
+
+            nodesEdgesMap[nodeName] = new();
+
+            adjacencyMap[nodeName] = new();
+
+
 
             return node;
         }
