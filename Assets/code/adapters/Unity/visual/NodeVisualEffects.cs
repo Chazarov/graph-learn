@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-namespace GraphMaster.UnityAdapter.UI
+namespace GraphMaster.UnityAdapter.VisualEffects
 {
     public class NodeVisualEffects : MonoBehaviour
     {
@@ -15,7 +15,26 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void Initialize(int squenseCount)
         {
+            CheckGameObjectContent();
             SetVisualLayer(squenseCount);
+        }
+
+        public void CheckGameObjectContent()
+        {
+            if (nameVisual == null)
+            {
+                throw new System.Exception("TextMeshProUGUI nameVisual can't be a null");
+            }
+
+            if (nodeToolBar == null)
+            {
+                throw new System.Exception("Canvas nodeToolBar can't be a null");
+            }
+
+            if (nodeSpriteRenderer == null)
+            {
+                throw new System.Exception("SpriteRenderer nodeSpriteRenderer can't be a null");
+            }
         }
 
         public void StartSelectionAnimation()
@@ -42,6 +61,11 @@ namespace GraphMaster.UnityAdapter.UI
         {
             nodeToolBar.sortingOrder = graphEdgesSequenseCount * 2 + 1;
             nodeSpriteRenderer.sortingOrder = graphEdgesSequenseCount * 2;
+        }
+
+        public void UpdateFrame()
+        {
+            return;
         }
     }
 }

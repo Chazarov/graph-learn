@@ -444,8 +444,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81338e6f21f2e5e49a8636c0566adc46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodePrefab: {fileID: 6115264197397747076, guid: 003a5f52230f9cd48bf04ac3a0d30732, type: 3}
-  edgePrefab: {fileID: 6805337557755957020, guid: fedeb1963bb2dcc43851a50333975a42, type: 3}
+  nodePrefab: {fileID: 6115264197397747076, guid: ada7baca7905bec479283dfd6c59d111, type: 3}
+  edgePrefab: {fileID: 6805337557755957020, guid: 040144baa9032db4d8d96998b2b18ac5, type: 3}
   EdgeSelected:
     m_PersistentCalls:
       m_Calls:

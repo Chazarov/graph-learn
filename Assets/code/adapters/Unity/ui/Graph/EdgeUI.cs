@@ -1,57 +1,60 @@
 using Domain;
 using GraphMaster.UnityAdapter.UI;
+using GraphMaster.UnityAdapter.VisualEffects;
 using System;
 using UnityEngine;
 
 namespace GraphMaster.UnityAdapter
 {
-    public class EdgeVisual : MonoBehaviour, Domain.GraphEdgeInterface<UIPositioned2Node>
+    public class EdgeUI : MonoBehaviour, Domain.GraphEdgeInterface<NodeUI>, GraphObjectUiActionsInterface
     {
         [SerializeField] private EdgeVisualEffects visualEffects;
 
-        private GraphEdgeInterface<UIPositioned2Node> sourse;
-        private UIPositioned2Node sourceNode;
-        private UIPositioned2Node targetNode;
+        private GraphEdgeInterface<NodeUI> sourse;
+        private NodeUI sourceNode;
+        private NodeUI targetNode;
 
         public bool isSelected = false;
 
-        public event Action<EdgeVisual> IsSelected;
-        public event Action<EdgeVisual> IsDeselected;
+        public event Action<EdgeUI> IsSelected;
+        public event Action<EdgeUI> IsDeselected;
 
         void Update()
         {
-            visualEffects?.UpdateFrame(transform.position.z);
+            visualEffects?.UpdateFrame();
         }
 
         private void OnMouseDown()
         {
             if (!isSelected)
             {
-                SelectThisEdge();
+                Select();
                 isSelected = true;
             }
             else
             {
                 isSelected = false;
-                DeselectThisEdge();
+                Deselect();
             }
         }
 
-        public void SelectThisEdge()
+        public void Select()
         {
             visualEffects?.StartSelectionAnimation();
             IsSelected?.Invoke(this);
         }
 
-        public void DeselectThisEdge()
+        public void Deselect()
         {
             visualEffects?.StartDeselectionAnimation();
             IsDeselected?.Invoke(this);
         }
 
-        public void Initialize(UIPositioned2Node sourseNode, UIPositioned2Node targetNode, string edgeName, int graphEdgesSequenseCount)
+        public void Initialize(NodeUI sourseNode, NodeUI targetNode, string edgeName, int graphEdgesSequenseCount)
         {
-            GraphEdgeInterface<UIPositioned2Node> edge = new GraphEdge<UIPositioned2Node>(sourseNode, targetNode);
+            CheckGameObjectContent();
+            
+            GraphEdgeInterface<NodeUI> edge = new GraphEdge<NodeUI>(sourseNode, targetNode);
             
             this.sourse = edge;
             this.name = $"Edge {edgeName}";
@@ -65,12 +68,23 @@ namespace GraphMaster.UnityAdapter
             this.SetWeight(sourse.GetWeight());
         }
 
-        public UIPositioned2Node GetSourceNode()
+        public void CheckGameObjectContent()
+        {
+            if (visualEffects == null)            {
+                Debug.LogWarning("EdgeVisualEffects component is not assigned. Visual features will be disabled.");
+            }
+            else
+            {
+                visualEffects?.CheckGameObjectContent();
+            }
+        }
+
+        public NodeUI GetSourceNode()
         {
             return sourceNode;
         }
 
-        public UIPositioned2Node GetTargetNode()
+        public NodeUI GetTargetNode()
         {
             return targetNode;
         }
@@ -102,17 +116,18 @@ namespace GraphMaster.UnityAdapter
             sourse.SetName(name);
         }
 
-        public void SetSourseNode(UIPositioned2Node node)
+        public void SetSourseNode(NodeUI node)
         {
             this.sourceNode = node;
             sourse.SetSourseNode(node);
         }
 
-        public void SetTargetNode(UIPositioned2Node node)
+        public void SetTargetNode(NodeUI node)
         {
             this.targetNode = node;
             sourse.SetTargetNode(node);
         }
+
     }
 
 }

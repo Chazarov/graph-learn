@@ -1,11 +1,12 @@
 using Domain;
+using GraphMaster.UnityAdapter.VisualEffects;
 using System;
 using UnityEngine;
 
 
 namespace GraphMaster.UnityAdapter.UI
 {
-    public class UIPositioned2Node : MonoBehaviour, Domain.GraphNodeInterface
+    public class NodeUI : MonoBehaviour, Domain.GraphNodeInterface, GraphObjectUiActionsInterface
     {
         [SerializeField] private NodeVisualEffects visualEffects;
         [SerializeField] private GraphMaster.UnityAdapter.Positioned2Node sourse;
@@ -16,7 +17,7 @@ namespace GraphMaster.UnityAdapter.UI
         
         private void OnMouseDown()
         {
-            this.SelectThisNode();
+            this.Select();
         }
 
         private void OnMouseDrag()
@@ -29,7 +30,9 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void Initialize(string name, Vector3 position, int squenseCount)
         {
-            visualEffects.Initialize(squenseCount);
+            CheckGameobgectContent();
+            
+            visualEffects?.Initialize(squenseCount);
             SetName(name);
             SetPosition(position);
         }
@@ -40,6 +43,15 @@ namespace GraphMaster.UnityAdapter.UI
             {
                 throw new System.Exception("sourse can't be a null. Please add a sourse Positioned2NodeComponent ");
             }
+
+            if (visualEffects == null)
+            {
+                Debug.LogWarning("NodeVisualEffects component is not assigned. Visual features will be disabled.");
+            }
+            else
+            {
+                visualEffects.CheckGameObjectContent();
+            }
         }
 
         public void SetPosition(Vector3 position)
@@ -47,18 +59,18 @@ namespace GraphMaster.UnityAdapter.UI
             sourse.SetPosition(position);
         }
 
-        public void SelectThisNode()
+        public void Select()
         {
             isSelected = true;
-            visualEffects.StartSelectionAnimation();
+            visualEffects?.StartSelectionAnimation();
             IsSelected?.Invoke(this.GetName());
         }
 
-        public void DeselectThisNode()
+        public void Deselect()
         {
             if (isSelected)
             {
-                visualEffects.StartDeselectionAnimation();
+                visualEffects?.StartDeselectionAnimation();
                 isSelected = false;
                 IsDeselected?.Invoke(this.GetName());
             }
@@ -76,7 +88,7 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void SetName(string name)
         {
-            visualEffects.UpdateNameDisplay(name);
+            visualEffects?.UpdateNameDisplay(name);
             sourse.SetName(name);
         }
 

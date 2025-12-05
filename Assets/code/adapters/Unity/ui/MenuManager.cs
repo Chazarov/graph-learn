@@ -8,7 +8,7 @@ public class MenuManager : MonoBehaviour
 {
 
     [SerializeField] private TMP_InputField setWeightInput;
-    [SerializeField] private GraphVisual graphVisual;
+    [SerializeField] private GraphUI graphVisual;
 
     private void OnEnable()
     {
@@ -37,7 +37,7 @@ public class MenuManager : MonoBehaviour
 
     void EdgeSelected(string edgeName)
     {
-        EdgeVisual edge = graphVisual.GetEdge(edgeName);
+        EdgeUI edge = graphVisual.GetEdge(edgeName);
         setWeightInput.SetTextWithoutNotify(edge.GetWeight().ToString());
     }
 
