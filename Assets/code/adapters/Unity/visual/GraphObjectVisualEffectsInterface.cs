@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GraphObjectVisualEffectsInterface : MonoBehaviour
+public interface GraphObjectVisualEffectsInterface
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public void StartSelectionAnimation();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public void StartDeselectionAnimation();
+
+    public void PointThisAnimation();
+
+    public void RemovePointerAnimation();
+
+    public void MarkThisAnimation();
+
+    public void RemoveMarkAnimation();
 }

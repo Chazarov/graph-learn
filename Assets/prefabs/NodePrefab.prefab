@@ -246,9 +246,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5045161421506508037}
   - component: {fileID: 2432569259376094163}
-  - component: {fileID: 1394269402225191795}
+  - component: {fileID: 4818523086946444196}
   - component: {fileID: -8864676273580272040}
   - component: {fileID: 8350196607987080010}
+  - component: {fileID: 2790718317739022781}
   m_Layer: 6
   m_Name: NodePrefab
   m_TagString: Untagged
@@ -314,7 +315,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.57254905, g: 0.8980392, b: 0.84244615, a: 1}
+  m_Color: {r: 0.57254905, g: 0.8980392, b: 0.84244615, a: 0.8235294}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -324,7 +325,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1394269402225191795
+--- !u!114 &4818523086946444196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -333,16 +334,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6115264197397747076}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbfb50e95080af144a3b784a5b281fe4, type: 3}
+  m_Script: {fileID: 11500000, guid: 722fadf17c17fea4f85bfe27f2e93cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameVisual: {fileID: 7922480532095966600}
-  nodeToolBar: {fileID: 7537153058417728020}
-  selectedColor: {r: 0.4308473, g: 0.8867924, b: 0.54640543, a: 1}
-  defaultColor: {r: 0.2991723, g: 0.7830189, b: 0.7014062, a: 1}
-  defaultScale: {x: 1, y: 1}
-  selectedScale: {x: 1.2, y: 1.2}
-  nodeSpriteRenderer: {fileID: 2432569259376094163}
+  visualEffects: {fileID: 2790718317739022781}
   sourse: {fileID: -8864676273580272040}
 --- !u!114 &-8864676273580272040
 MonoBehaviour:
@@ -392,3 +387,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &2790718317739022781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6115264197397747076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4452ade18fed17a46bad6876c7176e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameVisual: {fileID: 7922480532095966600}
+  nodeToolBar: {fileID: 7537153058417728020}
+  selectedColor: {r: 0.38470095, g: 0.8584906, b: 0.42710546, a: 0.78431374}
+  selectedScale: {x: 1.2, y: 1.2}
+  nodeSpriteRenderer: {fileID: 2432569259376094163}

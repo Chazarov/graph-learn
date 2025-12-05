@@ -8,10 +8,16 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         [SerializeField] private TextMeshProUGUI nameVisual;
         [SerializeField] private Canvas nodeToolBar;
         [SerializeField] private Color selectedColor;
-        [SerializeField] private Color defaultColor;
-        [SerializeField] private Vector2 defaultScale;
+        private Color defaultColor;
+        private Vector2 defaultScale;
         [SerializeField] private Vector2 selectedScale;
         [SerializeField] private SpriteRenderer nodeSpriteRenderer;
+
+        private void Start()
+        {
+            defaultColor = nodeSpriteRenderer.color;
+            defaultScale = transform.localScale;
+        }
 
         public void Initialize(int squenseCount)
         {
@@ -39,8 +45,10 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void StartSelectionAnimation()
         {
+
             nodeSpriteRenderer.color = selectedColor;
             transform.localScale = selectedScale;
+
         }
 
         public void StartDeselectionAnimation()

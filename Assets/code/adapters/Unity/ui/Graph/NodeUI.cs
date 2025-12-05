@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GraphMaster.UnityAdapter.UI
 {
-    public class NodeUI : MonoBehaviour, Domain.GraphNodeInterface, GraphObjectUiActionsInterface
+    public class NodeUI : MonoBehaviour, Domain.GraphNodeInterface
     {
         [SerializeField] private NodeVisualEffects visualEffects;
         [SerializeField] private GraphMaster.UnityAdapter.Positioned2Node sourse;
@@ -96,6 +96,7 @@ namespace GraphMaster.UnityAdapter.UI
         {
             sourse.SetDescription(description);
         }
+
     }
 }
 

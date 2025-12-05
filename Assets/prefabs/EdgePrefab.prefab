@@ -357,7 +357,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8639328328069343421}
-  - component: {fileID: 3250888383957205000}
+  - component: {fileID: 1294130350398814220}
+  - component: {fileID: 3063531433152806472}
   - component: {fileID: 1393656597070005156}
   - component: {fileID: 3703825979788306121}
   m_Layer: 7
@@ -389,7 +390,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3250888383957205000
+--- !u!114 &1294130350398814220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -398,7 +399,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 6805337557755957020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe7e92fdf4460ee4db8a524087b3743e, type: 3}
+  m_Script: {fileID: 11500000, guid: 661b50ce69c48204fa03d8cf2f0dfdea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visualEffects: {fileID: 3063531433152806472}
+  isSelected: 0
+--- !u!114 &3063531433152806472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6805337557755957020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc800a6159ea5d40814b1554703e74b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   line: {fileID: 5378095913783592059}
@@ -406,7 +421,6 @@ MonoBehaviour:
   edgeCollider: {fileID: 1393656597070005156}
   weightText: {fileID: 1477226910510868275}
   edgeToolBar: {fileID: 3198972815900863546}
-  isSelected: 0
 --- !u!68 &1393656597070005156
 EdgeCollider2D:
   m_ObjectHideFlags: 0

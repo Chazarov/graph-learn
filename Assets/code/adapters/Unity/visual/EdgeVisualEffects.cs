@@ -17,6 +17,12 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         private NodeUI sourceNode;
         private NodeUI targetNode;
 
+
+        private void Update()
+        {
+            UpdateFrame();
+        }
+
         public void Initialize(int graphEdgesSequenseCount, NodeUI source, NodeUI target)
         {
             CheckGameObjectContent();
@@ -60,6 +66,8 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void UpdateWeightDisplay(float weight)
         {
+
+           
             if (weightText != null)
             {
                 weightText.text = weight.ToString();
