@@ -202,6 +202,12 @@ namespace GraphMaster
             return nodesMap.Values.Count;
         }
 
+        public Dictionary<string, List<(string to, float weight, string edgeName)>> GetAdjacencyMap()
+        {
+            return new Dictionary<string, List<(string to, float weight, string edgeName)>>(adjacencyMap);
+        }
+
+
         
 
 
