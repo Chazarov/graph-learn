@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GraphMaster.UnityAdapter
 {
-    public class EdgeUI : MonoBehaviour, Domain.GraphEdgeInterface<NodeUI>
+    public class EdgeUI : MonoBehaviour, Domain.GraphEdgeInterface<NodeUI>, GraphObjectUiActionsInterface
     {
         [SerializeField] private EdgeVisualEffects visualEffects;
 
@@ -128,6 +128,25 @@ namespace GraphMaster.UnityAdapter
             sourse.SetTargetNode(node);
         }
 
+        public void PointThis()
+        {
+            visualEffects?.PointThisAnimation();
+        }
+
+        public void RemovePointer()
+        {
+            visualEffects?.RemovePointerAnimation();
+        }
+
+        public void MarkThis()
+        {
+            visualEffects?.MarkThisAnimation();
+        }
+
+        public void RemoveMark()
+        {
+            visualEffects?.RemoveMarkAnimation();
+        }
         
     }
 

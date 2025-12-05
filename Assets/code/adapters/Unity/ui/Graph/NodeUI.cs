@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GraphMaster.UnityAdapter.UI
 {
-    public class NodeUI : MonoBehaviour, Domain.GraphNodeInterface
+    public class NodeUI : MonoBehaviour, Domain.GraphNodeInterface, GraphObjectUiActionsInterface
     {
         [SerializeField] private NodeVisualEffects visualEffects;
         [SerializeField] private GraphMaster.UnityAdapter.Positioned2Node sourse;
@@ -95,6 +95,26 @@ namespace GraphMaster.UnityAdapter.UI
         public void SetDescription(string description)
         {
             sourse.SetDescription(description);
+        }
+
+        public void PointThis()
+        {
+            visualEffects?.PointThisAnimation();
+        }
+
+        public void RemovePointer()
+        {
+            visualEffects?.RemovePointerAnimation();
+        }
+
+        public void MarkThis()
+        {
+            visualEffects?.MarkThisAnimation();
+        }
+
+        public void RemoveMark()
+        {
+            visualEffects?.RemoveMarkAnimation();
         }
 
     }

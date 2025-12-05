@@ -3,7 +3,7 @@ using TMPro;
 
 namespace GraphMaster.UnityAdapter.VisualEffects
 {
-    public class NodeVisualEffects : MonoBehaviour
+    public class NodeVisualEffects : MonoBehaviour, GraphObjectVisualEffectsInterface
     {
         [SerializeField] private TextMeshProUGUI nameVisual;
         [SerializeField] private Canvas nodeToolBar;
@@ -12,6 +12,17 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         private Vector2 defaultScale;
         [SerializeField] private Vector2 selectedScale;
         [SerializeField] private SpriteRenderer nodeSpriteRenderer;
+        
+        [Header("Mark Animation")]
+        [SerializeField] private string markApplyAnimationName;
+        [SerializeField] private string markRevertAnimationName;
+        [SerializeField] private Animator nodeAnimator;
+        
+        [Header("Point Animation")]
+        [SerializeField] private Transform pointerObject;
+        [SerializeField] private float pointerAnimationDuration = 0.5f;
+        
+        private Coroutine currentPointerCoroutine;
 
         private void Start()
         {
@@ -74,6 +85,57 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         public void UpdateFrame()
         {
             return;
+        }
+
+        public void PointThisAnimation()
+        {
+            if (pointerObject != null)
+            {
+                if (currentPointerCoroutine != null)
+                {
+                    StopCoroutine(currentPointerCoroutine);
+                }
+                currentPointerCoroutine = StartCoroutine(AnimatePointerToCenter());
+            }
+        }
+
+        public void RemovePointerAnimation()
+        {
+        }
+
+        public void MarkThisAnimation()
+        {
+            if (nodeAnimator != null && !string.IsNullOrEmpty(markApplyAnimationName))
+            {
+                nodeAnimator.Play(markApplyAnimationName);
+            }
+        }
+
+        public void RemoveMarkAnimation()
+        {
+            if (nodeAnimator != null && !string.IsNullOrEmpty(markRevertAnimationName))
+            {
+                nodeAnimator.Play(markRevertAnimationName);
+            }
+        }
+
+        private System.Collections.IEnumerator AnimatePointerToCenter()
+        {
+            if (pointerObject == null) yield break;
+
+            Vector3 startPosition = pointerObject.position;
+            Vector3 targetPosition = transform.position;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < pointerAnimationDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / pointerAnimationDuration;
+                pointerObject.position = Vector3.Lerp(startPosition, targetPosition, t);
+                yield return null;
+            }
+
+            pointerObject.position = targetPosition;
         }
     }
 }

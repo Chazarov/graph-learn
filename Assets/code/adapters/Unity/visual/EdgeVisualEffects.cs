@@ -5,17 +5,29 @@ using GraphMaster.UnityAdapter.UI;
 
 namespace GraphMaster.UnityAdapter.VisualEffects
 {
-    public class EdgeVisualEffects : MonoBehaviour
+    public class EdgeVisualEffects : MonoBehaviour, GraphObjectVisualEffectsInterface
     {
         [SerializeField] private LineRenderer line;
         [SerializeField] private LineRenderer selectedLine;
         [SerializeField] private EdgeCollider2D edgeCollider;
         [SerializeField] private TextMeshProUGUI weightText;
         [SerializeField] private Canvas edgeToolBar;
+        
+        [Header("Mark Animation")]
+        [SerializeField] private LineRenderer markLine;
+        [SerializeField] private float markAnimationDuration = 1f;
+        
+        [Header("Point Animation")]
+        [SerializeField] private Transform pointerObject;
+        [SerializeField] private float pointerAnimationDuration = 0.5f;
 
         private LineRenderer activeLine;
         private NodeUI sourceNode;
         private NodeUI targetNode;
+        
+        private Coroutine currentMarkCoroutine;
+        private Coroutine currentPointerCoroutine;
+        private bool isMarkAnimationReversed = false;
 
 
         private void Update()
@@ -139,6 +151,127 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             {
                 throw new System.Exception(" Canvas edgeToolBar can't be a null");
             }
+        }
+
+        public void PointThisAnimation()
+        {
+            if (pointerObject != null)
+            {
+                if (currentPointerCoroutine != null)
+                {
+                    StopCoroutine(currentPointerCoroutine);
+                }
+                currentPointerCoroutine = StartCoroutine(AnimatePointerToCenter());
+            }
+        }
+
+        public void RemovePointerAnimation()
+        {
+            // Функция отката анимации пустая согласно требованиям
+        }
+
+        public void MarkThisAnimation(bool reverseDirection = false)
+        {
+            if (markLine != null)
+            {
+                if (currentMarkCoroutine != null)
+                {
+                    StopCoroutine(currentMarkCoroutine);
+                }
+                
+                isMarkAnimationReversed = reverseDirection;
+                markLine.gameObject.SetActive(true);
+                currentMarkCoroutine = StartCoroutine(AnimateMarkLine(reverseDirection));
+            }
+        }
+        
+        public void MarkThisAnimation()
+        {
+            MarkThisAnimation(false);
+        }
+
+        public void RemoveMarkAnimation()
+        {
+            if (markLine != null)
+            {
+                if (currentMarkCoroutine != null)
+                {
+                    StopCoroutine(currentMarkCoroutine);
+                }
+                
+                currentMarkCoroutine = StartCoroutine(AnimateMarkLineReverse(!isMarkAnimationReversed));
+            }
+        }
+
+        private System.Collections.IEnumerator AnimateMarkLine(bool reverseDirection)
+        {
+            if (sourceNode == null || targetNode == null) yield break;
+
+            Vector3 startPos = reverseDirection ? targetNode.transform.position : sourceNode.transform.position;
+            Vector3 endPos = reverseDirection ? sourceNode.transform.position : targetNode.transform.position;
+            
+            markLine.positionCount = 2;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < markAnimationDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / markAnimationDuration;
+                
+                Vector3 currentEndPos = Vector3.Lerp(startPos, endPos, t);
+                
+                markLine.SetPosition(0, startPos);
+                markLine.SetPosition(1, currentEndPos);
+                
+                yield return null;
+            }
+
+            markLine.SetPosition(0, startPos);
+            markLine.SetPosition(1, endPos);
+        }
+
+        private System.Collections.IEnumerator AnimateMarkLineReverse(bool reverseDirection)
+        {
+            if (sourceNode == null || targetNode == null) yield break;
+
+            Vector3 startPos = reverseDirection ? targetNode.transform.position : sourceNode.transform.position;
+            Vector3 endPos = reverseDirection ? sourceNode.transform.position : targetNode.transform.position;
+            
+            float elapsedTime = 0f;
+
+            while (elapsedTime < markAnimationDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = 1f - (elapsedTime / markAnimationDuration);
+                
+                Vector3 currentEndPos = Vector3.Lerp(startPos, endPos, t);
+                
+                markLine.SetPosition(0, startPos);
+                markLine.SetPosition(1, currentEndPos);
+                
+                yield return null;
+            }
+
+            markLine.gameObject.SetActive(false);
+        }
+
+        private System.Collections.IEnumerator AnimatePointerToCenter()
+        {
+            if (pointerObject == null || sourceNode == null || targetNode == null) yield break;
+
+            Vector3 startPosition = pointerObject.position;
+            Vector3 edgeCenter = (sourceNode.transform.position + targetNode.transform.position) / 2f;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < pointerAnimationDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / pointerAnimationDuration;
+                pointerObject.position = Vector3.Lerp(startPosition, edgeCenter, t);
+                yield return null;
+            }
+
+            pointerObject.position = edgeCenter;
         }
     }
 }
