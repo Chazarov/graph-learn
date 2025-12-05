@@ -139,7 +139,7 @@ namespace GraphMaster
 
             if (!this.parralelEdgesAreAllowed)
             {
-                bool occuerence =  nodesEdgesMap[sourseName].FindAll(item => item == targetName).Count != 0;
+                bool occuerence =  adjacencyMap[sourseName].FindAll(item => item.to == targetName).Count != 0;
                 if (occuerence)
                 {
                     throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
