@@ -1,23 +1,14 @@
 using Domain;
 using GraphMaster.UnityAdapter.UI;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 namespace GraphMaster.UnityAdapter
 {
     public class EdgeVisual : MonoBehaviour, Domain.GraphEdgeInterface<UIPositioned2Node>
     {
-        [SerializeField] private LineRenderer line;
-        
-        [SerializeField] private LineRenderer selectedLine;
-        [SerializeField] private EdgeCollider2D edgeCollider;
-        [SerializeField] private TextMeshProUGUI weightText;
-        [SerializeField] private Canvas edgeToolBar;
+        [SerializeField] private EdgeVisualEffects visualEffects;
 
-        private LineRenderer activeLine;
         private GraphEdgeInterface<UIPositioned2Node> sourse;
         private UIPositioned2Node sourceNode;
         private UIPositioned2Node targetNode;
@@ -27,48 +18,9 @@ namespace GraphMaster.UnityAdapter
         public event Action<EdgeVisual> IsSelected;
         public event Action<EdgeVisual> IsDeselected;
 
-        void Start()
-        {
-            activeLine = line;
-            selectedLine.gameObject.SetActive(false);
-        }
-
-
         void Update()
         {
-            if (sourceNode != null && targetNode != null)
-            {
-                Vector3 soursePosition = sourceNode.transform.position;
-                Vector3 targetPosition = targetNode.transform.position;
-                targetPosition.z = soursePosition.z = transform.position.z;
-
-                activeLine.SetPosition(0, soursePosition);
-                activeLine.SetPosition(1, targetPosition);
-                edgeCollider.SetPoints(new List<Vector2> { sourceNode.transform.position, targetNode.transform.position });
-                
-                UpdateWeightTextPosition();
-            }
-        }
-
-        private void UpdateWeightTextPosition()
-        {
-            if (edgeToolBar == null || sourceNode == null || targetNode == null) return;
-
-            Vector3 sourcePos = sourceNode.transform.position;
-            Vector3 targetPos = targetNode.transform.position;
-            Vector3 centerPos = (sourcePos + targetPos) / 2f;
-
-            edgeToolBar.transform.position = centerPos;
-
-            Vector3 direction = (targetPos - sourcePos).normalized;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-            if (angle > 90f || angle < -90f)
-            {
-                angle += 180f;
-            }
-
-            edgeToolBar.transform.rotation = Quaternion.Euler(0, 0, angle);
+            visualEffects?.UpdateFrame(transform.position.z);
         }
 
         private void OnMouseDown()
@@ -87,28 +39,19 @@ namespace GraphMaster.UnityAdapter
 
         public void SelectThisEdge()
         {
-            line.gameObject.SetActive(false);
-            selectedLine.gameObject.SetActive(true);
-            activeLine = selectedLine;
+            visualEffects?.StartSelectionAnimation();
             IsSelected?.Invoke(this);
         }
 
         public void DeselectThisEdge()
         {
-            selectedLine.gameObject.SetActive(false);
-            line.gameObject.SetActive(true);
-            activeLine = line;
+            visualEffects?.StartDeselectionAnimation();
             IsDeselected?.Invoke(this);
         }
 
         public void Initialize(UIPositioned2Node sourseNode, UIPositioned2Node targetNode, string edgeName, int graphEdgesSequenseCount)
         {
-            // Число уже созданных ребер необходимо, чтобы выставить порядок отображения текста на ребрах (чтобы текст не просвечивал через несколько ребер)
-            CheckGameObjectContent();
-            setVisualLayer(graphEdgesSequenseCount);
-            activeLine = line;
             GraphEdgeInterface<UIPositioned2Node> edge = new GraphEdge<UIPositioned2Node>(sourseNode, targetNode);
-
             
             this.sourse = edge;
             this.name = $"Edge {edgeName}";
@@ -116,53 +59,10 @@ namespace GraphMaster.UnityAdapter
 
             this.SetSourseNode(sourseNode);
             this.SetTargetNode(targetNode);
-            this.SetWeight(sourse.GetWeight());
-
-            activeLine.positionCount = 2;
-            activeLine.SetPosition(0, sourseNode.transform.position);
-            activeLine.SetPosition(1, targetNode.transform.position);
             
-            selectedLine.positionCount = 2;
-
-
-            edgeCollider.SetPoints(new List<Vector2> { sourseNode.transform.position , targetNode.transform.position });
-        }
-
-        private void setVisualLayer(int graphEdgesSequenseCount)
-        {
-            edgeToolBar.sortingOrder = -graphEdgesSequenseCount * 2 + 1;
-            line.sortingOrder = -graphEdgesSequenseCount * 2;
-            selectedLine.sortingOrder = -graphEdgesSequenseCount * 2;
-        }
-
-
-        public void CheckGameObjectContent()
-        {
-            if (line == null)
-            {
-                throw new System.Exception(" Line Renderer can't be a null");
-            }
-
-
-            if (selectedLine == null)
-            {
-                throw new System.Exception(" SelectedLine Renderer can't be a null");
-            }
-
-            if (edgeCollider == null)
-            {
-                throw new System.Exception(" EdgeCollider2D  edgeCollider can't be a null");
-            }
-
-            if (weightText == null)
-            {
-                throw new System.Exception(" TextMeshPro weightText can't be a null");
-            }
-
-            if (edgeToolBar == null)
-            {
-                throw new System.Exception(" Canvas edgeToolBar can't be a null");
-            }
+            visualEffects?.Initialize(graphEdgesSequenseCount, sourseNode, targetNode);
+            
+            this.SetWeight(sourse.GetWeight());
         }
 
         public UIPositioned2Node GetSourceNode()
@@ -189,10 +89,7 @@ namespace GraphMaster.UnityAdapter
         public void SetWeight(float weight)
         {
             sourse.SetWeight(weight);
-            if (weightText != null)
-            {
-                weightText.text = weight.ToString();
-            }
+            visualEffects?.UpdateWeightDisplay(weight);
         }
 
         public string GetName()

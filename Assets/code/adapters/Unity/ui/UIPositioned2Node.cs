@@ -1,8 +1,5 @@
 using Domain;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 
@@ -10,29 +7,12 @@ namespace GraphMaster.UnityAdapter.UI
 {
     public class UIPositioned2Node : MonoBehaviour, Domain.GraphNodeInterface
     {
-        [SerializeField] private TextMeshProUGUI nameVisual;
-        [SerializeField] private Canvas nodeToolBar;
-        [SerializeField] private Color selectedColor;
-        [SerializeField] private Color defaultColor;
-        [SerializeField] private Vector2 defaultScale;
-        [SerializeField] private Vector2 selectedScale;
-        [SerializeField] private SpriteRenderer nodeSpriteRenderer;
+        [SerializeField] private NodeVisualEffects visualEffects;
         [SerializeField] private GraphMaster.UnityAdapter.Positioned2Node sourse;
-        
 
         public event Action<string> IsSelected;
         public event Action<string> IsDeselected;
         private bool isSelected = false;
-    
-        void Start()
-        {
-
-        }
-        
-        void Update()
-        {
-        
-        }
         
         private void OnMouseDown()
         {
@@ -49,15 +29,9 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void Initialize(string name, Vector3 position, int squenseCount)
         {
+            visualEffects.Initialize(squenseCount);
             SetName(name);
             SetPosition(position);
-            setVisualLayer(squenseCount);
-        }
-
-        private void setVisualLayer(int graphEdgesSequenseCount)
-        {
-            nodeToolBar.sortingOrder = graphEdgesSequenseCount * 2 + 1;
-            nodeSpriteRenderer.sortingOrder = graphEdgesSequenseCount * 2;
         }
 
         public void CheckGameobgectContent()
@@ -76,7 +50,7 @@ namespace GraphMaster.UnityAdapter.UI
         public void SelectThisNode()
         {
             isSelected = true;
-            selectAnimation();
+            visualEffects.StartSelectionAnimation();
             IsSelected?.Invoke(this.GetName());
         }
 
@@ -84,23 +58,10 @@ namespace GraphMaster.UnityAdapter.UI
         {
             if (isSelected)
             {
-                deselectionAnimation();
+                visualEffects.StartDeselectionAnimation();
                 isSelected = false;
                 IsDeselected?.Invoke(this.GetName());
             }
-            
-        }
-
-        private void selectAnimation()
-        {
-            nodeSpriteRenderer.color = selectedColor;
-            transform.localScale = selectedScale;
-        }
-
-        private void deselectionAnimation()
-        {
-            nodeSpriteRenderer.color = defaultColor;
-            transform.localScale = defaultScale;
         }
 
         public string GetName()
@@ -115,7 +76,7 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void SetName(string name)
         {
-            this.nameVisual.text = name;
+            visualEffects.UpdateNameDisplay(name);
             sourse.SetName(name);
         }
 
