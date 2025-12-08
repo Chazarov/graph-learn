@@ -31,6 +31,12 @@ namespace Domain
 
         public void DeleteEdge(TEdge edge);
 
-        
+
+
+        public void SetParralelEdgesAllowed(bool value);
+
+        public void SetDirected(bool value);
+
+
     }
 }

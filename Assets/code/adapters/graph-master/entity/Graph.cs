@@ -17,23 +17,38 @@ namespace GraphMaster
         private Dictionary<string, TNode> nodesMap = new Dictionary<string, TNode>();
         private Dictionary<string, TEdge> edgesMap = new Dictionary<string, TEdge>();
 
-        // Simple undirected grpah for a simple calculations
-        private Dictionary<string, HashSet<string>> uAdjacencyMap = new();
         // Algorithms with a directed weighed graph
-        private Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>> dWAdjacencyMap = new();
+        private Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>> AdjacencyMap = new();
+
+        private Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>> ReversedAdjacencyMap = new();
 
         private bool parralelEdgesAreAllowed = false;
         private bool loopsAreAllowed = false;
-        private bool isDirected = false;
+        private bool isDirected = true;
 
-        public void SetParralelEdgesAllowed(bool allowed)
+        public void SetParralelEdgesAllowed(bool value)
         {
-            parralelEdgesAreAllowed = allowed;
+            parralelEdgesAreAllowed = value;
+        }
+
+        public void SetDirected(bool value)
+        {
+            isDirected = value;
+        }
+
+        public void SetLoopsAllowed(bool value)
+        {
+            loopsAreAllowed = value;
         }
 
         public bool GetParralelEdgesAllowed()
         {
             return parralelEdgesAreAllowed;
+        }
+
+        public bool GetDirected()
+        {
+            return isDirected;
         }
 
         public TNode GetNode(string name)
@@ -67,24 +82,20 @@ namespace GraphMaster
 
         public TEdge AddEdge(TEdge edge)
         {
-
             string sourseName = edge.GetSourceNode().GetName();
             string targetName = edge.GetTargetNode().GetName();
             string edgeName = edge.GetName();
             float edgeWeight = edge.GetWeight();
 
-
             CheckPossibilityOfAddingAnEdge(sourseName, targetName, edgeName);
             
             edgesMap[edgeName] = edge;
 
+            if (!AdjacencyMap[sourseName].ContainsKey(targetName)) AdjacencyMap[sourseName][targetName] = new();
+            AdjacencyMap[sourseName][targetName].Add((edgeWeight, edgeName));
 
-            if (!dWAdjacencyMap[sourseName].ContainsKey(targetName)) dWAdjacencyMap[sourseName][targetName] = new();
-            dWAdjacencyMap[sourseName][targetName].Add((edgeWeight, edgeName));
-
-            uAdjacencyMap[sourseName].Add(targetName);
-            uAdjacencyMap[targetName].Add(sourseName);
-
+            if (!ReversedAdjacencyMap[targetName].ContainsKey(sourseName)) ReversedAdjacencyMap[targetName][sourseName] = new();
+            ReversedAdjacencyMap[targetName][sourseName].Add((edgeWeight, edgeName));
 
             return edge;
         }
@@ -100,8 +111,6 @@ namespace GraphMaster
                 throw new NotFoundException("Edge", edge.GetName(), "Graph");
             }
 
-
-
             string edgeName = edge.GetName();
             float edgeWeight = edge.GetWeight();
             string sourceName = edge.GetSourceNode().GetName();
@@ -109,21 +118,23 @@ namespace GraphMaster
 
             edgesMap.Remove(edgeName);
 
-            dWAdjacencyMap[sourceName][targetName].Remove((edgeWeight, edgeName));
-            if(dWAdjacencyMap[sourceName][targetName].Count == 0)
+            if (AdjacencyMap.ContainsKey(sourceName) && AdjacencyMap[sourceName].ContainsKey(targetName))
             {
-                dWAdjacencyMap[sourceName].Remove(targetName);
-
-                if (!dWAdjacencyMap[targetName].ContainsKey(sourceName))
+                AdjacencyMap[sourceName][targetName].Remove((edgeWeight, edgeName));
+                if (AdjacencyMap[sourceName][targetName].Count == 0)
                 {
-                    uAdjacencyMap[sourceName].Remove(targetName);
-                    uAdjacencyMap[targetName].Remove(sourceName);
+                    AdjacencyMap[sourceName].Remove(targetName);
                 }
             }
 
-
-
-
+            if (ReversedAdjacencyMap.ContainsKey(targetName) && ReversedAdjacencyMap[targetName].ContainsKey(sourceName))
+            {
+                ReversedAdjacencyMap[targetName][sourceName].Remove((edgeWeight, edgeName));
+                if (ReversedAdjacencyMap[targetName][sourceName].Count == 0)
+                {
+                    ReversedAdjacencyMap[targetName].Remove(sourceName);
+                }
+            }
         }
 
        
@@ -144,12 +155,17 @@ namespace GraphMaster
                 }
             }
 
+            this.GetNode(sourseName);
+            this.GetNode(targetName);
+
             if (!this.parralelEdgesAreAllowed)
             {
-                if (uAdjacencyMap[sourseName].Contains(targetName))
+                
+                if (AdjacencyMap[sourseName].ContainsKey(targetName) || ReversedAdjacencyMap[targetName].ContainsKey(sourseName))
                 {
                     throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
                 }
+                
                 
             }  
         }
@@ -163,8 +179,8 @@ namespace GraphMaster
             }
             nodesMap.Add(nodeName, node);
 
-            dWAdjacencyMap[nodeName] = new();
-            uAdjacencyMap[nodeName] = new();
+            AdjacencyMap[nodeName] = new();
+            ReversedAdjacencyMap[nodeName] = new();
 
             return node;
         }
@@ -177,10 +193,10 @@ namespace GraphMaster
                 throw new NotFoundException("Node", name, "Graph");
             }
 
-            var pairedNodes = dWAdjacencyMap[name].Values.ToList();
-            for (int i = 0; i < pairedNodes.Count; i++)
+            var outgoingEdges = AdjacencyMap[name].Values.ToList();
+            for (int i = 0; i < outgoingEdges.Count; i++)
             {
-                var edges = pairedNodes[i];
+                var edges = outgoingEdges[i];
                 for (int j = 0; j < edges.Count; j++)
                 {
                     string edge = edges[j].edgeName;
@@ -188,28 +204,21 @@ namespace GraphMaster
                 }
             }
 
-            foreach (var nodeEntry in dWAdjacencyMap)
+            var incomingEdges = ReversedAdjacencyMap[name].Values.ToList();
+            for (int i = 0; i < incomingEdges.Count; i++)
             {
-                if (nodeEntry.Key == name) continue;
-
-                if (nodeEntry.Value.ContainsKey(name))
+                var edges = incomingEdges[i];
+                for (int j = 0; j < edges.Count; j++)
                 {
-                    var incomingEdges = nodeEntry.Value[name].ToList();
-                    foreach (var edgeInfo in incomingEdges)
-                    {
-                        this.DeleteEdge(edgeInfo.edgeName);
-                    }
+                    string edge = edges[j].edgeName;
+                    this.DeleteEdge(edge);
                 }
             }
+            
 
             nodesMap.Remove(name);
-            dWAdjacencyMap.Remove(name);
-            uAdjacencyMap.Remove(name);
-
-            foreach (var nodeEntry in uAdjacencyMap)
-            {
-                nodeEntry.Value.Remove(name);
-            }
+            AdjacencyMap.Remove(name);
+            ReversedAdjacencyMap.Remove(name);
         }
 
 
@@ -226,13 +235,10 @@ namespace GraphMaster
 
         public Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>> GetAdjacencyMap()
         {
-            return new Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>>(dWAdjacencyMap);
+            return new Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>>(AdjacencyMap);
         }
 
-
         
-
-
     }
 }
 
