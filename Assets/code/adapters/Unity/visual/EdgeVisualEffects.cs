@@ -41,6 +41,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             SetVisualLayer(graphEdgesSequenseCount);
             activeLine = line;
             selectedLine.gameObject.SetActive(false);
+            markLine.gameObject.SetActive(false);
             
             sourceNode = source;
             targetNode = target;
@@ -120,9 +121,14 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         private void SetVisualLayer(int graphEdgesSequenseCount)
         {
-            edgeToolBar.sortingOrder = -graphEdgesSequenseCount * 2 + 1;
-            line.sortingOrder = -graphEdgesSequenseCount * 2;
-            selectedLine.sortingOrder = -graphEdgesSequenseCount * 2;
+            int baseSortingLayer = -graphEdgesSequenseCount * 3;
+
+
+            edgeToolBar.sortingOrder = baseSortingLayer + 2;
+            markLine.sortingOrder = baseSortingLayer + 1;
+            line.sortingOrder = baseSortingLayer;
+            selectedLine.sortingOrder = baseSortingLayer;
+            
         }
 
         public void CheckGameObjectContent()

@@ -7,13 +7,17 @@ namespace GraphMaster.UnityAdapter.VisualEffects
     {
         [SerializeField] private TextMeshProUGUI nameVisual;
         [SerializeField] private Canvas nodeToolBar;
+
+        [Header("Selection Animation")]
         [SerializeField] private Color selectedColor;
+        [SerializeField] private Vector2 selectedScale;
         private Color defaultColor;
         private Vector2 defaultScale;
-        [SerializeField] private Vector2 selectedScale;
+
         [SerializeField] private SpriteRenderer nodeSpriteRenderer;
         
         [Header("Mark Animation")]
+        [SerializeField] private SpriteRenderer markSpriteRenderer;
         [SerializeField] private string markApplyAnimationName;
         [SerializeField] private string markRevertAnimationName;
         [SerializeField] private Animator nodeAnimator;
@@ -52,6 +56,11 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             {
                 throw new System.Exception("SpriteRenderer nodeSpriteRenderer can't be a null");
             }
+
+            if (markSpriteRenderer == null)
+            {
+                throw new System.Exception("SpriteRenderer markSpriteRenderer can't be a null");
+            }
         }
 
         public void StartSelectionAnimation()
@@ -78,8 +87,10 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         private void SetVisualLayer(int graphEdgesSequenseCount)
         {
-            nodeToolBar.sortingOrder = graphEdgesSequenseCount * 2 + 1;
-            nodeSpriteRenderer.sortingOrder = graphEdgesSequenseCount * 2;
+            int baseVisualLayer = graphEdgesSequenseCount * 3;
+            nodeToolBar.sortingOrder = baseVisualLayer + 1;
+            markSpriteRenderer.sortingOrder = baseVisualLayer + 2;
+            nodeSpriteRenderer.sortingOrder = baseVisualLayer;
         }
 
         public void UpdateFrame()
