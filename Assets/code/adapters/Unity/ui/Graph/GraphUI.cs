@@ -174,15 +174,6 @@ namespace GraphMaster.UnityAdapter
         private void OnAnyEdgeSelected(EdgeUI edge)
         {
 
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            string temp = "";
-            Debug.Log($"Select edge: {edge.GetName()}");
-            foreach (var ed in this.selectedEdges)
-            {
-                temp += "----" + ed.GetName();
-            }
-            Debug.Log($" Selected Edges: {temp}");
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
             if (deletingMode)
@@ -193,10 +184,8 @@ namespace GraphMaster.UnityAdapter
             {
                 if (edge == selectedEdges[0])
                 {
-                    Debug.Log("Breaking");
                     return;
                 }
-                Debug.Log($"  Replaced {selectedEdges[0].GetName()} ");
                 selectedEdges[0].Deselect();
                 selectedEdges.Clear();
                 selectedEdges.Add(edge);
@@ -221,7 +210,6 @@ namespace GraphMaster.UnityAdapter
 
         private void OnAnyEdgeDeselected(EdgeUI edge)
         {
-            Debug.Log($" Edge deselected {edge.GetName()}");
             selectedEdges.Remove(edge);
             EdgeDeselected.Invoke(edge.GetName());
         }
