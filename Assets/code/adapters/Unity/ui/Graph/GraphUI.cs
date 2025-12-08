@@ -190,11 +190,11 @@ namespace GraphMaster.UnityAdapter
             }
             else if (selectedEdges.Count == 1)
             {
-                if (edge != selectedEdges[0])
+                if (edge == selectedEdges[0])
                 {
-                    selectedEdges[0].Deselect();
+                    return;
                 }
-                
+                selectedEdges[0].Deselect();
                 selectedEdges.Clear();
                 selectedEdges.Add(edge);
                 EdgeSelected.Invoke(edge.GetName());
@@ -218,6 +218,11 @@ namespace GraphMaster.UnityAdapter
 
         private void OnAnyEdgeDeselected(EdgeUI edge)
         {
+            if (selectedEdges.Count == 1)
+            {
+                selectedEdges[0].Deselect();
+                selectedEdges.Clear();
+            }
             EdgeDeselected.Invoke(edge.GetName());
         }
 
