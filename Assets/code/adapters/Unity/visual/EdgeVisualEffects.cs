@@ -34,7 +34,9 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         private Coroutine currentMarkCoroutine;
         private Coroutine currentPointerCoroutine;
         private Coroutine selectCoroutine;
-        private bool isMarkAnimationReversed = false;
+        
+        private Color initialStartColor;
+        private Color initialEndColor;
 
 
         private void Update()
@@ -71,12 +73,20 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void SelectThisAnimation()
         {
-
+            if (selectCoroutine != null)
+            {
+                StopCoroutine(selectCoroutine);
+            }
+            selectCoroutine = StartCoroutine(AnimateColorTransition(selectColor, selectAnimationDuraton));
         }
 
         public void DeselectThisAnimation()
         {
-
+            if (selectCoroutine != null)
+            {
+                StopCoroutine(selectCoroutine);
+            }
+            selectCoroutine = StartCoroutine(AnimateColorToInitial(selectAnimationDuraton));
         }
 
         public void UpdateWeightDisplay(float weight)
@@ -100,6 +110,9 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             activeLine.SetPosition(0, sourcePosition);
             activeLine.SetPosition(1, targetPosition);
             edgeCollider.SetPoints(new List<Vector2> { sourcePosition, targetPosition });
+            
+            initialStartColor = activeLine.startColor;
+            initialEndColor = activeLine.endColor;
         }
 
         private void UpdateWeightTextPosition(Vector3 sourcePos, Vector3 targetPos)
@@ -178,7 +191,11 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void MarkThisAnimation(bool reverseDirection = false)
         {
-            
+            if (currentMarkCoroutine != null)
+            {
+                StopCoroutine(currentMarkCoroutine);
+            }
+            currentMarkCoroutine = StartCoroutine(AnimateColorTransition(markColor, markAnimationDuration));
         }
         
         public void MarkThisAnimation()
@@ -188,6 +205,11 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void RemoveMarkAnimation()
         {
+            if (currentMarkCoroutine != null)
+            {
+                StopCoroutine(currentMarkCoroutine);
+            }
+            currentMarkCoroutine = StartCoroutine(AnimateColorToInitial(markAnimationDuration));
         }
 
         private System.Collections.IEnumerator AnimatePointerToCenter()
@@ -207,6 +229,44 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             }
 
             pointerObject.position = edgeCenter;
+        }
+
+        private System.Collections.IEnumerator AnimateColorTransition(Color targetColor, float duration)
+        {
+            Color startColorBegin = activeLine.startColor;
+            Color endColorBegin = activeLine.endColor;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / duration;
+                activeLine.startColor = Color.Lerp(startColorBegin, targetColor, t);
+                activeLine.endColor = Color.Lerp(endColorBegin, targetColor, t);
+                yield return null;
+            }
+
+            activeLine.startColor = targetColor;
+            activeLine.endColor = targetColor;
+        }
+
+        private System.Collections.IEnumerator AnimateColorToInitial(float duration)
+        {
+            Color startColorBegin = activeLine.startColor;
+            Color endColorBegin = activeLine.endColor;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / duration;
+                activeLine.startColor = Color.Lerp(startColorBegin, initialStartColor, t);
+                activeLine.endColor = Color.Lerp(endColorBegin, initialEndColor, t);
+                yield return null;
+            }
+
+            activeLine.startColor = initialStartColor;
+            activeLine.endColor = initialEndColor;
         }
     }
 }
