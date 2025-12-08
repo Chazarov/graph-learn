@@ -29,23 +29,23 @@ namespace GraphMaster.UnityAdapter
             if (!isSelected)
             {
                 Select();
-                isSelected = true;
             }
             else
             {
-                isSelected = false;
                 Deselect();
             }
         }
 
         public void Select()
         {
+            isSelected = true;
             visualEffects?.SelectThisAnimation();
             IsSelected?.Invoke(this);
         }
 
         public void Deselect()
         {
+            isSelected = false;
             visualEffects?.DeselectThisAnimation();
             IsDeselected?.Invoke(this);
         }
