@@ -62,7 +62,7 @@ namespace GraphMaster.UnityAdapter.UI
         public void Select()
         {
             isSelected = true;
-            visualEffects?.StartSelectionAnimation();
+            visualEffects?.SelectThisAnimation();
             IsSelected?.Invoke(this.GetName());
         }
 
@@ -70,7 +70,7 @@ namespace GraphMaster.UnityAdapter.UI
         {
             if (isSelected)
             {
-                visualEffects?.StartDeselectionAnimation();
+                visualEffects?.DeselectThisAnimation();
                 isSelected = false;
                 IsDeselected?.Invoke(this.GetName());
             }

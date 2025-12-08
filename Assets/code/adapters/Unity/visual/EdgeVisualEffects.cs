@@ -8,14 +8,18 @@ namespace GraphMaster.UnityAdapter.VisualEffects
     public class EdgeVisualEffects : MonoBehaviour, GraphObjectVisualEffectsInterface
     {
         [SerializeField] private LineRenderer line;
-        [SerializeField] private LineRenderer selectedLine;
+        [SerializeField] private LineRenderer directedLine;
         [SerializeField] private EdgeCollider2D edgeCollider;
         [SerializeField] private TextMeshProUGUI weightText;
         [SerializeField] private Canvas edgeToolBar;
-        
+
+        [Header("Select animation")]
+        [SerializeField] private Color selectColor;
+        [SerializeField] private float selectAnimationDuraton = 1f;
+
         [Header("Mark Animation")]
-        [SerializeField] private LineRenderer markLine;
         [SerializeField] private float markAnimationDuration = 1f;
+        [SerializeField] private Color markColor;
         
         [Header("Point Animation")]
         [SerializeField] private Transform pointerObject;
@@ -24,9 +28,12 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         private LineRenderer activeLine;
         private NodeUI sourceNode;
         private NodeUI targetNode;
+
+
         
         private Coroutine currentMarkCoroutine;
         private Coroutine currentPointerCoroutine;
+        private Coroutine selectCoroutine;
         private bool isMarkAnimationReversed = false;
 
 
@@ -40,8 +47,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             CheckGameObjectContent();
             SetVisualLayer(graphEdgesSequenseCount);
             activeLine = line;
-            selectedLine.gameObject.SetActive(false);
-            markLine.gameObject.SetActive(false);
+            directedLine.gameObject.SetActive(false);
             
             sourceNode = source;
             targetNode = target;
@@ -63,18 +69,14 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             UpdateWeightTextPosition(sourcePosition, targetPosition);
         }
 
-        public void StartSelectionAnimation()
+        public void SelectThisAnimation()
         {
-            line.gameObject.SetActive(false);
-            selectedLine.gameObject.SetActive(true);
-            activeLine = selectedLine;
+
         }
 
-        public void StartDeselectionAnimation()
+        public void DeselectThisAnimation()
         {
-            selectedLine.gameObject.SetActive(false);
-            line.gameObject.SetActive(true);
-            activeLine = line;
+
         }
 
         public void UpdateWeightDisplay(float weight)
@@ -97,7 +99,6 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             activeLine.positionCount = 2;
             activeLine.SetPosition(0, sourcePosition);
             activeLine.SetPosition(1, targetPosition);
-            selectedLine.positionCount = 2;
             edgeCollider.SetPoints(new List<Vector2> { sourcePosition, targetPosition });
         }
 
@@ -125,9 +126,8 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
 
             edgeToolBar.sortingOrder = baseSortingLayer + 2;
-            markLine.sortingOrder = baseSortingLayer + 1;
+            directedLine.sortingOrder = baseSortingLayer;
             line.sortingOrder = baseSortingLayer;
-            selectedLine.sortingOrder = baseSortingLayer;
             
         }
 
@@ -138,9 +138,9 @@ namespace GraphMaster.UnityAdapter.VisualEffects
                 throw new System.Exception(" Line Renderer can't be a null");
             }
 
-            if (selectedLine == null)
+            if (directedLine == null)
             {
-                throw new System.Exception(" SelectedLine Renderer can't be a null");
+                throw new System.Exception(" directedLine Renderer can't be a null");
             }
 
             if (edgeCollider == null)
@@ -173,22 +173,12 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void RemovePointerAnimation()
         {
-            // Функция отката анимации пустая согласно требованиям
+            return;
         }
 
         public void MarkThisAnimation(bool reverseDirection = false)
         {
-            if (markLine != null)
-            {
-                if (currentMarkCoroutine != null)
-                {
-                    StopCoroutine(currentMarkCoroutine);
-                }
-                
-                isMarkAnimationReversed = reverseDirection;
-                markLine.gameObject.SetActive(true);
-                currentMarkCoroutine = StartCoroutine(AnimateMarkLine(reverseDirection));
-            }
+            
         }
         
         public void MarkThisAnimation()
@@ -198,67 +188,6 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void RemoveMarkAnimation()
         {
-            if (markLine != null)
-            {
-                if (currentMarkCoroutine != null)
-                {
-                    StopCoroutine(currentMarkCoroutine);
-                }
-                
-                currentMarkCoroutine = StartCoroutine(AnimateMarkLineReverse(!isMarkAnimationReversed));
-            }
-        }
-
-        private System.Collections.IEnumerator AnimateMarkLine(bool reverseDirection)
-        {
-            if (sourceNode == null || targetNode == null) yield break;
-
-            Vector3 startPos = reverseDirection ? targetNode.transform.position : sourceNode.transform.position;
-            Vector3 endPos = reverseDirection ? sourceNode.transform.position : targetNode.transform.position;
-            
-            markLine.positionCount = 2;
-            float elapsedTime = 0f;
-
-            while (elapsedTime < markAnimationDuration)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = elapsedTime / markAnimationDuration;
-                
-                Vector3 currentEndPos = Vector3.Lerp(startPos, endPos, t);
-                
-                markLine.SetPosition(0, startPos);
-                markLine.SetPosition(1, currentEndPos);
-                
-                yield return null;
-            }
-
-            markLine.SetPosition(0, startPos);
-            markLine.SetPosition(1, endPos);
-        }
-
-        private System.Collections.IEnumerator AnimateMarkLineReverse(bool reverseDirection)
-        {
-            if (sourceNode == null || targetNode == null) yield break;
-
-            Vector3 startPos = reverseDirection ? targetNode.transform.position : sourceNode.transform.position;
-            Vector3 endPos = reverseDirection ? sourceNode.transform.position : targetNode.transform.position;
-            
-            float elapsedTime = 0f;
-
-            while (elapsedTime < markAnimationDuration)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = 1f - (elapsedTime / markAnimationDuration);
-                
-                Vector3 currentEndPos = Vector3.Lerp(startPos, endPos, t);
-                
-                markLine.SetPosition(0, startPos);
-                markLine.SetPosition(1, currentEndPos);
-                
-                yield return null;
-            }
-
-            markLine.gameObject.SetActive(false);
         }
 
         private System.Collections.IEnumerator AnimatePointerToCenter()

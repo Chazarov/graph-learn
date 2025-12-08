@@ -4,9 +4,9 @@ using UnityEngine;
 
 public interface GraphObjectVisualEffectsInterface
 {
-    public void StartSelectionAnimation();
+    public void SelectThisAnimation();
 
-    public void StartDeselectionAnimation();
+    public void DeselectThisAnimation();
 
     public void PointThisAnimation();
 

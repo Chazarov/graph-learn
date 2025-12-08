@@ -40,13 +40,13 @@ namespace GraphMaster.UnityAdapter
 
         public void Select()
         {
-            visualEffects?.StartSelectionAnimation();
+            visualEffects?.SelectThisAnimation();
             IsSelected?.Invoke(this);
         }
 
         public void Deselect()
         {
-            visualEffects?.StartDeselectionAnimation();
+            visualEffects?.DeselectThisAnimation();
             IsDeselected?.Invoke(this);
         }
 

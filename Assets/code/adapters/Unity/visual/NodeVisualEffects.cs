@@ -63,7 +63,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             }
         }
 
-        public void StartSelectionAnimation()
+        public void SelectThisAnimation()
         {
 
             nodeSpriteRenderer.color = selectedColor;
@@ -71,7 +71,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         }
 
-        public void StartDeselectionAnimation()
+        public void DeselectThisAnimation()
         {
             nodeSpriteRenderer.color = defaultColor;
             transform.localScale = defaultScale;
