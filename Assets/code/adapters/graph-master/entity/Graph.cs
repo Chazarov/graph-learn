@@ -19,10 +19,10 @@ namespace GraphMaster
 
 
         // Algorithms with an undirected graph
-        private Dictionary<string, List<string>> nodesEdgesMap = new();
+        private Dictionary<string, Dictionary<string, (float weight, string edgeName)>> nodesEdgesMap = new();
 
-        // Algoritms with a weighed graph 
-        public Dictionary<string, List<(string to, float weight, string edgeName)>> adjacencyMap = new();
+        // Algoritms with a directed weighed graph 
+        public Dictionary<string, List<(string to, float weight, string edgeName)>> directedAdjacencyMap = new();
 
         private bool parralelEdgesAreAllowed = false;
         private bool loopsAreAllowed = false;
@@ -79,14 +79,12 @@ namespace GraphMaster
             
             edgesMap[edgeName] = edge;
 
-            if (!nodesEdgesMap[sourseName].Contains(edgeName)) nodesEdgesMap[sourseName] = new List<string>();
-            if (!nodesEdgesMap[targetName].Contains(edgeName)) nodesEdgesMap[targetName] = new List<string>();
-            nodesEdgesMap[sourseName].Add(edgeName);
-            nodesEdgesMap[targetName].Add(edgeName);
+            nodesEdgesMap[sourseName][edgeName] = (edgeWeight, targetName);
+            nodesEdgesMap[targetName][edgeName] = (edgeWeight, sourseName);
 
 
-            if (!adjacencyMap[sourseName].Contains((targetName, edgeWeight, edgeName))) adjacencyMap[sourseName] = new List<(string, float, string)>();
-            adjacencyMap[sourseName].Add((targetName, edgeWeight, edgeName));
+            if (!directedAdjacencyMap[sourseName].Contains((targetName, edgeWeight, edgeName))) directedAdjacencyMap[sourseName] = new List<(string, float, string)>();
+            directedAdjacencyMap[sourseName].Add((targetName, edgeWeight, edgeName));
 
             return edge;
         }
@@ -116,7 +114,7 @@ namespace GraphMaster
             nodesEdgesMap[sourceName].Remove(edgeName);
 
 
-            adjacencyMap[sourceName].Remove((targetName, edgeWeight, edgeName));
+            directedAdjacencyMap[sourceName].Remove((targetName, edgeWeight, edgeName));
         }
 
        
@@ -139,7 +137,7 @@ namespace GraphMaster
 
             if (!this.parralelEdgesAreAllowed)
             {
-                bool occuerence =  adjacencyMap[sourseName].FindAll(item => item.to == targetName).Count != 0;
+                bool occuerence =  directedAdjacencyMap[sourseName].FindAll(item => item.to == targetName).Count != 0;
                 if (occuerence)
                 {
                     throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
@@ -159,7 +157,7 @@ namespace GraphMaster
 
             nodesEdgesMap[nodeName] = new();
 
-            adjacencyMap[nodeName] = new();
+            directedAdjacencyMap[nodeName] = new();
 
 
 
@@ -178,10 +176,10 @@ namespace GraphMaster
 
             nodesMap.Remove(name);
 
-            var edgesToDelete = nodesEdgesMap[name];
+            var edgesToDelete = nodesEdgesMap[name].Values.ToList();
             for(int i = 0; i < edgesToDelete.Count; i++)
             {
-                string edge = edgesToDelete[i];
+                string edge = edgesToDelete[i].edgeName;
                 this.DeleteEdge(edge);
 
             }
@@ -189,7 +187,7 @@ namespace GraphMaster
             nodesEdgesMap.Remove(name);
 
 
-            adjacencyMap.Remove(name);
+            directedAdjacencyMap.Remove(name);
         }
 
         public bool HasNodes()
@@ -204,7 +202,7 @@ namespace GraphMaster
 
         public Dictionary<string, List<(string to, float weight, string edgeName)>> GetAdjacencyMap()
         {
-            return new Dictionary<string, List<(string to, float weight, string edgeName)>>(adjacencyMap);
+            return new Dictionary<string, List<(string to, float weight, string edgeName)>>(directedAdjacencyMap);
         }
 
 
