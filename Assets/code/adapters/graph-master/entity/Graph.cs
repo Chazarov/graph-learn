@@ -18,9 +18,9 @@ namespace GraphMaster
         private Dictionary<string, TEdge> edgesMap = new Dictionary<string, TEdge>();
 
         // Algorithms with a directed weighed graph
-        private Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>> AdjacencyMap = new();
+        private Dictionary<string, Dictionary<string, List<TEdge>>> AdjacencyMap = new();
 
-        private Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>> ReversedAdjacencyMap = new();
+        private Dictionary<string, Dictionary<string, List<TEdge>>> ReversedAdjacencyMap = new();
 
         private bool parralelEdgesAreAllowed = false;
         private bool loopsAreAllowed = false;
@@ -92,10 +92,10 @@ namespace GraphMaster
             edgesMap[edgeName] = edge;
 
             if (!AdjacencyMap[sourseName].ContainsKey(targetName)) AdjacencyMap[sourseName][targetName] = new();
-            AdjacencyMap[sourseName][targetName].Add((edgeWeight, edgeName));
+            AdjacencyMap[sourseName][targetName].Add(edge);
 
             if (!ReversedAdjacencyMap[targetName].ContainsKey(sourseName)) ReversedAdjacencyMap[targetName][sourseName] = new();
-            ReversedAdjacencyMap[targetName][sourseName].Add((edgeWeight, edgeName));
+            ReversedAdjacencyMap[targetName][sourseName].Add(edge);
 
             return edge;
         }
@@ -120,7 +120,7 @@ namespace GraphMaster
 
             if (AdjacencyMap.ContainsKey(sourceName) && AdjacencyMap[sourceName].ContainsKey(targetName))
             {
-                AdjacencyMap[sourceName][targetName].Remove((edgeWeight, edgeName));
+                AdjacencyMap[sourceName][targetName].Remove(edge);
                 if (AdjacencyMap[sourceName][targetName].Count == 0)
                 {
                     AdjacencyMap[sourceName].Remove(targetName);
@@ -129,7 +129,7 @@ namespace GraphMaster
 
             if (ReversedAdjacencyMap.ContainsKey(targetName) && ReversedAdjacencyMap[targetName].ContainsKey(sourceName))
             {
-                ReversedAdjacencyMap[targetName][sourceName].Remove((edgeWeight, edgeName));
+                ReversedAdjacencyMap[targetName][sourceName].Remove(edge);
                 if (ReversedAdjacencyMap[targetName][sourceName].Count == 0)
                 {
                     ReversedAdjacencyMap[targetName].Remove(sourceName);
@@ -199,7 +199,7 @@ namespace GraphMaster
                 var edges = outgoingEdges[i];
                 for (int j = 0; j < edges.Count; j++)
                 {
-                    string edge = edges[j].edgeName;
+                    string edge = edges[j].GetName();
                     this.DeleteEdge(edge);
                 }
             }
@@ -210,7 +210,7 @@ namespace GraphMaster
                 var edges = incomingEdges[i];
                 for (int j = 0; j < edges.Count; j++)
                 {
-                    string edge = edges[j].edgeName;
+                    string edge = edges[j].GetName();
                     this.DeleteEdge(edge);
                 }
             }
@@ -233,9 +233,9 @@ namespace GraphMaster
             return nodesMap.Values.Count;
         }
 
-        public Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>> GetAdjacencyMap()
+        public Dictionary<string, Dictionary<string, List<TEdge>>> GetAdjacencyMap()
         {
-            return new Dictionary<string, Dictionary<string, List<(float weight, string edgeName)>>>(AdjacencyMap);
+            return new Dictionary<string, Dictionary<string, List<TEdge>>>(AdjacencyMap);
         }
 
         
