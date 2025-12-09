@@ -221,6 +221,18 @@ namespace GraphMaster
             ReversedAdjacencyMap.Remove(name);
         }
 
+        public List<TEdge> GetEdgesBetween(string sourseName, string targetName)
+        {
+            if (AdjacencyMap.ContainsKey(sourseName))
+            {
+                if (AdjacencyMap[sourseName].ContainsKey(targetName))
+                {
+                    List<TEdge> edges = AdjacencyMap[sourseName][targetName];
+                    return new List<TEdge>(edges);
+                }
+            }
+            return new List<TEdge>();
+        }
 
 
         public bool HasNodes()

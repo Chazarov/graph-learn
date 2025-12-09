@@ -25,6 +25,11 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         [SerializeField] private Transform pointerObject;
         [SerializeField] private float pointerAnimationDuration = 0.5f;
 
+        [Header("Directed View")]
+        [SerializeField] private float edgeCenterOffset = 0f;
+
+        private bool directedView = false;
+
         private LineRenderer activeLine;
         private NodeUI sourceNode;
         private NodeUI targetNode;
@@ -57,6 +62,37 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             SetupInitialLine();
         }
 
+        public void SetDirectedView(bool isDirected)
+        {
+            directedView = isDirected;
+            
+            if (directedView)
+            {
+                line.gameObject.SetActive(false);
+                directedLine.gameObject.SetActive(true);
+                activeLine = directedLine;
+                
+                initialStartColor = activeLine.startColor;
+                initialEndColor = activeLine.endColor;
+            }
+            else
+            {
+                directedLine.gameObject.SetActive(false);
+                line.gameObject.SetActive(true);
+                activeLine = line;
+                
+                initialStartColor = activeLine.startColor;
+                initialEndColor = activeLine.endColor;
+            }
+            
+            UpdateFrame();
+        }
+
+        public void SetEdgeCenterOffset(float offset)
+        {
+            edgeCenterOffset = offset;
+        }
+
         public void UpdateFrame()
         {
             if (sourceNode == null || targetNode == null) return;
@@ -65,8 +101,30 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             Vector3 targetPosition = targetNode.transform.position;
             sourcePosition.z = targetPosition.z = transform.position.z;
             
-            activeLine.SetPosition(0, sourcePosition);
-            activeLine.SetPosition(1, targetPosition);
+            if (directedView && edgeCenterOffset > 0)
+            {
+                activeLine.positionCount = 5;
+                
+                Vector3 direction = (targetPosition - sourcePosition).normalized;
+                Vector3 perpendicular = new Vector3(-direction.y, direction.x, 0);
+                
+                Vector3 center = (sourcePosition + targetPosition) / 2f;
+                Vector3 quarter1 = sourcePosition + (targetPosition - sourcePosition) * 0.25f;
+                Vector3 quarter3 = sourcePosition + (targetPosition - sourcePosition) * 0.75f;
+                
+                activeLine.SetPosition(0, sourcePosition);
+                activeLine.SetPosition(1, quarter1 + perpendicular * edgeCenterOffset);
+                activeLine.SetPosition(2, center + perpendicular * edgeCenterOffset);
+                activeLine.SetPosition(3, quarter3 + perpendicular * edgeCenterOffset);
+                activeLine.SetPosition(4, targetPosition);
+            }
+            else
+            {
+                activeLine.positionCount = 2;
+                activeLine.SetPosition(0, sourcePosition);
+                activeLine.SetPosition(1, targetPosition);
+            }
+            
             edgeCollider.SetPoints(new List<Vector2> { sourcePosition, targetPosition });
             UpdateWeightTextPosition(sourcePosition, targetPosition);
         }
@@ -211,6 +269,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             }
             currentMarkCoroutine = StartCoroutine(AnimateColorToInitial(markAnimationDuration));
         }
+
 
         private System.Collections.IEnumerator AnimatePointerToCenter()
         {
