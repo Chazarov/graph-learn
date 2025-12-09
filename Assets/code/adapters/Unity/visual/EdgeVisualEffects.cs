@@ -15,10 +15,10 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         [Header("Select animation")]
         [SerializeField] private Color selectColor;
-        [SerializeField] private float selectAnimationDuraton = 1f;
+        [SerializeField] private float selectAnimationDuraton = 0.3f;
 
         [Header("Mark Animation")]
-        [SerializeField] private float markAnimationDuration = 1f;
+        [SerializeField] private float markAnimationDuration = 0.5f;
         [SerializeField] private Color markColor;
         
         [Header("Point Animation")]
@@ -26,7 +26,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         [SerializeField] private float pointerAnimationDuration = 0.5f;
 
         [Header("Directed View")]
-        [SerializeField] private float edgeCenterOffset = 0f;
+        [SerializeField] private int edgeOffsetPositionNumber = 0;
 
         private bool directedView = false;
 
@@ -46,7 +46,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         private void Update()
         {
-            UpdateFrame();
+            CalculateEdgeVisualPos();
         }
 
         public void Initialize(int graphEdgesSequenseCount, NodeUI source, NodeUI target)
@@ -85,38 +85,68 @@ namespace GraphMaster.UnityAdapter.VisualEffects
                 initialEndColor = activeLine.endColor;
             }
             
-            UpdateFrame();
         }
 
-        public void SetEdgeCenterOffset(float offset)
+        public void SetEdgeCenterOffset(int offset)
         {
-            edgeCenterOffset = offset;
+            edgeOffsetPositionNumber = offset;
         }
 
-        public void UpdateFrame()
+        private float CalculateArcOffset(float chordLength, float centerOffset, float distanceFromCenter)
+        {
+            float halfChord = chordLength / 2f;
+            float h = Mathf.Abs(centerOffset);
+            if (h < 0.001f) return centerOffset;
+            
+            float radius = (halfChord * halfChord + h * h) / (2f * h);
+            float y = Mathf.Sqrt(radius * radius - distanceFromCenter * distanceFromCenter) - (radius - h);
+            
+            return centerOffset > 0 ? y : -y;
+        }
+
+
+        private void CalculateEdgeVisualPos()
         {
             if (sourceNode == null || targetNode == null) return;
-            
+
             Vector3 sourcePosition = sourceNode.transform.position;
             Vector3 targetPosition = targetNode.transform.position;
-            sourcePosition.z = targetPosition.z = transform.position.z;
+            float z = sourcePosition.z = targetPosition.z = transform.position.z;
+
             
-            if (directedView && edgeCenterOffset > 0)
+
+            Vector3 textOffset = Vector3.zero;
+
+            if (edgeOffsetPositionNumber > 0)
             {
+                int offset = edgeOffsetPositionNumber / 2;
+                bool isLocatedToTheRight = edgeOffsetPositionNumber % 2 == 0;
+                if (!isLocatedToTheRight)
+                {
+                    offset *= -1;
+                }
+
+
                 activeLine.positionCount = 5;
-                
+
                 Vector3 direction = (targetPosition - sourcePosition).normalized;
-                Vector3 perpendicular = new Vector3(-direction.y, direction.x, 0);
-                
+                Vector3 perpendicular = new Vector3(-direction.y, direction.x, z);
+
                 Vector3 center = (sourcePosition + targetPosition) / 2f;
                 Vector3 quarter1 = sourcePosition + (targetPosition - sourcePosition) * 0.25f;
                 Vector3 quarter3 = sourcePosition + (targetPosition - sourcePosition) * 0.75f;
-                
+
+                float chordLength = Vector3.Distance(sourcePosition, targetPosition);
+                float offset1 = CalculateArcOffset(chordLength, offset, chordLength * 0.25f);
+                float offset3 = offset1;
+
                 activeLine.SetPosition(0, sourcePosition);
-                activeLine.SetPosition(1, quarter1 + perpendicular * edgeCenterOffset);
-                activeLine.SetPosition(2, center + perpendicular * edgeCenterOffset);
-                activeLine.SetPosition(3, quarter3 + perpendicular * edgeCenterOffset);
+                activeLine.SetPosition(1, quarter1 + perpendicular * offset1);
+                activeLine.SetPosition(2, center + perpendicular * offset);
+                activeLine.SetPosition(3, quarter3 + perpendicular * offset3);
                 activeLine.SetPosition(4, targetPosition);
+
+                textOffset += perpendicular * offset;
             }
             else
             {
@@ -124,10 +154,11 @@ namespace GraphMaster.UnityAdapter.VisualEffects
                 activeLine.SetPosition(0, sourcePosition);
                 activeLine.SetPosition(1, targetPosition);
             }
-            
+
             edgeCollider.SetPoints(new List<Vector2> { sourcePosition, targetPosition });
-            UpdateWeightTextPosition(sourcePosition, targetPosition);
+            UpdateWeightTextPosition(sourcePosition, targetPosition, textOffset);
         }
+
 
         public void SelectThisAnimation()
         {
@@ -173,12 +204,12 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             initialEndColor = activeLine.endColor;
         }
 
-        private void UpdateWeightTextPosition(Vector3 sourcePos, Vector3 targetPos)
+        private void UpdateWeightTextPosition(Vector3 sourcePos, Vector3 targetPos, Vector3 offset)
         {
             if (edgeToolBar == null) return;
 
             Vector3 centerPos = (sourcePos + targetPos) / 2f;
-            edgeToolBar.transform.position = centerPos;
+            edgeToolBar.transform.position = centerPos + offset;
 
             Vector3 direction = (targetPos - sourcePos).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
