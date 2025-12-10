@@ -13,12 +13,9 @@ public class SettingsManager : MonoBehaviour
 
     [SerializeField] private GraphUI graph;
 
-    RootExceptionHandler rootExceptionHandler;
+    [SerializeField] RootExceptionHandler rootExceptionHandler;
 
-    private void Awake()
-    {
-        rootExceptionHandler = FindObjectOfType<RootExceptionHandler>();
-    }
+   
 
     private void Start()
     {

@@ -2833,10 +2833,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d8bb75a4cbf5e46a6086079180a8f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  warningNotifyAnimator: {fileID: 0}
-  errorNotifyAnimator: {fileID: 0}
-  warningText: {fileID: 0}
-  errorText: {fileID: 0}
+  warningNotifyAnimator: {fileID: 1898405956}
+  errorNotifyAnimator: {fileID: 597484888}
+  warningText: {fileID: 1339957205}
+  errorText: {fileID: 201837214}
+  rootExceptionHandler: {fileID: 11400000, guid: dca0e2e7afcd3654ebbb33e54c8f0136, type: 2}
 --- !u!1 &756842465
 GameObject:
   m_ObjectHideFlags: 0
@@ -4123,6 +4124,7 @@ MonoBehaviour:
   setDirectedToggle: {fileID: 674641280}
   setParallelEdgesToggle: {fileID: 1611937351}
   graph: {fileID: 39104890}
+  rootExceptionHandler: {fileID: 11400000, guid: dca0e2e7afcd3654ebbb33e54c8f0136, type: 2}
 --- !u!1 &1155339823
 GameObject:
   m_ObjectHideFlags: 0

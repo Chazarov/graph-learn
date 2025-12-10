@@ -14,7 +14,9 @@ public class Notificator : MonoBehaviour
     [SerializeField] TextMeshProUGUI warningText;
     [SerializeField] TextMeshProUGUI errorText;
 
-    RootExceptionHandler rootExceptionHandler;
+    [SerializeField] RootExceptionHandler rootExceptionHandler;
+
+   
     private void ProcessException(Exception e)
     {
         if(e is GraphMasterException)
@@ -38,7 +40,7 @@ public class Notificator : MonoBehaviour
     {
         if(type.ToUpper() == "W" ||  type.ToUpper() == "WARNING")
         {
-            RunNotify(warningNotifyAnimator, errorText, text);
+            RunNotify(warningNotifyAnimator, warningText, text);
         }
         else if(type.ToUpper() == "E" || type.ToUpper() == "ERROR")
         {
