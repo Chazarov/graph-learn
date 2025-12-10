@@ -162,6 +162,13 @@ namespace GraphMaster
             AdjacencyMap[nodeName] = new();
             ReversedAdjacencyMap[nodeName] = new();
 
+            if (this.nodesMap.Count == 1)
+            {
+                this.SetRoot(node);
+            }
+
+
+
             return node;
         }
 

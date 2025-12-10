@@ -13,11 +13,24 @@ namespace GraphMaster.UnityAdapter.UI
 
         public event Action<string> IsSelected;
         public event Action<string> IsDeselected;
+        public event Action<NodeUI> IsRootMarking;
+        public event Action<NodeUI> IsRootUnmarking;
         private bool isSelected = false;
+
+        private bool isRoot = false;
+
+        [SerializeField][Range(0f, 1f)] private float maxDelayOfDoublePressing;
+
+        private float prevPressTime = 0;
         
         private void OnMouseDown()
         {
+            if((Time.time - prevPressTime) < maxDelayOfDoublePressing)
+            {
+                MarkAsRoot();
+            }
             this.Select();
+            prevPressTime = Time.time;
         }
 
         private void OnMouseDrag()
@@ -35,6 +48,28 @@ namespace GraphMaster.UnityAdapter.UI
             visualEffects?.Initialize(squenseCount);
             SetName(name);
             SetPosition(position);
+        }
+
+        public void MarkAsRoot()
+        {
+            if (isRoot) return;
+            IsRootMarking.Invoke(this);
+            MarkAsRootWithoutNotify();
+        }
+
+        public void MarkAsRootWithoutNotify()
+        {
+            if(isRoot) return;
+            visualEffects?.MarkAsRootAnimation();
+            isRoot = true;
+        }
+
+        public void RemoveRoot()
+        {
+            visualEffects.RemoveRootMarkAnimation();
+            IsRootUnmarking?.Invoke(this);
+            isRoot = false;
+
         }
 
         public void CheckGameobgectContent()

@@ -586,7 +586,7 @@ MonoBehaviour:
   pointerObject: {fileID: 0}
   pointerAnimationDuration: 0.5
   edgeOffsetPositionNumber: 0
-  spreadKof: 0.3
+  spreadKof: 0.7
   directedLineSegmentsCount: 50
 --- !u!68 &1393656597070005156
 EdgeCollider2D:

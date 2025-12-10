@@ -25,7 +25,11 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         [Header("Point Animation")]
         [SerializeField] private Transform pointerObject;
         [SerializeField] private float pointerAnimationDuration = 0.5f;
-        
+
+        [Header("Root Animation")]
+        [SerializeField] private SpriteRenderer rootSpriteRenderer;
+
+
         private Coroutine currentPointerCoroutine;
 
         private void Start()
@@ -61,6 +65,16 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             {
                 throw new System.Exception("SpriteRenderer markSpriteRenderer can't be a null");
             }
+        }
+
+        public void MarkAsRootAnimation()
+        {
+            this.rootSpriteRenderer.gameObject.SetActive(true);
+        }
+
+        public void RemoveRootMarkAnimation()
+        {
+            this.rootSpriteRenderer.gameObject.SetActive(false);
         }
 
         public void SelectThisAnimation()

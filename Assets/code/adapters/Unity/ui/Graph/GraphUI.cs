@@ -183,6 +183,42 @@ namespace GraphMaster.UnityAdapter
             
         }
 
+        private void SetRoot(NodeUI root)
+        {
+            var prev = sourse.GetRoot();
+            if (prev != null)
+            {
+                prev.RemoveRoot();
+            }
+            root.MarkAsRoot();
+            sourse.SetRoot(root);
+
+        }
+        public void CreateNodeObject()
+        {
+            CheckTheNodePrefabContent(nodePrefab);
+            GameObject instance = Instantiate(nodePrefab);
+            Vector3 instancePosition = new Vector3(UnityEngine.Random.Range(upperCreationRange.x, lowerCreationRange.x), UnityEngine.Random.Range(upperCreationRange.y, lowerCreationRange.y), instance.transform.position.z);
+
+            NodeUI UIComponent = instance.GetComponent<NodeUI>();
+            UIComponent.IsSelected += OnAnyNodeSelected;
+            UIComponent.IsDeselected += OnAnyNodeDeselected;
+            UIComponent.IsRootMarking += SetRoot;
+
+            UIComponent.Initialize(NumberToLetters(nodeNameSequense), instancePosition, nodeNameSequense);
+
+            bool thisNOdeFirst = !sourse.HasNodes();
+
+            sourse.AddNode(UIComponent);
+            nodeNameSequense++;
+            if (thisNOdeFirst)
+            {
+                Debug.Log("This Node first");
+                this.SetRoot(UIComponent);
+            }
+
+        }
+
 
 
         private void OnAnyEdgeSelected(EdgeUI edge)
@@ -241,8 +277,10 @@ namespace GraphMaster.UnityAdapter
 
             GameObject instance = Instantiate(edgePrefab);
             EdgeUI edgeVisualComponent = instance.GetComponent<EdgeUI>();
+
             edgeVisualComponent.IsSelected += OnAnyEdgeSelected;
             edgeVisualComponent.IsDeselected += OnAnyEdgeDeselected;
+
             edgeVisualComponent.Initialize(sourseNode, targetNode, edgeName, edgeNameSequense, this.GetIsDirected());
             this.sourse.AddEdge(edgeVisualComponent);
             edgeNameSequense += 1;
@@ -255,21 +293,7 @@ namespace GraphMaster.UnityAdapter
         
 
 
-        public void CreateNodeObject()
-        {
-            CheckTheNodePrefabContent(nodePrefab);
-            GameObject instance = Instantiate(nodePrefab);
-            Vector3 instancePosition = new Vector3(UnityEngine.Random.Range(upperCreationRange.x, lowerCreationRange.x), UnityEngine.Random.Range(upperCreationRange.y, lowerCreationRange.y), instance.transform.position.z);
-
-            NodeUI UIComponent = instance.GetComponent<NodeUI>();
-            UIComponent.IsSelected += OnAnyNodeSelected;
-            UIComponent.IsDeselected += OnAnyNodeDeselected;
-
-            UIComponent.Initialize(NumberToLetters(nodeNameSequense), instancePosition, nodeNameSequense);
-            sourse.AddNode(UIComponent);
-            nodeNameSequense++;
-
-        }
+        
 
 
         public void DeleteNode(string nodeName)
