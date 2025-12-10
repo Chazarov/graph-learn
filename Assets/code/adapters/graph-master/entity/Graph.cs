@@ -17,6 +17,8 @@ namespace GraphMaster
         private Dictionary<string, TNode> nodesMap = new Dictionary<string, TNode>();
         private Dictionary<string, TEdge> edgesMap = new Dictionary<string, TEdge>();
 
+        private TNode root;
+
         // Algorithms with a directed weighed graph
         private Dictionary<string, Dictionary<string, List<TEdge>>> AdjacencyMap = new();
 
@@ -330,6 +332,25 @@ namespace GraphMaster
         public List<TEdge> GetEdges()
         {
             return new List<TEdge>(this.edgesMap.Values);
+        }
+
+        public TNode GetRoot()
+        {
+            return this.root;
+        }
+
+        public void SetRoot(TNode root)
+        {
+            try
+            {
+                GetNode(root.GetName());
+            }
+            catch (NotFoundException) 
+            {
+                throw new InvalidGraphOperationException("It is not possible to add a new root. The node does not belong to this graph.");
+            } 
+            
+            this.root = root;
         }
 
 

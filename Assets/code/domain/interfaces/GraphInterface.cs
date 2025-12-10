@@ -37,6 +37,10 @@ namespace Domain
 
         public void SetDirected(bool value);
 
+        public TNode GetRoot();
+
+        public void SetRoot(TNode root);
+
 
     }
 }
