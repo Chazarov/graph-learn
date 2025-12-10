@@ -28,18 +28,21 @@ namespace GraphMaster
 
         public void SetParralelEdgesAllowed(bool value)
         {
+            bool hasParralel = HasParallelEdges();
+            if (hasParralel)
+            {
+                throw new InpossibleToChangeGraphTypeException("It is impossible to change the graph type to a non-parallel one. There are parallel edges in the graph");
+            }
             parralelEdgesAreAllowed = value;
         }
 
         public void SetDirected(bool value)
         {
+            
             isDirected = value;
         }
 
-        public void SetLoopsAllowed(bool value)
-        {
-            loopsAreAllowed = value;
-        }
+
 
         public bool GetParralelEdgesAllowed()
         {
@@ -251,6 +254,70 @@ namespace GraphMaster
         public Dictionary<string, Dictionary<string, List<TEdge>>> GetAdjacencyMap()
         {
             return new Dictionary<string, Dictionary<string, List<TEdge>>>(AdjacencyMap);
+        }
+
+        /// <summary>
+        /// Checks for parallel edges in the graph.
+        /// For a directed graph: edges between two vertices with the same direction are considered parallel.
+        /// For an undirected graph: any two edges between the same vertices are considered parallel.
+        /// </summary>
+        /// <returns>true if the graph has parallel edges, otherwise false</returns>
+        public bool HasParallelEdges()
+        {
+            if (isDirected)
+            {
+                // For a directed graph: check if there is more than one edge in one direction
+                foreach (var sourceEntry in AdjacencyMap)
+                {
+                    foreach (var targetEntry in sourceEntry.Value)
+                    {
+                        if (targetEntry.Value.Count > 1)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // For an undirected graph: check if there is more than one edge between a pair of vertices (in any direction)
+                HashSet<string> checkedPairs = new HashSet<string>();
+
+                foreach (var sourceEntry in AdjacencyMap)
+                {
+                    string sourceName = sourceEntry.Key;
+
+                    foreach (var targetEntry in sourceEntry.Value)
+                    {
+                        string targetName = targetEntry.Key;
+
+                        string pairKey = string.Compare(sourceName, targetName) < 0
+                            ? $"{sourceName}_{targetName}"
+                            : $"{targetName}_{sourceName}";
+
+                        if (checkedPairs.Contains(pairKey))
+                        {
+                            continue;
+                        }
+                        checkedPairs.Add(pairKey);
+
+                        // Считаем рёбра в обоих направлениях
+                        int edgeCount = targetEntry.Value.Count;
+
+                        if (AdjacencyMap.ContainsKey(targetName) && AdjacencyMap[targetName].ContainsKey(sourceName))
+                        {
+                            edgeCount += AdjacencyMap[targetName][sourceName].Count;
+                        }
+
+                        if (edgeCount > 1)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         
