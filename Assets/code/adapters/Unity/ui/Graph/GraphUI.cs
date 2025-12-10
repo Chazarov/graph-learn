@@ -310,6 +310,7 @@ namespace GraphMaster.UnityAdapter
             this.selectedEdges.Remove(edge);
             sourse.DeleteEdge(edge);
             Destroy(edge.gameObject);
+            this.UpdateDirectedEdgesViews(edge.GetSourceNode(), edge.GetTargetNode());
         }
 
 
