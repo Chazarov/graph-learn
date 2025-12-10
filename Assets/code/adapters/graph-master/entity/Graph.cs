@@ -24,7 +24,7 @@ namespace GraphMaster
 
         private bool parralelEdgesAreAllowed = false;
         private bool loopsAreAllowed = false;
-        private bool isDirected = true;
+        private bool isDirected = false;
 
         public void SetParralelEdgesAllowed(bool value)
         {
@@ -46,7 +46,7 @@ namespace GraphMaster
             return parralelEdgesAreAllowed;
         }
 
-        public bool GetDirected()
+        public bool GetIsDirected()
         {
             return isDirected;
         }
@@ -233,8 +233,6 @@ namespace GraphMaster
             }
             return new List<TEdge>();
         }
-
-
         public bool HasNodes()
         {
             return nodesMap.Values.Count > 0;

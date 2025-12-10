@@ -27,6 +27,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         [Header("Directed View")]
         [SerializeField] private int edgeOffsetPositionNumber = 0;
+        [SerializeField] private float spreadKof = 1;
 
         private bool directedView = false;
 
@@ -42,7 +43,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         
         private Color initialStartColor;
         private Color initialEndColor;
-
+        private int baseSortingLayer;
 
         private void Update()
         {
@@ -119,12 +120,14 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
             if (edgeOffsetPositionNumber > 0)
             {
-                int offset = edgeOffsetPositionNumber / 2;
+                int offset = (edgeOffsetPositionNumber / 2 )+ (edgeOffsetPositionNumber%2);
                 bool isLocatedToTheRight = edgeOffsetPositionNumber % 2 == 0;
                 if (!isLocatedToTheRight)
                 {
                     offset *= -1;
                 }
+
+                float offsetF = offset * spreadKof;
 
 
                 activeLine.positionCount = 5;
@@ -137,25 +140,31 @@ namespace GraphMaster.UnityAdapter.VisualEffects
                 Vector3 quarter3 = sourcePosition + (targetPosition - sourcePosition) * 0.75f;
 
                 float chordLength = Vector3.Distance(sourcePosition, targetPosition);
-                float offset1 = CalculateArcOffset(chordLength, offset, chordLength * 0.25f);
+                float offset1 = CalculateArcOffset(chordLength, offsetF, chordLength * 0.25f);
                 float offset3 = offset1;
 
                 activeLine.SetPosition(0, sourcePosition);
                 activeLine.SetPosition(1, quarter1 + perpendicular * offset1);
-                activeLine.SetPosition(2, center + perpendicular * offset);
+                activeLine.SetPosition(2, center + perpendicular * offsetF);
                 activeLine.SetPosition(3, quarter3 + perpendicular * offset3);
                 activeLine.SetPosition(4, targetPosition);
 
+                edgeCollider.SetPoints(new List<Vector2> { sourcePosition, quarter1 + perpendicular * offset1, center + perpendicular * offsetF, quarter3 + perpendicular * offset3, targetPosition });
+
+
+
                 textOffset += perpendicular * offset;
+                Debug.Log($"SetDirectedPositions {this.name}  offset: {offsetF}");
             }
             else
             {
+                Debug.Log($"SetPositions {this.name}");
                 activeLine.positionCount = 2;
                 activeLine.SetPosition(0, sourcePosition);
                 activeLine.SetPosition(1, targetPosition);
+                edgeCollider.SetPoints(new List<Vector2> { sourcePosition, targetPosition });
             }
 
-            edgeCollider.SetPoints(new List<Vector2> { sourcePosition, targetPosition });
             UpdateWeightTextPosition(sourcePosition, targetPosition, textOffset);
         }
 
@@ -224,7 +233,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         private void SetVisualLayer(int graphEdgesSequenseCount)
         {
-            int baseSortingLayer = -graphEdgesSequenseCount * 3;
+            this.baseSortingLayer = -graphEdgesSequenseCount * 3;
 
 
             edgeToolBar.sortingOrder = baseSortingLayer + 2;

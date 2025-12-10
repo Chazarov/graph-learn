@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using GraphMaster.UnityAdapter.UI;
 using UnityEngine.Events;
+using System.Linq;
+
 
 
 
@@ -27,6 +29,7 @@ namespace GraphMaster.UnityAdapter
         private List<EdgeUI> selectedEdges = new List<EdgeUI>();
         private bool addEdgesMode = false;
         private bool deletingMode = false;
+
 
 
         [SerializeField] public  UnityEvent<string> EdgeSelected;
@@ -95,6 +98,11 @@ namespace GraphMaster.UnityAdapter
             else { this.deletingMode = true; }
         }
 
+
+        public void SetDirectedView()
+        {
+
+        }
 
         private void OnAnyNodeSelected(string nodeName)
         {
@@ -229,9 +237,13 @@ namespace GraphMaster.UnityAdapter
             EdgeUI edgeVisualComponent = instance.GetComponent<EdgeUI>();
             edgeVisualComponent.IsSelected += OnAnyEdgeSelected;
             edgeVisualComponent.IsDeselected += OnAnyEdgeDeselected;
-            edgeVisualComponent.Initialize(sourseNode, targetNode, edgeName, edgeNameSequense);
+            edgeVisualComponent.Initialize(sourseNode, targetNode, edgeName, edgeNameSequense, this.GetIsDirected());
             this.sourse.AddEdge(edgeVisualComponent);
             edgeNameSequense += 1;
+
+
+
+            this.UpdateDirectedEdgesViews(sourseNode, targetNode);
         }
 
         
@@ -298,6 +310,75 @@ namespace GraphMaster.UnityAdapter
         public EdgeUI GetEdge(string name)
         {
             return sourse.GetEdge(name);
+        }
+
+        public bool GetIsDirected()
+        {
+            return sourse.GetIsDirected();
+        }
+
+        public void SetParralel(bool value)
+        {
+            sourse.SetParralelEdgesAllowed(value);
+        }
+
+        public void SetDirected(bool value)
+        {
+
+            sourse.SetDirected(value);
+
+            var edges = sourse.GetEdges();
+            foreach (EdgeUI edge in edges)
+            {
+                edge.SetDirected(value);
+            }
+        }
+
+
+        public void UpdateDirectedEdgesViews(NodeUI node1, NodeUI node2)
+        {
+            var AdjMap = this.sourse.GetAdjacencyMap();
+            string name1 = node1.GetName();
+            string name2 = node2.GetName();
+
+
+            List<EdgeUI> edgesToUpdate = new();
+
+            if (AdjMap[name1].ContainsKey(name2))
+            {
+                edgesToUpdate.AddRange(AdjMap[name1][name2]);
+            }
+            if (AdjMap[name2].ContainsKey(name1))
+            {
+                edgesToUpdate.AddRange(AdjMap[name2][name1]);
+            }
+
+            UpdateDirectedEdgesViews(edgesToUpdate);
+        }
+        public void UpdateDirectedEdgesViews(List<EdgeUI> edges)
+        {
+            int l = edges.Count;
+            int l2 = l;
+            if (l % 2 == 0) l2 += 1;
+
+            int counter = l;
+            int b = 0;
+            int c = 0;
+
+            for (int i = 0; i < l; i++) 
+            {
+                b += 2;
+                c = (b - 1) % l2;
+
+                if (l2 > b)
+                {
+                    edges[i].SetEdgeCenterOffset(l2 - b);
+                }
+                else
+                {
+                    edges[i].SetEdgeCenterOffset(c);
+                }
+            }
         }
 
 

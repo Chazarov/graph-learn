@@ -21,7 +21,6 @@ namespace GraphMaster.UnityAdapter
 
         void Update()
         {
-            visualEffects?.UpdateFrame();
         }
 
         private void OnMouseDown()
@@ -50,7 +49,7 @@ namespace GraphMaster.UnityAdapter
             IsDeselected?.Invoke(this);
         }
 
-        public void Initialize(NodeUI sourseNode, NodeUI targetNode, string edgeName, int graphEdgesSequenseCount)
+        public void Initialize(NodeUI sourseNode, NodeUI targetNode, string edgeName, int graphEdgesSequenseCount, bool isDirected = false)
         {
             CheckGameObjectContent();
             
@@ -66,6 +65,7 @@ namespace GraphMaster.UnityAdapter
             visualEffects?.Initialize(graphEdgesSequenseCount, sourseNode, targetNode);
             
             this.SetWeight(sourse.GetWeight());
+            this.SetDirected(isDirected);
         }
 
         public void CheckGameObjectContent()
@@ -148,6 +148,15 @@ namespace GraphMaster.UnityAdapter
             visualEffects?.RemoveMarkAnimation();
         }
         
+        public void SetEdgeCenterOffset(int number)
+        {
+            this.visualEffects.SetEdgeCenterOffset(number);
+        }
+
+        public void SetDirected(bool value)
+        {
+            visualEffects.SetDirectedView(value);
+        }
     }
 
 }
