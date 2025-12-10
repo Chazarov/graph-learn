@@ -31,18 +31,22 @@ namespace GraphMaster
             bool hasParralel = HasDirectedParallelEdges() || HasParallelEdges();
             if (hasParralel)
             {
-                throw new InpossibleToChangeGraphTypeException("It is impossible to change the graph type to a non-parallel one. There are parallel edges in the graph");
+                throw new ImpossibleToSetGraphParralel("It is impossible to change the graph type to a non-parallel one. There are parallel edges in the graph");
             }
             parralelEdgesAreAllowed = value;
         }
 
         public void SetDirected(bool value)
         {
-            bool hasParallel = HasParallelEdges();
-            if (hasParallel)
+            if (parralelEdgesAreAllowed && !value)
             {
-                throw new InpossibleToChangeGraphTypeException("It is impossible to change the graph type to a non-directed one. There are parallel edges in the graph");
+                bool hasParallel = HasParallelEdges();
+                if (hasParallel)
+                {
+                    throw new ImpossibleToSetGraphDirection("It is impossible to change the graph type to a non-directed one. There are parallel edges in the graph");
+                }
             }
+            
             isDirected = value;
         }
 

@@ -19,6 +19,10 @@ namespace GraphMaster.UnityAdapter
         [SerializeField] private GameObject nodePrefab;
         [SerializeField] private GameObject edgePrefab;
 
+
+        [SerializeField] private Vector2 upperCreationRange =  Vector2.zero;
+        [SerializeField] private Vector2 lowerCreationRange = Vector2.zero;
+
         private int nodeNameSequense = 1;
         private int edgeNameSequense = 1;
 
@@ -29,6 +33,8 @@ namespace GraphMaster.UnityAdapter
         private List<EdgeUI> selectedEdges = new List<EdgeUI>();
         private bool addEdgesMode = false;
         private bool deletingMode = false;
+
+
 
 
 
@@ -253,7 +259,7 @@ namespace GraphMaster.UnityAdapter
         {
             CheckTheNodePrefabContent(nodePrefab);
             GameObject instance = Instantiate(nodePrefab);
-            Vector3 instancePosition = new Vector3(UnityEngine.Random.Range(3, -3), UnityEngine.Random.Range(3, -3), instance.transform.position.z);
+            Vector3 instancePosition = new Vector3(UnityEngine.Random.Range(upperCreationRange.x, lowerCreationRange.x), UnityEngine.Random.Range(upperCreationRange.y, lowerCreationRange.y), instance.transform.position.z);
 
             NodeUI UIComponent = instance.GetComponent<NodeUI>();
             UIComponent.IsSelected += OnAnyNodeSelected;

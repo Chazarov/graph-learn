@@ -1,4 +1,5 @@
 using GraphMaster.UnityAdapter;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,13 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private Toggle setParallelEdgesToggle;
 
     [SerializeField] private GraphUI graph;
+
+    RootExceptionHandler rootExceptionHandler;
+
+    private void Awake()
+    {
+        rootExceptionHandler = FindObjectOfType<RootExceptionHandler>();
+    }
 
     private void Start()
     {
@@ -48,10 +56,9 @@ public class SettingsManager : MonoBehaviour
         {
             graph.SetDirected(setDirectedToggle.isOn);
         }
-        catch 
-        {
+        catch(Exception e) {
             setDirectedToggle.SetIsOnWithoutNotify(graph.GetIsDirected());
-            throw;
+            rootExceptionHandler.PublishError.Invoke(e);
         }
         
     }
@@ -62,9 +69,10 @@ public class SettingsManager : MonoBehaviour
         {
             graph.SetParralel(setParallelEdgesToggle.isOn);
         }
-        catch
+        catch (Exception e)
         {
             setParallelEdgesToggle.SetIsOnWithoutNotify(graph.GetIsParallel());
+            rootExceptionHandler.PublishError.Invoke(e);
         }
         
     }
