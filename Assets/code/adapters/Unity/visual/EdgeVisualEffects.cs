@@ -103,7 +103,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             float radius = (halfChord * halfChord + h * h) / (2f * h);
             float y = Mathf.Sqrt(radius * radius - distanceFromCenter * distanceFromCenter) - (radius - h);
             
-            return centerOffset > 0 ? y : -y;
+            return y;
         }
 
 
@@ -123,13 +123,13 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             {
                 int offset = (edgeOffsetPositionNumber / 2 )+ (edgeOffsetPositionNumber%2);
                 bool isLocatedToTheRight = edgeOffsetPositionNumber % 2 == 0;
+                float offsetF = offset * spreadKof;
                 if (!isLocatedToTheRight)
                 {
-                    offset *= -1;
+                    offsetF *= -1;
                 }
 
-                float offsetF = offset * spreadKof;
-                Debug.Log(offsetF);
+                
 
                 int segmentsCount = Mathf.Clamp(directedLineSegmentsCount, 3, 100);
                 activeLine.positionCount = segmentsCount;
@@ -156,7 +156,9 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
                 edgeCollider.SetPoints(colliderPoints);
 
-                textOffset += perpendicular * offsetF;
+                Debug.Log($"edge {this.name}    {offsetF},   {perpendicular.x}, {perpendicular.y}");
+
+                textOffset += perpendicular * Mathf.Abs(offsetF);
             }
             else
             {

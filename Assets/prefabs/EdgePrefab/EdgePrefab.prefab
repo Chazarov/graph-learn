@@ -211,15 +211,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 3, z: 0}
-  - {x: 1, y: 3, z: 0}
-  - {x: 2, y: 3, z: 0}
-  - {x: 3, y: 3, z: 0}
-  - {x: 4, y: 3, z: 0}
-  - {x: 5, y: 3, z: 0}
-  - {x: 6, y: 3, z: 0}
-  - {x: 7, y: 3, z: 0}
-  - {x: 8, y: 3, z: 0}
-  - {x: 9, y: 3, z: 0}
+  - {x: 6.9917455, y: 3, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -228,7 +220,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.70542836
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -241,7 +233,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 0.990566, g: 0.990566, b: 0.990566, a: 1}
       key2: {r: 0.990566, g: 0.990566, b: 0.990566, a: 1}
       key3: {r: 0.9433962, g: 0.12904951, b: 0.12904951, a: 0}
       key4: {r: 1, g: 1, b: 1, a: 0}
@@ -249,7 +241,7 @@ LineRenderer:
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 193
-      ctime1: 6554
+      ctime1: 63993
       ctime2: 63993
       ctime3: 64186
       ctime4: 65150
@@ -266,7 +258,7 @@ LineRenderer:
       atime7: 0
       m_Mode: 0
       m_ColorSpace: 0
-      m_NumColorKeys: 3
+      m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0
@@ -376,7 +368,7 @@ LineRenderer:
   m_SortingOrder: -1
   m_Positions:
   - {x: 0, y: 1, z: 0}
-  - {x: 2, y: 1, z: 0}
+  - {x: 1, y: 1, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -385,7 +377,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.49789104
+        value: 0.50831026
         inSlope: 0.000017327364
         outSlope: 0.000017327364
         tangentMode: 0
@@ -428,7 +420,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 3
+    textureMode: 0
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
@@ -570,7 +562,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualEffects: {fileID: 3063531433152806472}
-  isSelected: 0
 --- !u!114 &3063531433152806472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -584,14 +575,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   line: {fileID: 5378095913783592059}
-  selectedLine: {fileID: 0}
+  directedLine: {fileID: 1739734099142864463}
   edgeCollider: {fileID: 1393656597070005156}
   weightText: {fileID: 1477226910510868275}
   edgeToolBar: {fileID: 3198972815900863546}
-  markLine: {fileID: 0}
+  selectColor: {r: 0.2971698, g: 1, b: 0.5632329, a: 1}
+  selectAnimationDuraton: 0.3
   markAnimationDuration: 1
+  markColor: {r: 1, g: 0.19339621, b: 0.19339621, a: 0.9137255}
   pointerObject: {fileID: 0}
   pointerAnimationDuration: 0.5
+  edgeOffsetPositionNumber: 0
+  spreadKof: 0.3
+  directedLineSegmentsCount: 50
 --- !u!68 &1393656597070005156
 EdgeCollider2D:
   m_ObjectHideFlags: 0
