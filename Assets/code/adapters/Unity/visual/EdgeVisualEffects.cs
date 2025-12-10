@@ -28,6 +28,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         [Header("Directed View")]
         [SerializeField] private int edgeOffsetPositionNumber = 0;
         [SerializeField] private float spreadKof = 1;
+        [SerializeField] [Range(3, 100)] private int directedLineSegmentsCount = 5;
 
         private bool directedView = false;
 
@@ -129,29 +130,30 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
                 float offsetF = offset * spreadKof;
 
-
-                activeLine.positionCount = 5;
+                int segmentsCount = Mathf.Clamp(directedLineSegmentsCount, 3, 100);
+                activeLine.positionCount = segmentsCount;
 
                 Vector3 direction = (targetPosition - sourcePosition).normalized;
                 Vector3 perpendicular = new Vector3(-direction.y, direction.x, z);
 
-                Vector3 center = (sourcePosition + targetPosition) / 2f;
-                Vector3 quarter1 = sourcePosition + (targetPosition - sourcePosition) * 0.25f;
-                Vector3 quarter3 = sourcePosition + (targetPosition - sourcePosition) * 0.75f;
-
                 float chordLength = Vector3.Distance(sourcePosition, targetPosition);
-                float offset1 = CalculateArcOffset(chordLength, offsetF, chordLength * 0.25f);
-                float offset3 = offset1;
+                
+                List<Vector2> colliderPoints = new List<Vector2>();
+                
+                for (int i = 0; i < segmentsCount; i++)
+                {
+                    float t = (float)i / (segmentsCount - 1);
+                    Vector3 pointOnLine = Vector3.Lerp(sourcePosition, targetPosition, t);
+                    
+                    float distanceFromCenter = chordLength * (t - 0.5f);
+                    float arcOffset = CalculateArcOffset(chordLength, offsetF, Mathf.Abs(distanceFromCenter));
+                    
+                    Vector3 finalPosition = pointOnLine + perpendicular * arcOffset;
+                    activeLine.SetPosition(i, finalPosition);
+                    colliderPoints.Add(finalPosition);
+                }
 
-                activeLine.SetPosition(0, sourcePosition);
-                activeLine.SetPosition(1, quarter1 + perpendicular * offset1);
-                activeLine.SetPosition(2, center + perpendicular * offsetF);
-                activeLine.SetPosition(3, quarter3 + perpendicular * offset3);
-                activeLine.SetPosition(4, targetPosition);
-
-                edgeCollider.SetPoints(new List<Vector2> { sourcePosition, quarter1 + perpendicular * offset1, center + perpendicular * offsetF, quarter3 + perpendicular * offset3, targetPosition });
-
-
+                edgeCollider.SetPoints(colliderPoints);
 
                 textOffset += perpendicular * offset;
                 Debug.Log($"SetDirectedPositions {this.name}  offset: {offsetF}");
