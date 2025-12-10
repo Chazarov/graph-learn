@@ -357,7 +357,15 @@ namespace GraphMaster.UnityAdapter
         }
         public void UpdateDirectedEdgesViews(List<EdgeUI> edges)
         {
+
             int l = edges.Count;
+            if(l == 2)
+            {
+                edges[0].SetEdgeCenterOffset(1);
+                edges[1].SetEdgeCenterOffset(2);
+                return;
+            }
+
             int l2 = l;
             if (l % 2 == 0) l2 += 1;
 

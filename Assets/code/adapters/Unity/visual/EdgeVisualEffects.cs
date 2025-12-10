@@ -129,6 +129,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
                 }
 
                 float offsetF = offset * spreadKof;
+                Debug.Log(offsetF);
 
                 int segmentsCount = Mathf.Clamp(directedLineSegmentsCount, 3, 100);
                 activeLine.positionCount = segmentsCount;
@@ -155,12 +156,10 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
                 edgeCollider.SetPoints(colliderPoints);
 
-                textOffset += perpendicular * offset;
-                Debug.Log($"SetDirectedPositions {this.name}  offset: {offsetF}");
+                textOffset += perpendicular * offsetF;
             }
             else
             {
-                Debug.Log($"SetPositions {this.name}");
                 activeLine.positionCount = 2;
                 activeLine.SetPosition(0, sourcePosition);
                 activeLine.SetPosition(1, targetPosition);
