@@ -28,7 +28,7 @@ namespace GraphMaster
 
         public void SetParralelEdgesAllowed(bool value)
         {
-            bool hasParralel = HasParallelEdges();
+            bool hasParralel = HasDirectedParallelEdges() || HasParallelEdges();
             if (hasParralel)
             {
                 throw new InpossibleToChangeGraphTypeException("It is impossible to change the graph type to a non-parallel one. There are parallel edges in the graph");
@@ -38,53 +38,12 @@ namespace GraphMaster
 
         public void SetDirected(bool value)
         {
-            
+            bool hasParallel = HasParallelEdges();
+            if (hasParallel)
+            {
+                throw new InpossibleToChangeGraphTypeException("It is impossible to change the graph type to a non-directed one. There are parallel edges in the graph");
+            }
             isDirected = value;
-        }
-
-
-
-        public bool GetParralelEdgesAllowed()
-        {
-            return parralelEdgesAreAllowed;
-        }
-
-        public bool GetIsDirected()
-        {
-            return isDirected;
-        }
-
-        public bool GetIsParralel()
-        {
-            return parralelEdgesAreAllowed;
-        }
-
-        public TNode GetNode(string name)
-        {
-            if (!nodesMap.TryGetValue(name, out var node))
-            {
-                throw new NotFoundException("Node", name, "Graph");
-            }
-            return node;
-        }
-
-        public TEdge GetEdge(string name)
-        {
-            if (!edgesMap.TryGetValue(name, out var edge))
-            {
-                throw new NotFoundException("Edge", name, "Graph");
-            }
-            return edge;
-        }
-
-        public List<TNode> GetNodes()
-        {
-            return new List<TNode>(this.nodesMap.Values);
-        }
-
-        public List<TEdge> GetEdges()
-        {
-            return new List<TEdge>(this.edgesMap.Values);
         }
 
 
@@ -168,10 +127,17 @@ namespace GraphMaster
 
             if (!this.parralelEdgesAreAllowed)
             {
-                
-                if (AdjacencyMap[sourseName].ContainsKey(targetName) || ReversedAdjacencyMap[targetName].ContainsKey(sourseName))
+                if (AdjacencyMap[sourseName].ContainsKey(targetName))
                 {
                     throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
+                }
+
+                if (!isDirected)
+                {
+                    if (ReversedAdjacencyMap[sourseName].ContainsKey(targetName))
+                    {
+                        throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
+                    }
                 }
                 
                 
@@ -241,6 +207,83 @@ namespace GraphMaster
             }
             return new List<TEdge>();
         }
+
+        /// <summary>
+        /// Checks for parallel edges in the graph.
+        /// For a directed graph: edges between two vertices with the same direction are considered parallel.
+        /// For an undirected graph: any two edges between the same vertices are considered parallel.
+        /// </summary>
+        /// <returns>true if the graph has parallel edges, otherwise false</returns>
+        public bool HasDirectedParallelEdges()
+        {
+            foreach (var sourceEntry in AdjacencyMap)
+            {
+                foreach (var targetEntry in sourceEntry.Value)
+                {
+                    if (targetEntry.Value.Count > 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool HasParallelEdges()
+        {
+            HashSet<string> checkedPairs = new HashSet<string>();
+
+            foreach (var sourceEntry in AdjacencyMap)
+            {
+                string sourceName = sourceEntry.Key;
+
+                foreach (var targetEntry in sourceEntry.Value)
+                {
+                    string targetName = targetEntry.Key;
+
+                    string pairKey = string.Compare(sourceName, targetName) < 0
+                        ? $"{sourceName}_{targetName}"
+                        : $"{targetName}_{sourceName}";
+
+                    if (checkedPairs.Contains(pairKey))
+                    {
+                        continue;
+                    }
+                    checkedPairs.Add(pairKey);
+
+                    // Считаем рёбра в обоих направлениях
+                    int edgeCount = targetEntry.Value.Count;
+
+                    if (AdjacencyMap.ContainsKey(targetName) && AdjacencyMap[targetName].ContainsKey(sourceName))
+                    {
+                        edgeCount += AdjacencyMap[targetName][sourceName].Count;
+                    }
+
+                    if (edgeCount > 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool GetParralelEdgesAllowed()
+        {
+            return parralelEdgesAreAllowed;
+        }
+
+        public bool GetIsDirected()
+        {
+            return isDirected;
+        }
+
+        public bool GetIsParralel()
+        {
+            return parralelEdgesAreAllowed;
+        }
+
         public bool HasNodes()
         {
             return nodesMap.Values.Count > 0;
@@ -256,71 +299,37 @@ namespace GraphMaster
             return new Dictionary<string, Dictionary<string, List<TEdge>>>(AdjacencyMap);
         }
 
-        /// <summary>
-        /// Checks for parallel edges in the graph.
-        /// For a directed graph: edges between two vertices with the same direction are considered parallel.
-        /// For an undirected graph: any two edges between the same vertices are considered parallel.
-        /// </summary>
-        /// <returns>true if the graph has parallel edges, otherwise false</returns>
-        public bool HasParallelEdges()
+
+        public TNode GetNode(string name)
         {
-            if (isDirected)
+            if (!nodesMap.TryGetValue(name, out var node))
             {
-                // For a directed graph: check if there is more than one edge in one direction
-                foreach (var sourceEntry in AdjacencyMap)
-                {
-                    foreach (var targetEntry in sourceEntry.Value)
-                    {
-                        if (targetEntry.Value.Count > 1)
-                        {
-                            return true;
-                        }
-                    }
-                }
+                throw new NotFoundException("Node", name, "Graph");
             }
-            else
-            {
-                // For an undirected graph: check if there is more than one edge between a pair of vertices (in any direction)
-                HashSet<string> checkedPairs = new HashSet<string>();
-
-                foreach (var sourceEntry in AdjacencyMap)
-                {
-                    string sourceName = sourceEntry.Key;
-
-                    foreach (var targetEntry in sourceEntry.Value)
-                    {
-                        string targetName = targetEntry.Key;
-
-                        string pairKey = string.Compare(sourceName, targetName) < 0
-                            ? $"{sourceName}_{targetName}"
-                            : $"{targetName}_{sourceName}";
-
-                        if (checkedPairs.Contains(pairKey))
-                        {
-                            continue;
-                        }
-                        checkedPairs.Add(pairKey);
-
-                        // Считаем рёбра в обоих направлениях
-                        int edgeCount = targetEntry.Value.Count;
-
-                        if (AdjacencyMap.ContainsKey(targetName) && AdjacencyMap[targetName].ContainsKey(sourceName))
-                        {
-                            edgeCount += AdjacencyMap[targetName][sourceName].Count;
-                        }
-
-                        if (edgeCount > 1)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
+            return node;
         }
 
-        
+        public TEdge GetEdge(string name)
+        {
+            if (!edgesMap.TryGetValue(name, out var edge))
+            {
+                throw new NotFoundException("Edge", name, "Graph");
+            }
+            return edge;
+        }
+
+        public List<TNode> GetNodes()
+        {
+            return new List<TNode>(this.nodesMap.Values);
+        }
+
+        public List<TEdge> GetEdges()
+        {
+            return new List<TEdge>(this.edgesMap.Values);
+        }
+
+
+
     }
 }
 
