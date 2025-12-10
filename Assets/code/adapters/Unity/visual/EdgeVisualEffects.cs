@@ -103,7 +103,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             float radius = (halfChord * halfChord + h * h) / (2f * h);
             float y = Mathf.Sqrt(radius * radius - distanceFromCenter * distanceFromCenter) - (radius - h);
             
-            return y;
+            return centerOffset > 0 ? y : - y;
         }
 
 
@@ -135,6 +135,11 @@ namespace GraphMaster.UnityAdapter.VisualEffects
                 activeLine.positionCount = segmentsCount;
 
                 Vector3 direction = (targetPosition - sourcePosition).normalized;
+                if(sourcePosition.magnitude > targetPosition.magnitude)
+                {
+                    direction = (sourcePosition - targetPosition).normalized;
+                }
+
                 Vector3 perpendicular = new Vector3(-direction.y, direction.x, z);
 
                 float chordLength = Vector3.Distance(sourcePosition, targetPosition);
@@ -156,9 +161,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
                 edgeCollider.SetPoints(colliderPoints);
 
-                Debug.Log($"edge {this.name}    {offsetF},   {perpendicular.x}, {perpendicular.y}");
-
-                textOffset += perpendicular * Mathf.Abs(offsetF);
+                textOffset += perpendicular * offsetF;
             }
             else
             {

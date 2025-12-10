@@ -8,6 +8,8 @@ public class SettingsManager : MonoBehaviour
 {
     [SerializeField] private  Toggle setDirectedToggle;
 
+    [SerializeField] private Toggle setParallelEdgesToggle;
+
     [SerializeField] private GraphUI graph;
 
     private void Start()
@@ -19,6 +21,7 @@ public class SettingsManager : MonoBehaviour
     private void syncSettingsParametrs()
     {
         setDirectedToggle.SetIsOnWithoutNotify(graph.GetIsDirected());
+        setParallelEdgesToggle.SetIsOnWithoutNotify(graph.GetIsParallel());
     }
 
     private void CheckCompanents()
@@ -28,14 +31,41 @@ public class SettingsManager : MonoBehaviour
             throw new System.Exception("setDirectedToggle can't be a null");
         }
 
+        if(setParallelEdgesToggle == null)
+        {
+            throw new System.Exception("setParallelEdgesToggle can't be a null");
+        }
+
         if (graph == null)
         {
             throw new System.Exception("graph can't be a null");
         }
-    }
+    }   
 
     public void OnSetDirectedChange()
     {
-        graph.SetDirected(setDirectedToggle.isOn);
+        try
+        {
+            graph.SetDirected(setDirectedToggle.isOn);
+        }
+        catch 
+        {
+            setDirectedToggle.SetIsOnWithoutNotify(graph.GetIsDirected());
+            throw;
+        }
+        
+    }
+
+    public void OnSetParallelEdgesChange()
+    {
+        try
+        {
+            graph.SetParralel(setParallelEdgesToggle.isOn);
+        }
+        catch
+        {
+            setParallelEdgesToggle.SetIsOnWithoutNotify(graph.GetIsParallel());
+        }
+        
     }
 }

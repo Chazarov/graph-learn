@@ -317,6 +317,11 @@ namespace GraphMaster.UnityAdapter
             return sourse.GetIsDirected();
         }
 
+        public bool GetIsParallel()
+        {
+            return sourse.GetIsParralel();
+        }
+
         public void SetParralel(bool value)
         {
             sourse.SetParralelEdgesAllowed(value);

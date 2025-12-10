@@ -51,6 +51,11 @@ namespace GraphMaster
             return isDirected;
         }
 
+        public bool GetIsParralel()
+        {
+            return parralelEdgesAreAllowed;
+        }
+
         public TNode GetNode(string name)
         {
             if (!nodesMap.TryGetValue(name, out var node))
