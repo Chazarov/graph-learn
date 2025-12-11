@@ -30,11 +30,20 @@ namespace GraphMaster
 
         public void SetParralelEdgesAllowed(bool value)
         {
-            bool hasParralel = HasDirectedParallelEdges() || HasParallelEdges();
-            if (hasParralel)
+            if (!value)
             {
-                throw new ImpossibleToSetGraphParralel("It is impossible to change the graph type to a non-parallel one. There are parallel edges in the graph");
+                bool hasParralel = HasDirectedParallelEdges();
+
+                if (!isDirected)
+                {
+                    hasParralel = hasParralel || HasParallelEdges();
+                }
+                if (hasParralel)
+                {
+                    throw new ImpossibleToSetGraphParralel("It is impossible to change the graph type to a non-parallel one. There are parallel edges in the graph");
+                }
             }
+            
             parralelEdgesAreAllowed = value;
         }
 

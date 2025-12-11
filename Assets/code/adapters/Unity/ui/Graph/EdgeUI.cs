@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GraphMaster.UnityAdapter
 {
-    public class EdgeUI : MonoBehaviour, Domain.GraphEdgeInterface<NodeUI>, GraphObjectUiActionsInterface
+    public class EdgeUI : MonoBehaviour, Domain.GraphEdgeInterface<NodeUI>, GraphPartInterface, GraphObjectUiActionsInterface
     {
         [SerializeField] private EdgeVisualEffects visualEffects;
 

@@ -60,7 +60,10 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             
             sourceNode = source;
             targetNode = target;
-            
+
+            GameObject cursor = GameObject.FindWithTag("Cursor");
+            this.pointerObject = cursor.transform;
+
             SetupInitialLine();
         }
 

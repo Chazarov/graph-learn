@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GraphMaster.UnityAdapter.UI
 {
-    public class NodeUI : MonoBehaviour, Domain.GraphNodeInterface, GraphObjectUiActionsInterface
+    public class NodeUI : MonoBehaviour, Domain.GraphNodeInterface, GraphPartInterface, GraphObjectUiActionsInterface
     {
         [SerializeField] private NodeVisualEffects visualEffects;
         [SerializeField] private GraphMaster.UnityAdapter.Positioned2Node sourse;
@@ -44,6 +44,8 @@ namespace GraphMaster.UnityAdapter.UI
         public void Initialize(string name, Vector3 position, int squenseCount)
         {
             CheckGameobgectContent();
+
+            
             
             visualEffects?.Initialize(squenseCount);
             SetName(name);
@@ -52,6 +54,7 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void MarkAsRoot()
         {
+            Debug.Log("Mark as root");
             if (isRoot) return;
             IsRootMarking.Invoke(this);
             MarkAsRootWithoutNotify();

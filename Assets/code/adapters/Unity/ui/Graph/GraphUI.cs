@@ -23,6 +23,8 @@ namespace GraphMaster.UnityAdapter
         [SerializeField] private Vector2 upperCreationRange =  Vector2.zero;
         [SerializeField] private Vector2 lowerCreationRange = Vector2.zero;
 
+        [SerializeField] private Transform cursorTransform;
+
         private int nodeNameSequense = 1;
         private int edgeNameSequense = 1;
 
@@ -190,7 +192,7 @@ namespace GraphMaster.UnityAdapter
             {
                 prev.RemoveRoot();
             }
-            root.MarkAsRoot();
+            root.MarkAsRootWithoutNotify();
             sourse.SetRoot(root);
 
         }
@@ -425,6 +427,13 @@ namespace GraphMaster.UnityAdapter
             }
         }
 
+        /// <summary>
+        /// Возвращает внутренний граф для использования в алгоритмах.
+        /// </summary>
+        public Graph<NodeUI, EdgeUI> GetGraph()
+        {
+            return sourse;
+        }
 
     }
 }

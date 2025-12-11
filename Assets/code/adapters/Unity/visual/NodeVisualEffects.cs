@@ -40,6 +40,8 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void Initialize(int squenseCount)
         {
+            GameObject cursor = GameObject.FindWithTag("Cursor");
+            this.pointerObject = cursor.transform;
             CheckGameObjectContent();
             SetVisualLayer(squenseCount);
         }

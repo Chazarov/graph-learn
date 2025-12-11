@@ -102,6 +102,7 @@ namespace GraphMaster.UnityAdapter.Visualization
                 currentObject.MarkThis();
                 currentObject.PointThis();
                 previousPointed = currentObject;
+                allProcessedObjects.Add(currentObject);
 
                 yield return new WaitForSeconds(stepDelay);
             }
