@@ -11,22 +11,41 @@ namespace GraphMaster.UnityAdapter.Visualization
     {
         [SerializeField] private UnityEvent onVisualizationStart;
         [SerializeField] private UnityEvent onVisualizationEnd;
-        [SerializeField] private UnityEvent onVisualizationPause;
-        [SerializeField] private UnityEvent onVisualizationResume;
-        [SerializeField] private UnityEvent onVisualizationCancel;
         [SerializeField] private float stepDelay = 0.5f;
 
+        private Cursor cursor;
         private Coroutine currentVisualizationCoroutine;
         private List<GraphObjectUiActionsInterface> allProcessedObjects = new List<GraphObjectUiActionsInterface>();
-        private bool isPaused = false;
 
-        public void Visualize(List<GraphObjectUiActionsInterface> objectsToPoint)
+        private void Awake()
         {
+            GameObject cursorObject = GameObject.FindGameObjectWithTag("Cursor");
+            if (cursorObject != null)
+            {
+                cursor = cursorObject.GetComponent<Cursor>();
+            }
+
+            if (cursor == null)
+            {
+                Debug.LogError("Cursor не найден! Убедитесь, что объект с компонентом Cursor имеет тег 'Cursor'.");
+            }
+        }
+
+        public void Visualize(List<GraphObjectUiActionsInterface> objectsToMark)
+        {
+
+            Debug.Log(" Visulize");
+            if (cursor == null)
+            {
+                Debug.LogError("Невозможно запустить визуализацию: Cursor не найден.");
+                return;
+            }
+
             if (currentVisualizationCoroutine != null)
             {
                 StopCoroutine(currentVisualizationCoroutine);
             }
-            currentVisualizationCoroutine = StartCoroutine(VisualizationRoutine(objectsToPoint));
+            currentVisualizationCoroutine = StartCoroutine(VisualizationRoutine(objectsToMark));
         }
 
         public void Clear()
@@ -36,6 +55,8 @@ namespace GraphMaster.UnityAdapter.Visualization
                 obj.RemoveMark();
             }
             allProcessedObjects.Clear();
+
+            cursor?.BackToStart();
         }
 
         public void Stop()
@@ -44,76 +65,30 @@ namespace GraphMaster.UnityAdapter.Visualization
             {
                 StopCoroutine(currentVisualizationCoroutine);
                 currentVisualizationCoroutine = null;
-                isPaused = false;
+                cursor?.BackToStart();
                 onVisualizationEnd?.Invoke();
             }
         }
 
-        public void Pause()
-        {
-            if (currentVisualizationCoroutine != null && !isPaused)
-            {
-                isPaused = true;
-                onVisualizationPause?.Invoke();
-            }
-        }
-
-        public void Resume()
-        {
-            if (currentVisualizationCoroutine != null && isPaused)
-            {
-                isPaused = false;
-                onVisualizationResume?.Invoke();
-            }
-        }
-
-        public void Cancel()
-        {
-            if (currentVisualizationCoroutine != null)
-            {
-                StopCoroutine(currentVisualizationCoroutine);
-                currentVisualizationCoroutine = null;
-                isPaused = false;
-                Clear();
-                onVisualizationCancel?.Invoke();
-            }
-        }
-
-        private IEnumerator VisualizationRoutine(List<GraphObjectUiActionsInterface> objectsToPoint)
+        private IEnumerator VisualizationRoutine(List<GraphObjectUiActionsInterface> objectsToMark)
         {
             onVisualizationStart?.Invoke();
 
-            GraphObjectUiActionsInterface previousPointed = null;
-
-            for (int i = 0; i < objectsToPoint.Count; i++)
+            for (int i = 0; i < objectsToMark.Count; i++)
             {
-                while (isPaused)
-                {
-                    yield return null;
-                }
+                var currentObject = objectsToMark[i];
 
-                var currentObject = objectsToPoint[i];
-
-                if (previousPointed != null)
-                {
-                    previousPointed.RemovePointer();
-                }
-
-                currentObject.MarkThis();
-                currentObject.PointThis();
-                previousPointed = currentObject;
+                // Вызываем MarkObject у курсора, передавая текущий объект
+                cursor.MarkObject(currentObject);
                 allProcessedObjects.Add(currentObject);
 
                 yield return new WaitForSeconds(stepDelay);
             }
 
-            if (previousPointed != null)
-            {
-                previousPointed.RemovePointer();
-            }
+            // Возвращаем курсор на начальную позицию после завершения
+            cursor.BackToStart();
 
             currentVisualizationCoroutine = null;
-            isPaused = false;
             onVisualizationEnd?.Invoke();
         }
     }

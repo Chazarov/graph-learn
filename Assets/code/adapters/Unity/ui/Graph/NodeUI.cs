@@ -44,6 +44,8 @@ namespace GraphMaster.UnityAdapter.UI
         public void Initialize(string name, Vector3 position, int squenseCount)
         {
             CheckGameobgectContent();
+
+            
             
             visualEffects?.Initialize(squenseCount);
             SetName(name);
@@ -52,6 +54,7 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void MarkAsRoot()
         {
+            Debug.Log("Mark as root");
             if (isRoot) return;
             IsRootMarking.Invoke(this);
             MarkAsRootWithoutNotify();
@@ -132,15 +135,6 @@ namespace GraphMaster.UnityAdapter.UI
             sourse.SetDescription(description);
         }
 
-        public void PointThis()
-        {
-            visualEffects?.PointThisAnimation();
-        }
-
-        public void RemovePointer()
-        {
-            visualEffects?.RemovePointerAnimation();
-        }
 
         public void MarkThis()
         {
@@ -150,6 +144,11 @@ namespace GraphMaster.UnityAdapter.UI
         public void RemoveMark()
         {
             visualEffects?.RemoveMarkAnimation();
+        }
+
+        public Vector3 GetCenterPosition()
+        {
+            return transform.position;
         }
 
     }

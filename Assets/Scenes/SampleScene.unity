@@ -9049,6 +9049,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   returnDuration: 5
+  moveDuration: 1
+  animator: {fileID: 0}
 --- !u!1 &2119402998
 GameObject:
   m_ObjectHideFlags: 0
@@ -9251,28 +9253,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onVisualizationPause:
-    m_PersistentCalls:
-      m_Calls: []
-  onVisualizationResume:
-    m_PersistentCalls:
-      m_Calls: []
-  onVisualizationCancel:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 382172476}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  stepDelay: 0.5
+  stepDelay: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

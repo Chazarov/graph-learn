@@ -21,9 +21,6 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         [SerializeField] private float markAnimationDuration = 0.5f;
         [SerializeField] private Color markColor;
         
-        [Header("Point Animation")]
-        [SerializeField] private Transform pointerObject;
-        [SerializeField] private float pointerAnimationDuration = 0.5f;
 
         [Header("Directed View")]
         [SerializeField] private int edgeOffsetPositionNumber = 0;
@@ -31,6 +28,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         [SerializeField] [Range(3, 100)] private int directedLineSegmentsCount = 5;
 
         private bool directedView = false;
+        Vector3 centerPosition = Vector3.zero;
 
         private LineRenderer activeLine;
         private NodeUI sourceNode;
@@ -39,7 +37,6 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         
         private Coroutine currentMarkCoroutine;
-        private Coroutine currentPointerCoroutine;
         private Coroutine selectCoroutine;
         
         private Color initialStartColor;
@@ -61,8 +58,6 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             sourceNode = source;
             targetNode = target;
 
-            GameObject cursor = GameObject.FindWithTag("Cursor");
-            this.pointerObject = cursor.transform;
 
             SetupInitialLine();
         }
@@ -227,6 +222,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             if (edgeToolBar == null) return;
 
             Vector3 centerPos = (sourcePos + targetPos) / 2f;
+            this.centerPosition = centerPos;
             edgeToolBar.transform.position = centerPos + offset;
 
             Vector3 direction = (targetPos - sourcePos).normalized;
@@ -294,6 +290,11 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             MarkThisAnimation(false);
         }
 
+        public Vector3 GetCenterPosition()
+        {
+            return this.centerPosition;
+        }
+
         public void RemoveMarkAnimation()
         {
             if (currentMarkCoroutine != null)
@@ -304,24 +305,6 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         }
 
 
-        private System.Collections.IEnumerator AnimatePointerToCenter()
-        {
-            if (pointerObject == null || sourceNode == null || targetNode == null) yield break;
-
-            Vector3 startPosition = pointerObject.position;
-            Vector3 edgeCenter = (sourceNode.transform.position + targetNode.transform.position) / 2f;
-            float elapsedTime = 0f;
-
-            while (elapsedTime < pointerAnimationDuration)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = elapsedTime / pointerAnimationDuration;
-                pointerObject.position = Vector3.Lerp(startPosition, edgeCenter, t);
-                yield return null;
-            }
-
-            pointerObject.position = edgeCenter;
-        }
 
         private System.Collections.IEnumerator AnimateColorTransition(Color targetColor, float duration)
         {

@@ -22,15 +22,10 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         [SerializeField] private string markRevertAnimationName;
         [SerializeField] private Animator nodeAnimator;
         
-        [Header("Point Animation")]
-        [SerializeField] private Transform pointerObject;
-        [SerializeField] private float pointerAnimationDuration = 0.5f;
 
         [Header("Root Animation")]
         [SerializeField] private SpriteRenderer rootSpriteRenderer;
 
-
-        private Coroutine currentPointerCoroutine;
 
         private void Start()
         {
@@ -40,8 +35,6 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void Initialize(int squenseCount)
         {
-            GameObject cursor = GameObject.FindWithTag("Cursor");
-            this.pointerObject = cursor.transform;
             CheckGameObjectContent();
             SetVisualLayer(squenseCount);
         }
@@ -131,24 +124,6 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             }
         }
 
-        private System.Collections.IEnumerator AnimatePointerToCenter()
-        {
-            if (pointerObject == null) yield break;
-
-            Vector3 startPosition = pointerObject.position;
-            Vector3 targetPosition = transform.position;
-            float elapsedTime = 0f;
-
-            while (elapsedTime < pointerAnimationDuration)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = elapsedTime / pointerAnimationDuration;
-                pointerObject.position = Vector3.Lerp(startPosition, targetPosition, t);
-                yield return null;
-            }
-
-            pointerObject.position = targetPosition;
-        }
     }
 }
 

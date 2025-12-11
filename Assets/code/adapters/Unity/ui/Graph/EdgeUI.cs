@@ -128,15 +128,6 @@ namespace GraphMaster.UnityAdapter
             sourse.SetTargetNode(node);
         }
 
-        public void PointThis()
-        {
-            visualEffects?.PointThisAnimation();
-        }
-
-        public void RemovePointer()
-        {
-            visualEffects?.RemovePointerAnimation();
-        }
 
         public void MarkThis()
         {
@@ -146,6 +137,11 @@ namespace GraphMaster.UnityAdapter
         public void RemoveMark()
         {
             visualEffects?.RemoveMarkAnimation();
+        }
+
+        public Vector3 GetCenterPosition()
+        {
+            return visualEffects.GetCenterPosition();
         }
         
         public void SetEdgeCenterOffset(int number)
