@@ -7,7 +7,7 @@ using Domain;
 namespace GraphMaster
 {
 
-    public class GraphNode : GraphNodeInterface
+    public class GraphNode : GraphNodeInterface, GraphPartInterface
     {
 
         private string name;

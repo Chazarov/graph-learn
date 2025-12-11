@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace GraphMaster.UnityAdapter.Visualization
 {
-    public class AlgorithmVisualizer : MonoBehaviour, AlgorithmVisualizerInterface
+    public class AlgorithmVisualizer : MonoBehaviour
     {
         [SerializeField] private UnityEvent onVisualizationStart;
         [SerializeField] private UnityEvent onVisualizationEnd;
@@ -20,13 +20,13 @@ namespace GraphMaster.UnityAdapter.Visualization
         private List<GraphObjectUiActionsInterface> allProcessedObjects = new List<GraphObjectUiActionsInterface>();
         private bool isPaused = false;
 
-        public void Visualize(List<GraphObjectUiActionsInterface> objectsToPoint, List<GraphObjectUiActionsInterface> objectsToMark)
+        public void Visualize(List<GraphObjectUiActionsInterface> objectsToPoint)
         {
             if (currentVisualizationCoroutine != null)
             {
                 StopCoroutine(currentVisualizationCoroutine);
             }
-            currentVisualizationCoroutine = StartCoroutine(VisualizationRoutine(objectsToPoint, objectsToMark));
+            currentVisualizationCoroutine = StartCoroutine(VisualizationRoutine(objectsToPoint));
         }
 
         public void Clear()
@@ -79,7 +79,7 @@ namespace GraphMaster.UnityAdapter.Visualization
             }
         }
 
-        private IEnumerator VisualizationRoutine(List<GraphObjectUiActionsInterface> objectsToPoint, List<GraphObjectUiActionsInterface> objectsToMark)
+        private IEnumerator VisualizationRoutine(List<GraphObjectUiActionsInterface> objectsToPoint)
         {
             onVisualizationStart?.Invoke();
 
@@ -99,17 +99,9 @@ namespace GraphMaster.UnityAdapter.Visualization
                     previousPointed.RemovePointer();
                 }
 
+                currentObject.MarkThis();
                 currentObject.PointThis();
                 previousPointed = currentObject;
-
-                if (i < objectsToMark.Count)
-                {
-                    objectsToMark[i].MarkThis();
-                    if (!allProcessedObjects.Contains(objectsToMark[i]))
-                    {
-                        allProcessedObjects.Add(objectsToMark[i]);
-                    }
-                }
 
                 yield return new WaitForSeconds(stepDelay);
             }

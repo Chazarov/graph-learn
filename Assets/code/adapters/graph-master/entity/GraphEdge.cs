@@ -7,7 +7,7 @@ using UnityEditor.Experimental.GraphView;
 
 namespace GraphMaster
 {
-    public class GraphEdge<TNode>: Domain.GraphEdgeInterface<TNode> where TNode : GraphNodeInterface
+    public class GraphEdge<TNode>: Domain.GraphEdgeInterface<TNode> where TNode : GraphNodeInterface , GraphPartInterface
     {
         private float weight;
         private bool hasWeight = false;
