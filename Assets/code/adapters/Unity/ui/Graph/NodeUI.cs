@@ -44,8 +44,6 @@ namespace GraphMaster.UnityAdapter.UI
         public void Initialize(string name, Vector3 position, int squenseCount)
         {
             CheckGameobgectContent();
-
-            
             
             visualEffects?.Initialize(squenseCount);
             SetName(name);
@@ -54,7 +52,6 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void MarkAsRoot()
         {
-            Debug.Log("Mark as root");
             if (isRoot) return;
             IsRootMarking.Invoke(this);
             MarkAsRootWithoutNotify();

@@ -279,22 +279,6 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             }
         }
 
-        public void PointThisAnimation()
-        {
-            if (pointerObject != null)
-            {
-                if (currentPointerCoroutine != null)
-                {
-                    StopCoroutine(currentPointerCoroutine);
-                }
-                currentPointerCoroutine = StartCoroutine(AnimatePointerToCenter());
-            }
-        }
-
-        public void RemovePointerAnimation()
-        {
-            return;
-        }
 
         public void MarkThisAnimation(bool reverseDirection = false)
         {

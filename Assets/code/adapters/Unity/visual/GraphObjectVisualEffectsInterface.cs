@@ -8,11 +8,9 @@ public interface GraphObjectVisualEffectsInterface
 
     public void DeselectThisAnimation();
 
-    public void PointThisAnimation();
-
-    public void RemovePointerAnimation();
-
     public void MarkThisAnimation();
 
     public void RemoveMarkAnimation();
+
+    
 }

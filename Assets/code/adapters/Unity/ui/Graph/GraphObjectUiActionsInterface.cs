@@ -9,13 +9,11 @@ public interface GraphObjectUiActionsInterface
 
     public void Deselect();
 
-    public void PointThis();
-
-    public void RemovePointer();
-
     public void MarkThis();
 
     public void RemoveMark();
-    
+
+    public void GetCenterPosition();
+
 
 }
