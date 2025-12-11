@@ -11,11 +11,12 @@ namespace GraphMaster.UnityAdapter.Visualization
     {
         [SerializeField] private UnityEvent onVisualizationStart;
         [SerializeField] private UnityEvent onVisualizationEnd;
-        [SerializeField] private float stepDelay = 0.5f;
 
         private Cursor cursor;
         private Coroutine currentVisualizationCoroutine;
         private List<GraphObjectUiActionsInterface> allProcessedObjects = new List<GraphObjectUiActionsInterface>();
+        
+        private bool waitingForCursor = false;
 
         private void Awake()
         {
@@ -31,10 +32,32 @@ namespace GraphMaster.UnityAdapter.Visualization
             }
         }
 
+        private void OnEnable()
+        {
+            if (cursor != null)
+            {
+                cursor.OnMovementComplete += OnCursorMovementComplete;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (cursor != null)
+            {
+                cursor.OnMovementComplete -= OnCursorMovementComplete;
+            }
+        }
+
+        /// <summary>
+        /// Обработчик события завершения движения курсора.
+        /// </summary>
+        private void OnCursorMovementComplete()
+        {
+            waitingForCursor = false;
+        }
+
         public void Visualize(List<GraphObjectUiActionsInterface> objectsToMark)
         {
-
-            Debug.Log(" Visulize");
             if (cursor == null)
             {
                 Debug.LogError("Невозможно запустить визуализацию: Cursor не найден.");
@@ -65,6 +88,7 @@ namespace GraphMaster.UnityAdapter.Visualization
             {
                 StopCoroutine(currentVisualizationCoroutine);
                 currentVisualizationCoroutine = null;
+                waitingForCursor = false;
                 cursor?.BackToStart();
                 onVisualizationEnd?.Invoke();
             }
@@ -78,15 +102,29 @@ namespace GraphMaster.UnityAdapter.Visualization
             {
                 var currentObject = objectsToMark[i];
 
+                // Устанавливаем флаг ожидания
+                waitingForCursor = true;
+
                 // Вызываем MarkObject у курсора, передавая текущий объект
+                Debug.Log("Next step");
                 cursor.MarkObject(currentObject);
                 allProcessedObjects.Add(currentObject);
 
-                yield return new WaitForSeconds(stepDelay);
+                // Ждём пока курсор завершит движение и вызовет событие
+                while (waitingForCursor)
+                {
+                    yield return null;
+                }
             }
 
-            // Возвращаем курсор на начальную позицию после завершения
+            // Ждём завершения возврата курсора на начальную позицию
+            waitingForCursor = true;
             cursor.BackToStart();
+            
+            while (waitingForCursor)
+            {
+                yield return null;
+            }
 
             currentVisualizationCoroutine = null;
             onVisualizationEnd?.Invoke();

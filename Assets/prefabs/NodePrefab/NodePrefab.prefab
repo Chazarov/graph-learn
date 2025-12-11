@@ -409,11 +409,7 @@ MonoBehaviour:
   selectedScale: {x: 1.2, y: 1.2}
   nodeSpriteRenderer: {fileID: 2432569259376094163}
   markSpriteRenderer: {fileID: 8833711737606473896}
-  markApplyAnimationName: 
-  markRevertAnimationName: 
-  nodeAnimator: {fileID: 0}
-  pointerObject: {fileID: 0}
-  pointerAnimationDuration: 0.5
+  markAnimator: {fileID: 9123510437589443513}
   rootSpriteRenderer: {fileID: 5712805439996777492}
 --- !u!95 &9123510437589443513
 Animator:
@@ -425,7 +421,7 @@ Animator:
   m_GameObject: {fileID: 6115264197397747076}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 71dc634103b20e84795a3da5164b8505, type: 2}
+  m_Controller: {fileID: 9100000, guid: 96eb8ca748fd432409f0eefbce068046, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

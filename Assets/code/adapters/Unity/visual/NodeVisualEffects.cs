@@ -18,9 +18,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         
         [Header("Mark Animation")]
         [SerializeField] private SpriteRenderer markSpriteRenderer;
-        [SerializeField] private string markApplyAnimationName;
-        [SerializeField] private string markRevertAnimationName;
-        [SerializeField] private Animator nodeAnimator;
+        [SerializeField] private Animator markAnimator;
         
 
         [Header("Root Animation")]
@@ -110,17 +108,17 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void MarkThisAnimation()
         {
-            if (nodeAnimator != null && !string.IsNullOrEmpty(markApplyAnimationName))
+            if (markAnimator != null)
             {
-                nodeAnimator.Play(markApplyAnimationName);
+                markAnimator.SetBool("Mark", true);
             }
         }
 
         public void RemoveMarkAnimation()
         {
-            if (nodeAnimator != null && !string.IsNullOrEmpty(markRevertAnimationName))
+            if (markAnimator != null)
             {
-                nodeAnimator.Play(markRevertAnimationName);
+                markAnimator.SetBool("Mark", false);
             }
         }
 
