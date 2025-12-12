@@ -73,12 +73,6 @@ public class Cursor : MonoBehaviour
         whitingTheAnimation = false;
     }
 
-    /// <summary>
-    /// Универсальная корутина плавного перемещения за фиксированное время.
-    /// </summary>
-    /// <param name="targetPosition">Целевая позиция</param>
-    /// <param name="duration">Точное время перемещения в секундах</param>
-    /// <param name="objectToMark">Объект для маркировки после перемещения (null если не нужно)</param>
     private IEnumerator SmoothMoveRoutine(Vector3 targetPosition, float duration, GraphObjectUiActionsInterface objectToMark)
     {
         Vector3 initialPosition = transform.position;
@@ -90,7 +84,6 @@ public class Cursor : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float remainingTime = duration - elapsedTime;
             
-            // Запускаем анимацию Point ровно один раз, когда оставшееся время <= длительности анимации
             if (!animationTriggered && objectToMark != null && remainingTime <= pointAnimationDuration)
             {
                 if (animator != null)
@@ -101,7 +94,6 @@ public class Cursor : MonoBehaviour
                 animationTriggered = true;
             }
             
-            // SmoothStep для плавного ускорения в начале и замедления в конце
             float t = Mathf.Clamp01(elapsedTime / duration);
             float smoothT = t * t * (3f - 2f * t);
             
@@ -115,11 +107,9 @@ public class Cursor : MonoBehaviour
         {
             while (whitingTheAnimation)
             {
-                Debug.Log("Whiting the animation");
                 yield return null;
             }
         }
-        Debug.Log("End the animation");
 
         if (objectToMark != null)
         {
@@ -128,8 +118,6 @@ public class Cursor : MonoBehaviour
 
         currentMovementCoroutine = null;
 
-        // Вызываем событие завершения движения
-        Debug.Log("End the action");
         OnMovementComplete?.Invoke();
     }
 }

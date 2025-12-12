@@ -22,9 +22,6 @@ namespace GraphMaster.UnityAdapter.Visualization
             bfsService = new BreadthFirstSearchService<NodeUI, EdgeUI>();
         }
 
-        /// <summary>
-        /// Запускает визуализацию обхода графа в глубину (DFS).
-        /// </summary>
         public void StartDepthFirstSearch()
         {
             if (!ValidateComponents()) return;
@@ -37,22 +34,15 @@ namespace GraphMaster.UnityAdapter.Visualization
                 return;
             }
 
-            // Очищаем предыдущую визуализацию
             visualizer.Clear();
 
-            // Выполняем обход в глубину
             List<GraphPartInterface> traversalResult = dfsService.Traverse(graph);
 
-            // Преобразуем результат в список объектов для визуализации
             List<GraphObjectUiActionsInterface> objectsToVisualize = ConvertToUiObjects(traversalResult);
 
-            // Запускаем визуализацию
             visualizer.Visualize(objectsToVisualize);
         }
 
-        /// <summary>
-        /// Запускает визуализацию обхода графа в ширину (BFS).
-        /// </summary>
         public void StartBreadthFirstSearch()
         {
             if (!ValidateComponents()) return;
@@ -65,22 +55,15 @@ namespace GraphMaster.UnityAdapter.Visualization
                 return;
             }
 
-            // Очищаем предыдущую визуализацию
             visualizer.Clear();
 
-            // Выполняем обход в ширину
             List<GraphPartInterface> traversalResult = bfsService.Traverse(graph);
 
-            // Преобразуем результат в список объектов для визуализации
             List<GraphObjectUiActionsInterface> objectsToVisualize = ConvertToUiObjects(traversalResult);
 
-            // Запускаем визуализацию
             visualizer.Visualize(objectsToVisualize);
         }
 
-        /// <summary>
-        /// Проверяет, что все необходимые компоненты назначены.
-        /// </summary>
         private bool ValidateComponents()
         {
             if (graphUI == null)
@@ -98,9 +81,6 @@ namespace GraphMaster.UnityAdapter.Visualization
             return true;
         }
 
-        /// <summary>
-        /// Преобразует список GraphPartInterface в список GraphObjectUiActionsInterface для визуализации.
-        /// </summary>
         private List<GraphObjectUiActionsInterface> ConvertToUiObjects(List<GraphPartInterface> parts)
         {
             List<GraphObjectUiActionsInterface> result = new List<GraphObjectUiActionsInterface>();

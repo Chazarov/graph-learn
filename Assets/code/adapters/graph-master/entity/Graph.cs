@@ -79,6 +79,9 @@ namespace GraphMaster
             if (!ReversedAdjacencyMap[targetName].ContainsKey(sourseName)) ReversedAdjacencyMap[targetName][sourseName] = new();
             ReversedAdjacencyMap[targetName][sourseName].Add(edge);
 
+            Debug.Log("Base:  \n\n" + this.GetAdjacencyMapAsJson());
+            Debug.Log("Reversed: \n\n" + this.GetReversedAdjacencyMapAsJson());
+
             return edge;
         }
         public void DeleteEdge(string name)
@@ -217,25 +220,26 @@ namespace GraphMaster
             ReversedAdjacencyMap.Remove(name);
         }
 
-        public List<TEdge> GetEdgesBetween(string sourseName, string targetName)
+        public List<TEdge> GetEdgesBetween(string node1, string node2)
         {
-            if (AdjacencyMap.ContainsKey(sourseName))
+            if (AdjacencyMap.ContainsKey(node1))
             {
-                if (AdjacencyMap[sourseName].ContainsKey(targetName))
+                List<TEdge> edges = new();
+                if (AdjacencyMap[node1].ContainsKey(node2))
                 {
-                    List<TEdge> edges = AdjacencyMap[sourseName][targetName];
-                    return new List<TEdge>(edges);
+                    edges.AddRange(AdjacencyMap[node1][node2]);
+                    
                 }
+                if (AdjacencyMap[node2].ContainsKey(node1))
+                {
+                    edges.AddRange(AdjacencyMap[node2][node1]);
+
+                }
+                return new List<TEdge>(edges);
             }
             return new List<TEdge>();
         }
 
-        /// <summary>
-        /// Checks for parallel edges in the graph.
-        /// For a directed graph: edges between two vertices with the same direction are considered parallel.
-        /// For an undirected graph: any two edges between the same vertices are considered parallel.
-        /// </summary>
-        /// <returns>true if the graph has parallel edges, otherwise false</returns>
         public bool HasDirectedParallelEdges()
         {
             foreach (var sourceEntry in AdjacencyMap)
@@ -291,6 +295,42 @@ namespace GraphMaster
             return false;
         }
 
+        public Dictionary<string, Dictionary<string, List<TEdge>>> GetAdjacencyMap()
+        {
+            var adj = new Dictionary<string, Dictionary<string, List<TEdge>>>();
+            foreach (var sourceEntry in AdjacencyMap)
+            {
+                adj[sourceEntry.Key] = new Dictionary<string, List<TEdge>>();
+                foreach (var targetEntry in sourceEntry.Value)
+                {
+                    adj[sourceEntry.Key][targetEntry.Key] = new List<TEdge>(targetEntry.Value);
+                }
+            }
+            
+            if (!isDirected)
+            {
+                foreach (var sourceEntry in ReversedAdjacencyMap)
+                {
+                    string sN = sourceEntry.Key;
+                    foreach (var targetEntry in sourceEntry.Value)
+                    {
+                        string tN = targetEntry.Key;
+                        if (adj[sN].ContainsKey(tN))
+                        {
+                            adj[sN][tN].AddRange(ReversedAdjacencyMap[sN][tN]);
+                        }
+                        else
+                        {
+                            adj[sN][tN] = new List<TEdge>();
+                            adj[sN][tN].AddRange(ReversedAdjacencyMap[sN][tN]);
+                        }
+                    }
+                }
+            }
+
+            return adj;
+        }
+
         public bool GetParralelEdgesAllowed()
         {
             return parralelEdgesAreAllowed;
@@ -316,10 +356,6 @@ namespace GraphMaster
             return nodesMap.Values.Count;
         }
 
-        public Dictionary<string, Dictionary<string, List<TEdge>>> GetAdjacencyMap()
-        {
-            return new Dictionary<string, Dictionary<string, List<TEdge>>>(AdjacencyMap);
-        }
 
 
         public TNode GetNode(string name)
@@ -369,7 +405,51 @@ namespace GraphMaster
             this.root = root;
         }
 
+        /// <summary>
+        /// Возвращает AdjacencyMap в виде отформатированной JSON-строки.
+        /// </summary>
+        public string GetAdjacencyMapAsJson()
+        {
+            return AdjacencyMapToJson(AdjacencyMap);
+        }
 
+        /// <summary>
+        /// Возвращает ReversedAdjacencyMap в виде отформатированной JSON-строки.
+        /// </summary>
+        public string GetReversedAdjacencyMapAsJson()
+        {
+            return AdjacencyMapToJson(ReversedAdjacencyMap);
+        }
+
+        private string AdjacencyMapToJson(Dictionary<string, Dictionary<string, List<TEdge>>> map)
+        {
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("{");
+
+            var sourceKeys = map.Keys.ToList();
+            for (int i = 0; i < sourceKeys.Count; i++)
+            {
+                string sourceNode = sourceKeys[i];
+                sb.AppendLine($"  \"{sourceNode}\": {{");
+
+                var targetKeys = map[sourceNode].Keys.ToList();
+                for (int j = 0; j < targetKeys.Count; j++)
+                {
+                    string targetNode = targetKeys[j];
+                    var edges = map[sourceNode][targetNode];
+                    var edgeNames = edges.Select(e => $"\"{e.GetName()}\"");
+
+                    sb.Append($"    \"{targetNode}\": [{string.Join(", ", edgeNames)}]");
+                    sb.AppendLine(j < targetKeys.Count - 1 ? "," : "");
+                }
+
+                sb.Append("  }");
+                sb.AppendLine(i < sourceKeys.Count - 1 ? "," : "");
+            }
+
+            sb.AppendLine("}");
+            return sb.ToString();
+        }
 
     }
 }

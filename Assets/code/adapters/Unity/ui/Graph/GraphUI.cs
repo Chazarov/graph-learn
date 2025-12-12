@@ -107,10 +107,6 @@ namespace GraphMaster.UnityAdapter
         }
 
 
-        public void SetDirectedView()
-        {
-
-        }
 
         private void OnAnyNodeSelected(string nodeName)
         {
@@ -375,21 +371,12 @@ namespace GraphMaster.UnityAdapter
 
         public void UpdateDirectedEdgesViews(NodeUI node1, NodeUI node2)
         {
-            var AdjMap = this.sourse.GetAdjacencyMap();
+            
+
+            Debug.Log(this.GetAdjacencyMapAsJson());
             string name1 = node1.GetName();
             string name2 = node2.GetName();
-
-
-            List<EdgeUI> edgesToUpdate = new();
-
-            if (AdjMap[name1].ContainsKey(name2))
-            {
-                edgesToUpdate.AddRange(AdjMap[name1][name2]);
-            }
-            if (AdjMap[name2].ContainsKey(name1))
-            {
-                edgesToUpdate.AddRange(AdjMap[name2][name1]);
-            }
+            List<EdgeUI> edgesToUpdate = this.sourse.GetEdgesBetween(name1, name2);
 
             UpdateDirectedEdgesViews(edgesToUpdate);
         }
@@ -433,6 +420,40 @@ namespace GraphMaster.UnityAdapter
         public Graph<NodeUI, EdgeUI> GetGraph()
         {
             return sourse;
+        }
+
+        /// <summary>
+        /// Возвращает AdjacencyMap в виде отформатированной JSON-строки.
+        /// </summary>
+        public string GetAdjacencyMapAsJson()
+        {
+            var adjMap = sourse.GetAdjacencyMap();
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("{");
+
+            var sourceKeys = adjMap.Keys.ToList();
+            for (int i = 0; i < sourceKeys.Count; i++)
+            {
+                string sourceNode = sourceKeys[i];
+                sb.AppendLine($"  \"{sourceNode}\": {{");
+
+                var targetKeys = adjMap[sourceNode].Keys.ToList();
+                for (int j = 0; j < targetKeys.Count; j++)
+                {
+                    string targetNode = targetKeys[j];
+                    var edges = adjMap[sourceNode][targetNode];
+                    var edgeNames = edges.Select(e => $"\"{e.GetName()}\"");
+                    
+                    sb.Append($"    \"{targetNode}\": [{string.Join(", ", edgeNames)}]");
+                    sb.AppendLine(j < targetKeys.Count - 1 ? "," : "");
+                }
+
+                sb.Append("  }");
+                sb.AppendLine(i < sourceKeys.Count - 1 ? "," : "");
+            }
+
+            sb.AppendLine("}");
+            return sb.ToString();
         }
 
     }

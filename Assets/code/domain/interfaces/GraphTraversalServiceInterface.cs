@@ -17,13 +17,6 @@ namespace Domain
         /// <returns>Список элементов графа (узлы и рёбра) в порядке обхода</returns>
         List<GraphPartInterface> Traverse(GraphInterface<TNode, TEdge> graph);
 
-        /// <summary>
-        /// Выполняет обход графа, начиная с указанной вершины.
-        /// </summary>
-        /// <param name="graph">Граф для обхода</param>
-        /// <param name="startNode">Начальная вершина</param>
-        /// <returns>Список элементов графа (узлы и рёбра) в порядке обхода</returns>
-        List<GraphPartInterface> Traverse(GraphInterface<TNode, TEdge> graph, TNode startNode);
     }
 }
 

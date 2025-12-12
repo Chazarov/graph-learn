@@ -37,6 +37,12 @@ namespace Domain
 
         public void SetDirected(bool value);
 
+        public Dictionary<string, Dictionary<string, List<TEdge>>> GetAdjacencyMap();
+
+        public bool GetIsDirected();
+
+        public bool GetParralelEdgesAllowed();
+
         public TNode GetRoot();
 
         public void SetRoot(TNode root);

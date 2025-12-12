@@ -45,7 +45,10 @@ namespace GraphMaster
                 return result;
             }
 
-            DFSRecursive(graph, startNode, visitedNodes, visitedEdges, result);
+            // Получаем карту смежности (для неориентированного графа уже содержит обратные рёбра)
+            var adjMap = graph.GetAdjacencyMap();
+
+            DFSRecursive(graph, adjMap, startNode, visitedNodes, visitedEdges, result);
 
             return result;
         }
@@ -54,7 +57,8 @@ namespace GraphMaster
         /// Рекурсивный метод для обхода в глубину.
         /// </summary>
         private void DFSRecursive(
-            GraphInterface<TNode, TEdge> graph, 
+            GraphInterface<TNode, TEdge> graph,
+            Dictionary<string, Dictionary<string, List<TEdge>>> adjMap,
             TNode currentNode, 
             HashSet<string> visitedNodes, 
             HashSet<string> visitedEdges,
@@ -71,37 +75,41 @@ namespace GraphMaster
             visitedNodes.Add(nodeName);
             result.Add(currentNode);
 
-            // Получаем все рёбра графа и ищем исходящие из текущей вершины
-            List<TEdge> edges = graph.GetEdges();
-
-            foreach (TEdge edge in edges)
+            // Проверяем, есть ли исходящие рёбра из текущей вершины
+            if (!adjMap.ContainsKey(nodeName))
             {
-                string edgeName = edge.GetName();
-                TNode sourceNode = edge.GetSourceNode();
-                TNode targetNode = edge.GetTargetNode();
+                return;
+            }
 
-                // Проверяем, является ли текущая вершина источником ребра
-                if (sourceNode.GetName() == nodeName && !visitedEdges.Contains(edgeName))
+            // Перебираем всех соседей текущей вершины
+            foreach (var targetEntry in adjMap[nodeName])
+            {
+                string targetName = targetEntry.Key;
+                List<TEdge> edges = targetEntry.Value;
+
+                // Берём первое непосещённое ребро к соседу
+                foreach (TEdge edge in edges)
                 {
+                    string edgeName = edge.GetName();
+
+                    if (visitedEdges.Contains(edgeName))
+                    {
+                        continue;
+                    }
+
                     // Добавляем ребро в результат
                     visitedEdges.Add(edgeName);
                     result.Add(edge);
 
-                    // Рекурсивно обходим целевую вершину
-                    DFSRecursive(graph, targetNode, visitedNodes, visitedEdges, result);
-                }
-                // Для неориентированного графа также проверяем обратное направление
-                else if (targetNode.GetName() == nodeName && !visitedEdges.Contains(edgeName))
-                {
-                    if (!visitedNodes.Contains(sourceNode.GetName()))
+                    // Если целевая вершина ещё не посещена - рекурсивно обходим
+                    if (!visitedNodes.Contains(targetName))
                     {
-                        // Добавляем ребро в результат
-                        visitedEdges.Add(edgeName);
-                        result.Add(edge);
-
-                        // Рекурсивно обходим исходную вершину
-                        DFSRecursive(graph, sourceNode, visitedNodes, visitedEdges, result);
+                        TNode targetNode = graph.GetNode(targetName);
+                        DFSRecursive(graph, adjMap, targetNode, visitedNodes, visitedEdges, result);
                     }
+
+                    // Для DFS берём только одно ребро к каждому соседу
+                    break;
                 }
             }
         }

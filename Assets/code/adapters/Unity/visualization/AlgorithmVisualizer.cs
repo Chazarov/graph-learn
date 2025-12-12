@@ -48,9 +48,6 @@ namespace GraphMaster.UnityAdapter.Visualization
             }
         }
 
-        /// <summary>
-        /// Обработчик события завершения движения курсора.
-        /// </summary>
         private void OnCursorMovementComplete()
         {
             waitingForCursor = false;
