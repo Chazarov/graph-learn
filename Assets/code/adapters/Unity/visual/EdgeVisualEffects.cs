@@ -222,7 +222,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             if (edgeToolBar == null) return;
 
             Vector3 centerPos = (sourcePos + targetPos) / 2f;
-            this.centerPosition = centerPos;
+            this.centerPosition = centerPos + offset;
             edgeToolBar.transform.position = centerPos + offset;
 
             Vector3 direction = (targetPos - sourcePos).normalized;
