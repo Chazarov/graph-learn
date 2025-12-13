@@ -211,7 +211,6 @@ namespace GraphMaster.UnityAdapter
             nodeNameSequense++;
             if (thisNOdeFirst)
             {
-                Debug.Log("This Node first");
                 this.SetRoot(UIComponent);
             }
 
@@ -373,7 +372,6 @@ namespace GraphMaster.UnityAdapter
         {
             
 
-            Debug.Log(this.GetAdjacencyMapAsJson());
             string name1 = node1.GetName();
             string name2 = node2.GetName();
             List<EdgeUI> edgesToUpdate = this.sourse.GetEdgesBetween(name1, name2);

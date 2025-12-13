@@ -92,7 +92,7 @@ namespace GraphMaster
                 {
                     string edgeName = edge.GetName();
 
-                    if (visitedEdges.Contains(edgeName))
+                    if (visitedNodes.Contains(targetName))
                     {
                         continue;
                     }
@@ -101,12 +101,8 @@ namespace GraphMaster
                     visitedEdges.Add(edgeName);
                     result.Add(edge);
 
-                    // Если целевая вершина ещё не посещена - рекурсивно обходим
-                    if (!visitedNodes.Contains(targetName))
-                    {
-                        TNode targetNode = graph.GetNode(targetName);
-                        DFSRecursive(graph, adjMap, targetNode, visitedNodes, visitedEdges, result);
-                    }
+                    TNode targetNode = graph.GetNode(targetName);
+                    DFSRecursive(graph, adjMap, targetNode, visitedNodes, visitedEdges, result);
 
                     // Для DFS берём только одно ребро к каждому соседу
                     break;

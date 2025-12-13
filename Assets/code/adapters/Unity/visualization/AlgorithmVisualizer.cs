@@ -99,22 +99,17 @@ namespace GraphMaster.UnityAdapter.Visualization
             {
                 var currentObject = objectsToMark[i];
 
-                // Устанавливаем флаг ожидания
                 waitingForCursor = true;
 
-                // Вызываем MarkObject у курсора, передавая текущий объект
-                Debug.Log("Next step");
                 cursor.MarkObject(currentObject);
                 allProcessedObjects.Add(currentObject);
 
-                // Ждём пока курсор завершит движение и вызовет событие
                 while (waitingForCursor)
                 {
                     yield return null;
                 }
             }
 
-            // Ждём завершения возврата курсора на начальную позицию
             waitingForCursor = true;
             cursor.BackToStart();
             

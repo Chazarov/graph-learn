@@ -54,7 +54,6 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void MarkAsRoot()
         {
-            Debug.Log("Mark as root");
             if (isRoot) return;
             IsRootMarking.Invoke(this);
             MarkAsRootWithoutNotify();

@@ -1,0 +1,7 @@
+2D070C  - bgd
+CA8686 - lb
+E5CBBA - lb2
+93B8FF - lb3
+981417 - red
+B53134 - ???
+468847 - green

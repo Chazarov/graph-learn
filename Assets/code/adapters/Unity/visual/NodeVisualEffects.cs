@@ -22,13 +22,25 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         
 
         [Header("Root Animation")]
-        [SerializeField] private SpriteRenderer rootSpriteRenderer;
+        [SerializeField] private GameObject rootMark;
+        private Vector3 startMarkRootScale;
+        private bool isRoot = false;
 
 
         private void Start()
         {
             defaultColor = nodeSpriteRenderer.color;
             defaultScale = transform.localScale;
+        }
+
+        private void Awake()
+        {
+            rootMark = GameObject.FindGameObjectWithTag("RootMark");
+
+            if (rootMark == null)
+            {
+                Debug.LogError("Root mark не найден! Убедитесь, Game Object  с тегом 'RootMark' существует.");
+            }
         }
 
         public void Initialize(int squenseCount)
@@ -62,12 +74,26 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void MarkAsRootAnimation()
         {
-            this.rootSpriteRenderer.gameObject.SetActive(true);
+
+            isRoot = true;
+            startMarkRootScale = rootMark.transform.localScale;
+            this.rootMark.transform.SetParent(null);
+
+            this.rootMark.transform.position = this.transform.position;
+
+            this.rootMark.transform.SetParent(this.transform);
         }
 
         public void RemoveRootMarkAnimation()
         {
-            this.rootSpriteRenderer.gameObject.SetActive(false);
+            
+            if(isRoot)
+            {   
+                this.rootMark.transform.SetParent(null);
+                rootMark.transform.localScale = startMarkRootScale;
+                isRoot = false;
+            }
+            
         }
 
         public void SelectThisAnimation()
@@ -75,6 +101,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
             nodeSpriteRenderer.color = selectedColor;
             transform.localScale = selectedScale;
+
 
         }
 
@@ -95,8 +122,8 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         private void SetVisualLayer(int graphEdgesSequenseCount)
         {
             int baseVisualLayer = graphEdgesSequenseCount * 3;
-            nodeToolBar.sortingOrder = baseVisualLayer + 1;
-            markSpriteRenderer.sortingOrder = baseVisualLayer + 2;
+            nodeToolBar.sortingOrder = baseVisualLayer + 2;
+            markSpriteRenderer.sortingOrder = baseVisualLayer + 1;
             nodeSpriteRenderer.sortingOrder = baseVisualLayer;
         }
 

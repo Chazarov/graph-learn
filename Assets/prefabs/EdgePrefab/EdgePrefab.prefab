@@ -67,15 +67,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b8348d8bb08c7fa43b76cf8c2ebd5e20, type: 2}
+  m_sharedMaterial: {fileID: -3314588104474506238, guid: b8348d8bb08c7fa43b76cf8c2ebd5e20, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -92,13 +92,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.85
+  m_fontSize: 24.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 10
   m_fontSizeMax: 1000
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -232,8 +232,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 0.990566, g: 0.990566, b: 0.990566, a: 1}
+      key0: {r: 0.5764706, g: 0.72156864, b: 1, a: 1}
+      key1: {r: 0.5764706, g: 0.72156864, b: 1, a: 1}
       key2: {r: 0.990566, g: 0.990566, b: 0.990566, a: 1}
       key3: {r: 0.9433962, g: 0.12904951, b: 0.12904951, a: 0}
       key4: {r: 1, g: 1, b: 1, a: 0}
@@ -319,10 +319,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8639328328069343421}
+  m_Father: {fileID: 5213400089251592176}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &5378095913783592059
 LineRenderer:
@@ -389,8 +389,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0.5568628, g: 0.72156864, b: 1, a: 1}
+      key1: {r: 0.5764706, g: 0.72156864, b: 1, a: 1}
       key2: {r: 1, g: 1, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -459,6 +459,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8117643173746785076}
+  - {fileID: 2527873715850824219}
   m_Father: {fileID: 8639328328069343421}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -540,7 +541,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5213400089251592176}
-  - {fileID: 2527873715850824219}
   - {fileID: 1962429702104291083}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -579,12 +579,10 @@ MonoBehaviour:
   edgeCollider: {fileID: 1393656597070005156}
   weightText: {fileID: 1477226910510868275}
   edgeToolBar: {fileID: 3198972815900863546}
-  selectColor: {r: 0.2971698, g: 1, b: 0.5632329, a: 1}
+  selectColor: {r: 0.7921569, g: 0.5254902, b: 0.5254902, a: 1}
   selectAnimationDuraton: 0.3
   markAnimationDuration: 1
-  markColor: {r: 1, g: 0.19339621, b: 0.19339621, a: 0.9137255}
-  pointerObject: {fileID: 0}
-  pointerAnimationDuration: 0.5
+  markColor: {r: 0.70980394, g: 0.19339621, b: 0.20392157, a: 0.9137255}
   edgeOffsetPositionNumber: 0
   spreadKof: 0.7
   directedLineSegmentsCount: 50

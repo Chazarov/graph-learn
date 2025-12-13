@@ -79,8 +79,6 @@ namespace GraphMaster
             if (!ReversedAdjacencyMap[targetName].ContainsKey(sourseName)) ReversedAdjacencyMap[targetName][sourseName] = new();
             ReversedAdjacencyMap[targetName][sourseName].Add(edge);
 
-            Debug.Log("Base:  \n\n" + this.GetAdjacencyMapAsJson());
-            Debug.Log("Reversed: \n\n" + this.GetReversedAdjacencyMapAsJson());
 
             return edge;
         }
