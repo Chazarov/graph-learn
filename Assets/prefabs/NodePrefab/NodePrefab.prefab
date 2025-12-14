@@ -341,6 +341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualEffects: {fileID: 2790718317739022781}
   sourse: {fileID: -8864676273580272040}
+  uiActionsManager: {fileID: 11400000, guid: 0827024b2db75c54791293b8d80c20fd, type: 2}
   maxDelayOfDoublePressing: 0.438
 --- !u!114 &-8864676273580272040
 MonoBehaviour:

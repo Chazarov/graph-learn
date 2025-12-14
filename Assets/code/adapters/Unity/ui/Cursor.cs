@@ -18,10 +18,6 @@ public class Cursor : MonoBehaviour
 
     private Coroutine currentMovementCoroutine;
     [SerializeField] private CursorAnimationHandler cursorAnimationHandler;
-
-    /// <summary>
-    /// Событие, вызываемое когда курсор завершил движение и отметил объект.
-    /// </summary>
     public event Action OnMovementComplete;
     private bool whitingTheAnimation = false;
 
@@ -54,7 +50,7 @@ public class Cursor : MonoBehaviour
         {
             StopCoroutine(currentMovementCoroutine);
         }
-        currentMovementCoroutine = StartCoroutine(SmoothMoveRoutine(startPosition, returnDuration, null));
+        currentMovementCoroutine = StartCoroutine(SmoothMoveRoutine(returnDuration, startPosition));
     }
 
     public void MarkObject(GraphObjectUiActionsInterface graphObject)
@@ -64,8 +60,7 @@ public class Cursor : MonoBehaviour
             StopCoroutine(currentMovementCoroutine);
         }
 
-        Vector3 targetPosition = graphObject.GetCenterPosition();
-        currentMovementCoroutine = StartCoroutine(SmoothMoveRoutine(targetPosition, moveDuration, graphObject));
+        currentMovementCoroutine = StartCoroutine(SmoothHarassmentRoutine(moveDuration, graphObject));
     }
 
     private void onCursorAnimationComplete()
@@ -73,11 +68,45 @@ public class Cursor : MonoBehaviour
         whitingTheAnimation = false;
     }
 
-    private IEnumerator SmoothMoveRoutine(Vector3 targetPosition, float duration, GraphObjectUiActionsInterface objectToMark)
+
+    private IEnumerator SmoothMoveRoutine(float duration, Vector3 target)
+    {
+        Vector3 initialPosition = transform.position;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float remainingTime = duration - elapsedTime;
+
+
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            float smoothT = t * t * (3f - 2f * t);
+
+            transform.position = Vector3.Lerp(initialPosition, target, smoothT);
+            yield return null;
+        }
+
+        transform.position = target;
+
+        if (cursorAnimationHandler != null)
+        {
+            while (whitingTheAnimation)
+            {
+                yield return null;
+            }
+        }
+
+        currentMovementCoroutine = null;
+
+        OnMovementComplete?.Invoke();
+    }
+    private IEnumerator SmoothHarassmentRoutine(float duration, GraphObjectUiActionsInterface objectToMark)
     {
         Vector3 initialPosition = transform.position;
         float elapsedTime = 0f;
         bool animationTriggered = false;
+        Vector3 target = objectToMark.GetCenterPosition();
 
         while (elapsedTime < duration)
         {
@@ -97,16 +126,18 @@ public class Cursor : MonoBehaviour
             float t = Mathf.Clamp01(elapsedTime / duration);
             float smoothT = t * t * (3f - 2f * t);
             
-            transform.position = Vector3.Lerp(initialPosition, targetPosition, smoothT);
+            target = objectToMark.GetCenterPosition();
+            transform.position = Vector3.Lerp(initialPosition, target, smoothT);
             yield return null;
         }
 
-        transform.position = targetPosition;
+        transform.position = objectToMark.GetCenterPosition();
 
         if (cursorAnimationHandler != null)
         {
             while (whitingTheAnimation)
             {
+                transform.position = objectToMark.GetCenterPosition();
                 yield return null;
             }
         }

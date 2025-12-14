@@ -18,6 +18,7 @@ namespace GraphMaster.UnityAdapter
     {
         [SerializeField] private GameObject nodePrefab;
         [SerializeField] private GameObject edgePrefab;
+        
 
 
         [SerializeField] private Vector2 upperCreationRange =  Vector2.zero;

@@ -16,6 +16,7 @@ namespace GraphMaster.UnityAdapter
 
         bool isSelected = false;
 
+
         public event Action<EdgeUI> IsSelected;
         public event Action<EdgeUI> IsDeselected;
 

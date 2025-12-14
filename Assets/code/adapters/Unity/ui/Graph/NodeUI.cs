@@ -11,6 +11,8 @@ namespace GraphMaster.UnityAdapter.UI
         [SerializeField] private NodeVisualEffects visualEffects;
         [SerializeField] private GraphMaster.UnityAdapter.Positioned2Node sourse;
 
+        [SerializeField] private UiActionsManager uiActionsManager;
+
         public event Action<string> IsSelected;
         public event Action<string> IsDeselected;
         public event Action<NodeUI> IsRootMarking;
@@ -54,6 +56,7 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void MarkAsRoot()
         {
+            if (!uiActionsManager.GetRootReplacementIsAllowed()) return;
             if (isRoot) return;
             IsRootMarking.Invoke(this);
             MarkAsRootWithoutNotify();
@@ -61,7 +64,8 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void MarkAsRootWithoutNotify()
         {
-            if(isRoot) return;
+            if (!uiActionsManager.GetRootReplacementIsAllowed()) return;
+            if (isRoot) return;
             visualEffects?.MarkAsRootAnimation();
             isRoot = true;
         }
