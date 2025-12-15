@@ -8,7 +8,9 @@ namespace GraphMaster.UnityAdapter.UI
 {
     public class NodeUI : MonoBehaviour, Domain.GraphNodeInterface, GraphPartInterface, GraphObjectUiActionsInterface
     {
-        [SerializeField] private NodeVisualEffects visualEffects;
+        [SerializeField] public NodeVisualEffects VisualEffects;
+
+
         [SerializeField] private GraphMaster.UnityAdapter.Positioned2Node sourse;
 
         [SerializeField] private UiActionsManager uiActionsManager;
@@ -17,6 +19,9 @@ namespace GraphMaster.UnityAdapter.UI
         public event Action<string> IsDeselected;
         public event Action<NodeUI> IsRootMarking;
         public event Action<NodeUI> IsRootUnmarking;
+
+        
+
         private bool isSelected = false;
 
         private bool isRoot = false;
@@ -49,7 +54,7 @@ namespace GraphMaster.UnityAdapter.UI
 
             
             
-            visualEffects?.Initialize(squenseCount);
+            VisualEffects?.Initialize(squenseCount);
             SetName(name);
             SetPosition(position);
         }
@@ -66,13 +71,13 @@ namespace GraphMaster.UnityAdapter.UI
         {
             if (!uiActionsManager.GetRootReplacementIsAllowed()) return;
             if (isRoot) return;
-            visualEffects?.MarkAsRootAnimation();
+            VisualEffects?.MarkAsRootAnimation();
             isRoot = true;
         }
 
         public void RemoveRoot()
         {
-            visualEffects.RemoveRootMarkAnimation();
+            VisualEffects.RemoveRootMarkAnimation();
             IsRootUnmarking?.Invoke(this);
             isRoot = false;
 
@@ -85,13 +90,13 @@ namespace GraphMaster.UnityAdapter.UI
                 throw new System.Exception("sourse can't be a null. Please add a sourse Positioned2NodeComponent ");
             }
 
-            if (visualEffects == null)
+            if (VisualEffects == null)
             {
                 Debug.LogWarning("NodeVisualEffects component is not assigned. Visual features will be disabled.");
             }
             else
             {
-                visualEffects.CheckGameObjectContent();
+                VisualEffects.CheckGameObjectContent();
             }
         }
 
@@ -103,7 +108,7 @@ namespace GraphMaster.UnityAdapter.UI
         public void Select()
         {
             isSelected = true;
-            visualEffects?.SelectThisAnimation();
+            VisualEffects?.SelectThisAnimation();
             IsSelected?.Invoke(this.GetName());
         }
 
@@ -111,7 +116,7 @@ namespace GraphMaster.UnityAdapter.UI
         {
             if (isSelected)
             {
-                visualEffects?.DeselectThisAnimation();
+                VisualEffects?.DeselectThisAnimation();
                 isSelected = false;
                 IsDeselected?.Invoke(this.GetName());
             }
@@ -129,7 +134,7 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void SetName(string name)
         {
-            visualEffects?.UpdateNameDisplay(name);
+            VisualEffects?.UpdateNameDisplay(name);
             sourse.SetName(name);
         }
 
@@ -141,12 +146,12 @@ namespace GraphMaster.UnityAdapter.UI
 
         public void MarkThis()
         {
-            visualEffects?.MarkThisAnimation();
+            VisualEffects?.MarkThisAnimation();
         }
 
         public void RemoveMark()
         {
-            visualEffects?.RemoveMarkAnimation();
+            VisualEffects?.RemoveMarkAnimation();
         }
 
         public Vector3 GetCenterPosition()

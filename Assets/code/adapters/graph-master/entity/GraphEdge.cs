@@ -16,12 +16,7 @@ namespace GraphMaster
         private TNode targetNode;
         private TNode sourceNode;
 
-        // Конструктор для невзвешенного ребра
-        public GraphEdge(TNode sourceNode, TNode targetNode)
-        {
-            this.targetNode = targetNode;
-            this.sourceNode = sourceNode;
-        }
+        
 
 
         // Конструктор для взвешенного ребра
@@ -32,7 +27,8 @@ namespace GraphMaster
             this.sourceNode = sourceNode;
             SetWeight(weight);
         }
-
+        // Конструктор для невзвешенного ребра
+        public GraphEdge(TNode sourceNode, TNode targetNode): this(sourceNode, targetNode, 1){}
    
         public float GetWeight()
         {

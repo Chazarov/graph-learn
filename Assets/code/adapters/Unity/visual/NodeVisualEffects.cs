@@ -27,7 +27,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
 
         [Header("Additional Values")]
-        [SerializeField] private AdditionalValueController additionalValueController;
+        public AdditionalValueController AdditionalValueController;
 
 
         private Vector3 startMarkRootScale;
@@ -46,7 +46,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
             if (rootMark == null)
             {
-                Debug.LogError("Root mark �� ������! ���������, Game Object  � ����� 'RootMark' ����������.");
+                Debug.LogError("Root mark cant be a null! Please add  Game Object  with tag 'RootMark' for the animation to work correctly.");
             }
         }
 
@@ -156,6 +156,8 @@ namespace GraphMaster.UnityAdapter.VisualEffects
                 markAnimator.SetBool("Mark", false);
             }
         }
+
+
 
     }
 }

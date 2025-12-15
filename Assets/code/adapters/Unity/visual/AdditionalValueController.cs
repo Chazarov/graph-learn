@@ -56,7 +56,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             // Если тулбар ещё не видим - запускаем анимацию появления
             if (!isVisible)
             {
-                additionalValuesAnimator?.SetTrigger("Show");
+                additionalValuesAnimator?.SetBool("Show", true);
                 isVisible = true;
             }
             else
@@ -79,7 +79,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             // Если тулбар ещё не видим - запускаем анимацию появления
             if (!isVisible)
             {
-                additionalValuesAnimator?.SetTrigger("Show");
+                additionalValuesAnimator?.SetBool("Show", true);
                 isVisible = true;
             }
             else
@@ -140,7 +140,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         {
             if (!isVisible) return;
 
-            additionalValuesAnimator?.SetTrigger("Hide");
+            additionalValuesAnimator?.SetBool("Show", false);
             isVisible = false;
             value = null;
 

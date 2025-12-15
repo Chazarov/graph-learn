@@ -277,6 +277,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4713555142092069499}
+  - component: {fileID: 8120640754192914282}
+  - component: {fileID: 592526675182710049}
   m_Layer: 0
   m_Name: NodeValue
   m_TagString: Untagged
@@ -295,11 +297,52 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3984201355879460420}
   m_Father: {fileID: 5045161421506508037}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
+--- !u!114 &8120640754192914282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3462464617949495002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c727e930ea9d2418f03bc82a21e3ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  additionalValueToolbar: {fileID: 3462464617949495002}
+  valueText: {fileID: 889222525608442096}
+  additionalValuesAnimator: {fileID: 592526675182710049}
+  value: 
+  maxValueToolbarScale: 3
+  maxValue: 10
+  minValueToolbarScale: 1
+  minValue: 0
+--- !u!95 &592526675182710049
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3462464617949495002}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9ef08edea2640874790741aacac73cd9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4248165320029822051
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +461,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3984201355879460420
 Transform:
   m_ObjectHideFlags: 0
@@ -693,7 +736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722fadf17c17fea4f85bfe27f2e93cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visualEffects: {fileID: 2790718317739022781}
+  VisualEffects: {fileID: 2790718317739022781}
   sourse: {fileID: -8864676273580272040}
   uiActionsManager: {fileID: 11400000, guid: 0827024b2db75c54791293b8d80c20fd, type: 2}
   maxDelayOfDoublePressing: 0.438
@@ -765,6 +808,7 @@ MonoBehaviour:
   markSpriteRenderer: {fileID: 8833711737606473896}
   markAnimator: {fileID: 9123510437589443513}
   rootMark: {fileID: 0}
+  AdditionalValueController: {fileID: 8120640754192914282}
 --- !u!95 &9123510437589443513
 Animator:
   serializedVersion: 5

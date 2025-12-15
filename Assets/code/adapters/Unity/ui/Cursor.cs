@@ -21,6 +21,8 @@ public class Cursor : MonoBehaviour
     public event Action OnMovementComplete;
     private bool whitingTheAnimation = false;
 
+    public bool IsMoving => currentMovementCoroutine != null;
+
 
     void Start()
     {
