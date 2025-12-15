@@ -59,7 +59,7 @@ namespace GraphMaster.UnityAdapter.UI
             if (!uiActionsManager.GetRootReplacementIsAllowed()) return;
             if (isRoot) return;
             IsRootMarking.Invoke(this);
-            MarkAsRootWithoutNotify();
+            MarkAsRootWithoutNotify(); 
         }
 
         public void MarkAsRootWithoutNotify()

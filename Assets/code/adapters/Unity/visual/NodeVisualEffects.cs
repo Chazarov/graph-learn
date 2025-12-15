@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using JetBrains.Annotations;
 
 namespace GraphMaster.UnityAdapter.VisualEffects
 {
@@ -23,6 +24,12 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         [Header("Root Animation")]
         [SerializeField] private GameObject rootMark;
+
+
+        [Header("Additional Values")]
+        [SerializeField] private AdditionalValueController additionalValueController;
+
+
         private Vector3 startMarkRootScale;
         private bool isRoot = false;
 
@@ -39,7 +46,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
             if (rootMark == null)
             {
-                Debug.LogError("Root mark не найден! Убедитесь, Game Object  с тегом 'RootMark' существует.");
+                Debug.LogError("Root mark пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ! пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, Game Object  пїЅ пїЅпїЅпїЅпїЅпїЅ 'RootMark' пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
             }
         }
 
@@ -72,6 +79,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             }
         }
 
+        
         public void MarkAsRootAnimation()
         {
 
