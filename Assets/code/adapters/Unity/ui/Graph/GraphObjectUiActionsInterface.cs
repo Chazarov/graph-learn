@@ -9,12 +9,9 @@ public interface GraphObjectUiActionsInterface
 
     public void Deselect();
 
+    public GraphObjectVisualEffectsInterface GetVisualEffects();
 
-    public void MarkThis();
 
-    public void RemoveMark();
-
-    public Vector3 GetCenterPosition();
 
 
 }

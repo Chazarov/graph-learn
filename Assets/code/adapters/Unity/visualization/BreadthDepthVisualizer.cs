@@ -6,48 +6,23 @@ namespace GraphMaster.UnityAdapter.Visualization
 {
     public class BreadthDepthVisualizer : IAlgorithmVisualizer
     {
-        private List<GraphObjectUiActionsInterface> objectsToMark;
-        private List<GraphObjectUiActionsInterface> processedObjects = new List<GraphObjectUiActionsInterface>();
+        private List<ActionInterface> actions;
         private Cursor cursor;
 
-        public BreadthDepthVisualizer(List<GraphObjectUiActionsInterface> objectsToMark, Cursor cursor)
+        public BreadthDepthVisualizer(List<ActionInterface> actions, Cursor cursor)
         {
-            this.objectsToMark = objectsToMark;
+            this.actions = actions;
             this.cursor = cursor;
         }
 
         public IEnumerator StartVisualisation()
         {
-            for (int i = 0; i < objectsToMark.Count; i++)
-            {
-                var currentObject = objectsToMark[i];
-                
-                cursor.MarkObject(currentObject);
-                processedObjects.Add(currentObject);
-
-                while (cursor.IsMoving)
-                {
-                    yield return null;
-                }
-            }
-
-            cursor.BackToStart();
-            
-            while (cursor.IsMoving)
-            {
-                yield return null;
-            }
+            return cursor.ExecuteActions(actions);
         }
 
         public void ClearVisualisation()
         {
-            foreach (var obj in processedObjects)
-            {
-                obj.RemoveMark();
-            }
-            processedObjects.Clear();
-            cursor?.BackToStart();
+            cursor.UnmarkAll();
         }
     }
 }
-

@@ -27,56 +27,38 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         [SerializeField] private float minValue = 0f;
 
         private Vector3 initialToolbarScale;
+        private Vector3 initialToolbarPosition;
         private bool isVisible = false;
 
         public string Value => value;
 
         public bool IsVisible => isVisible;
 
+        private void Start()
+        {
+            CheckConfiguration();
+        }
+
         private void Awake()
         {
             if (additionalValueToolbar != null)
             {
                 initialToolbarScale = additionalValueToolbar.transform.localScale;
+                initialToolbarPosition = additionalValueToolbar.transform.localPosition;
             }
         }
 
-        /// <summary>
-        /// Показывает тулбар с указанным строковым значением.
-        /// Запускает анимацию появления через аниматор.
-        /// </summary>
-        /// <param name="newValue">Значение для отображения</param>
-        public void ShowValue(string newValue)
+        public void SetValue(string newValue)
         {
             if (string.IsNullOrEmpty(newValue)) return;
 
             value = newValue;
+            if(float.TryParse(value, out float  fvalue))
+            {
+                this.SetToolbarScaleByValue(fvalue);
+            }
             UpdateValueText();
 
-            // Если тулбар ещё не видим - запускаем анимацию появления
-            if (!isVisible)
-            {
-                additionalValuesAnimator?.SetBool("Show", true);
-                isVisible = true;
-            }
-            else
-            {
-                // Если уже видим - просто обновляем значение с анимацией
-                additionalValuesAnimator?.SetTrigger("SetValue");
-            }
-        }
-
-        /// <summary>
-        /// Показывает тулбар с числовым значением.
-        /// Масштабирует размер тулбара пропорционально значению.
-        /// </summary>
-        /// <param name="newValue">Числовое значение для отображения</param>
-        public void ShowValue(float newValue)
-        {
-            value = newValue.ToString();
-            UpdateValueText();
-
-            // Если тулбар ещё не видим - запускаем анимацию появления
             if (!isVisible)
             {
                 additionalValuesAnimator?.SetBool("Show", true);
@@ -87,56 +69,14 @@ namespace GraphMaster.UnityAdapter.VisualEffects
                 additionalValuesAnimator?.SetTrigger("SetValue");
             }
 
-            // Масштабируем тулбар пропорционально значению
-            SetToolbarScaleByValue(newValue);
+            
         }
 
-        /// <summary>
-        /// Обновляет значение без анимации появления (если тулбар уже видим).
-        /// </summary>
-        /// <param name="newValue">Новое строковое значение</param>
-        public void UpdateValue(string newValue)
-        {
-            if (!isVisible) 
-            {
-                ShowValue(newValue);
-                return;
-            }
+       
 
-            value = newValue;
-            UpdateValueText();
-            additionalValuesAnimator?.SetTrigger("SetValue");
 
-            // Проверяем, является ли значение числом для масштабирования
-            if (float.TryParse(newValue, out float floatValue))
-            {
-                SetToolbarScaleByValue(floatValue);
-            }
-        }
 
-        /// <summary>
-        /// Обновляет числовое значение с масштабированием тулбара.
-        /// </summary>
-        /// <param name="newValue">Новое числовое значение</param>
-        public void UpdateValue(float newValue)
-        {
-            if (!isVisible)
-            {
-                ShowValue(newValue);
-                return;
-            }
-
-            value = newValue.ToString();
-            UpdateValueText();
-            additionalValuesAnimator?.SetTrigger("SetValue");
-            SetToolbarScaleByValue(newValue);
-        }
-
-        /// <summary>
-        /// Скрывает тулбар и удаляет значение.
-        /// Запускает анимацию исчезновения через аниматор.
-        /// </summary>
-        public void HideValue()
+        public void RemoveValue()
         {
             if (!isVisible) return;
 
@@ -148,19 +88,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             ResetToolbarScale();
         }
 
-        /// <summary>
-        /// Удаляет значение (алиас для HideValue).
-        /// </summary>
-        public void RemoveValue()
-        {
-            HideValue();
-        }
 
-        /// <summary>
-        /// Устанавливает масштаб тулбара пропорционально переданному значению.
-        /// Использует линейную интерполяцию между minValueToolbarScale и maxValueToolbarScale.
-        /// </summary>
-        /// <param name="currentValue">Текущее значение</param>
         private void SetToolbarScaleByValue(float currentValue)
         {
             if (additionalValueToolbar == null) return;
@@ -174,33 +102,39 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             // Применяем масштаб (сохраняем пропорции начального масштаба)
             Vector3 newScale = initialToolbarScale * targetScale;
             additionalValueToolbar.transform.localScale = newScale;
+
+            // Смещаем позицию вверх, чтобы нижний край оставался на месте
+            float heightDifference = newScale.y - initialToolbarScale.y;
+            Vector3 newPosition = initialToolbarPosition;
+            newPosition.y += heightDifference * 2;
+            additionalValueToolbar.transform.localPosition = newPosition;
         }
 
-        /// <summary>
-        /// Сбрасывает масштаб тулбара к начальному значению.
-        /// </summary>
         private void ResetToolbarScale()
         {
             if (additionalValueToolbar != null)
             {
                 additionalValueToolbar.transform.localScale = initialToolbarScale;
+                additionalValueToolbar.transform.localPosition = initialToolbarPosition;
             }
         }
 
-        /// <summary>
-        /// Обновляет текстовое отображение значения.
-        /// </summary>
         private void UpdateValueText()
         {
             if (valueText != null)
             {
                 valueText.text = value ?? string.Empty;
+
+                if (float.TryParse(value, out float fvalue))
+                {
+                    if (float.IsInfinity(fvalue) || fvalue >= float.MaxValue)
+                    {
+                        valueText.text = "∞";
+                    }
+                }
             }
         }
 
-        /// <summary>
-        /// Проверяет корректность настройки компонента.
-        /// </summary>
         public void CheckConfiguration()
         {
             if (additionalValueToolbar == null)

@@ -8,9 +8,11 @@ public interface GraphObjectVisualEffectsInterface
 
     public void DeselectThisAnimation();
 
-    public void MarkThisAnimation();
+    public void MarkThis();
 
-    public void RemoveMarkAnimation();
+    public void RemoveMark();
+
+    public Vector3 GetCenterPosition();
 
     
 }

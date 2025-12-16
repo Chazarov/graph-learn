@@ -20,10 +20,6 @@ namespace GraphMaster.UnityAdapter
         public event Action<EdgeUI> IsSelected;
         public event Action<EdgeUI> IsDeselected;
 
-        void Update()
-        {
-        }
-
         private void OnMouseDown()
         {
             if (!isSelected)
@@ -130,21 +126,6 @@ namespace GraphMaster.UnityAdapter
         }
 
 
-        public void MarkThis()
-        {
-            visualEffects?.MarkThisAnimation();
-        }
-
-        public void RemoveMark()
-        {
-            visualEffects?.RemoveMarkAnimation();
-        }
-
-        public Vector3 GetCenterPosition()
-        {
-            return visualEffects.GetCenterPosition();
-        }
-        
         public void SetEdgeCenterOffset(int number)
         {
             this.visualEffects.SetEdgeCenterOffset(number);
@@ -153,6 +134,11 @@ namespace GraphMaster.UnityAdapter
         public void SetDirected(bool value)
         {
             visualEffects.SetDirectedView(value);
+        }
+
+        public GraphObjectVisualEffectsInterface GetVisualEffects()
+        {
+            return visualEffects;
         }
     }
 

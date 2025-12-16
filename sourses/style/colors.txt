@@ -5,3 +5,4 @@ E5CBBA - lb2
 981417 - red
 B53134 - ???
 468847 - green
+E2E2E2 - soft-white

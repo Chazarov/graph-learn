@@ -13,13 +13,13 @@ namespace GraphMaster.UnityAdapter.Visualization
 
         private DepthFirstSearchService<NodeUI, EdgeUI> dfsService;
         private BreadthFirstSearchService<NodeUI, EdgeUI> bfsService;
-        private DijkstraService<NodeUI, EdgeUI> dijkstraService;
+        private DijkstraVisualisationService<NodeUI, EdgeUI> dijkstraService;
 
         private void Awake()
         {
             dfsService = new DepthFirstSearchService<NodeUI, EdgeUI>();
             bfsService = new BreadthFirstSearchService<NodeUI, EdgeUI>();
-            dijkstraService = new DijkstraService<NodeUI, EdgeUI>();
+            dijkstraService = new DijkstraVisualisationService<NodeUI, EdgeUI>();
 
             if (cursor == null)
             {
@@ -36,10 +36,8 @@ namespace GraphMaster.UnityAdapter.Visualization
             Graph<NodeUI, EdgeUI> graph = graphUI.GetGraph();
             if (!graph.HasNodes()) return;
 
-            List<GraphPartInterface> traversalResult = dfsService.Traverse(graph);
-            List<GraphObjectUiActionsInterface> objects = ConvertToUiObjects(traversalResult);
-
-            var breadthDepthVisualizer = new BreadthDepthVisualizer(objects, cursor);
+            List<ActionInterface> actions = dfsService.Traverse(graph);
+            var breadthDepthVisualizer = new BreadthDepthVisualizer(actions, cursor);
             visualizer.StartVisualisation(breadthDepthVisualizer);
         }
 
@@ -50,10 +48,8 @@ namespace GraphMaster.UnityAdapter.Visualization
             Graph<NodeUI, EdgeUI> graph = graphUI.GetGraph();
             if (!graph.HasNodes()) return;
 
-            List<GraphPartInterface> traversalResult = bfsService.Traverse(graph);
-            List<GraphObjectUiActionsInterface> objects = ConvertToUiObjects(traversalResult);
-
-            var breadthDepthVisualizer = new BreadthDepthVisualizer(objects, cursor);
+            List<ActionInterface> actions = bfsService.Traverse(graph);
+            var breadthDepthVisualizer = new BreadthDepthVisualizer(actions, cursor);
             visualizer.StartVisualisation(breadthDepthVisualizer);
         }
 
@@ -64,12 +60,10 @@ namespace GraphMaster.UnityAdapter.Visualization
             Graph<NodeUI, EdgeUI> graph = graphUI.GetGraph();
             if (!graph.HasNodes()) return;
 
-            Dictionary<string, float> distances = dijkstraService.FindShortestPaths(graph);
-
-            var dijkstraVisualizer = new DijkstraVisualizer(graph, distances);
+            List<ActionInterface> actions = dijkstraService.MakeDijkstra(graph);
+            var dijkstraVisualizer = new DijkstraVisualizer(graph, actions, cursor);
             visualizer.StartVisualisation(dijkstraVisualizer);
         }
-
 
         public void ClearVisualization()
         {
@@ -81,17 +75,6 @@ namespace GraphMaster.UnityAdapter.Visualization
             if (graphUI == null || visualizer == null || cursor == null)
                 return false;
             return true;
-        }
-
-        private List<GraphObjectUiActionsInterface> ConvertToUiObjects(List<GraphPartInterface> parts)
-        {
-            List<GraphObjectUiActionsInterface> result = new List<GraphObjectUiActionsInterface>();
-            foreach (var part in parts)
-            {
-                if (part is GraphObjectUiActionsInterface uiObject)
-                    result.Add(uiObject);
-            }
-            return result;
         }
     }
 }

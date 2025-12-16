@@ -285,7 +285,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             currentMarkCoroutine = StartCoroutine(AnimateColorTransition(markColor, markAnimationDuration));
         }
         
-        public void MarkThisAnimation()
+        public void MarkThis()
         {
             MarkThisAnimation(false);
         }
@@ -295,7 +295,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             return this.centerPosition;
         }
 
-        public void RemoveMarkAnimation()
+        public void RemoveMark()
         {
             if (currentMarkCoroutine != null)
             {

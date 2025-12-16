@@ -1,34 +1,31 @@
 using Domain;
+using GraphMaster.UnityAdapter.Visualization.Actions;
 using System.Collections.Generic;
 
 namespace GraphMaster
 {
-    /// <summary>
-    /// Сервис для обхода графа в ширину (Breadth-First Search).
-    /// Обход начинается с указанной вершины, сначала посещаются все соседние вершины,
-    /// затем соседи соседей и так далее по уровням.
-    /// </summary>
     public class BreadthFirstSearchService<TNode, TEdge> : GraphTraversalServiceInterface<TNode, TEdge>
         where TNode : GraphNodeInterface, GraphPartInterface
         where TEdge : GraphEdgeInterface<TNode>, GraphPartInterface
     {
-        public List<GraphPartInterface> Traverse(GraphInterface<TNode, TEdge> graph)
+        public List<ActionInterface> Traverse(GraphInterface<TNode, TEdge> graph)
         {
-            TNode startNode = graph.GetRoot();
-            List<GraphPartInterface> result = new List<GraphPartInterface>();
-            HashSet<string> visitedNodes = new HashSet<string>();
-            HashSet<string> visitedEdges = new HashSet<string>();
-            Queue<TNode> queue = new Queue<TNode>();
+            List<ActionInterface> actions = new();
+            
+            if (!graph.HasNodes())
+            {
+                return actions;
+            }
 
-            if (!graph.HasNodes() || startNode == null)
-                return result;
+            TNode startNode = graph.GetRoot();
+            HashSet<string> visitedNodes = new HashSet<string>();
+            Queue<TNode> queue = new Queue<TNode>();
 
             var adjMap = graph.GetAdjacencyMap();
 
-            // Старт
             queue.Enqueue(startNode);
             visitedNodes.Add(startNode.GetName());
-            result.Add(startNode);
+            actions.Add(new MarkThis(startNode));
 
             while (queue.Count > 0)
             {
@@ -38,33 +35,24 @@ namespace GraphMaster
                 if (!adjMap.ContainsKey(nodeName))
                     continue;
 
-                // **КЛЮЧЕВОЕ ИЗМЕНЕНИЕ**: перебираем ВСЕХ соседей!
                 foreach (var targetEntry in adjMap[nodeName])
                 {
                     string targetName = targetEntry.Key;
                     List<TEdge> edges = targetEntry.Value;
 
-                    // Проверяем непосещённую вершину
                     if (visitedNodes.Contains(targetName))
                         continue;
 
-                    // Берём первое ребро к этой вершине
                     TEdge edge = edges[0];
-                    string edgeName = edge.GetName();
-
-                    // Добавляем РЕБРО и ВЕРШИНУ
-                    visitedEdges.Add(edgeName);
-                    result.Add(edge);      // ← Ребро
-                    result.Add(graph.GetNode(targetName)); // ← Вершина
+                    actions.Add(new MarkThis(edge));
+                    actions.Add(new MarkThis(graph.GetNode(targetName)));
 
                     visitedNodes.Add(targetName);
                     queue.Enqueue(graph.GetNode(targetName));
                 }
             }
 
-            return result;
+            return actions;
         }
-
     }
 }
-

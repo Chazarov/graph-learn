@@ -9,47 +9,35 @@ namespace GraphMaster.UnityAdapter.Visualization
     public class DijkstraVisualizer : IAlgorithmVisualizer
     {
         private GraphInterface<NodeUI, EdgeUI> graph;
-        private Dictionary<string, float> distances;
-        private List<NodeUI> visualizedNodes = new List<NodeUI>();
-        private string infinitySymbol = "∞";
+        private List<ActionInterface> actions;
+        private Cursor cursor;
 
-        public DijkstraVisualizer(GraphInterface<NodeUI, EdgeUI> graph, Dictionary<string, float> distances)
+        public DijkstraVisualizer(GraphInterface<NodeUI, EdgeUI> graph, List<ActionInterface> actions, Cursor cursor)
         {
             this.graph = graph;
-            this.distances = distances;
+            this.actions = actions;
+            this.cursor = cursor;
         }
 
         public IEnumerator StartVisualisation()
         {
-            foreach (var pair in distances)
-            {
-                NodeUI node = graph.GetNode(pair.Key);
-                if (node != null)
-                {
-                    if (pair.Value >= float.MaxValue)
-                        node.VisualEffects.AdditionalValueController.ShowValue(infinitySymbol);
-                    else
-                        node.VisualEffects.AdditionalValueController.ShowValue(pair.Value);
-                    
-                    node.MarkThis();
-                    visualizedNodes.Add(node);
-                    yield return null;
-                }
-            }
+            var executeCoroutine = cursor.ExecuteActions(actions);
+            return executeCoroutine;
         }
 
 
         public void ClearVisualisation()
         {
-            foreach (var node in visualizedNodes)
+            cursor.UnmarkAll();
+            foreach (var node in graph.GetNodes())
             {
                 if (node != null)
                 {
-                    node.VisualEffects.AdditionalValueController.HideValue();
-                    node.RemoveMark();
+                    node.VisualEffects.AdditionalValueController.RemoveValue();
                 }
             }
-            visualizedNodes.Clear();
+
         }
+
     }
 }

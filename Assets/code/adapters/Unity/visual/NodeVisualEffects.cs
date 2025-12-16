@@ -4,7 +4,15 @@ using JetBrains.Annotations;
 
 namespace GraphMaster.UnityAdapter.VisualEffects
 {
-    public class NodeVisualEffects : MonoBehaviour, GraphObjectVisualEffectsInterface
+
+    public interface GraphObjectVisualEffectsWithAdValueInterface: GraphObjectVisualEffectsInterface
+    {
+        public void SetAdditionalValue(string NewValue);
+
+        public void HideAdditionalValue();
+    }
+
+    public class NodeVisualEffects : MonoBehaviour, GraphObjectVisualEffectsWithAdValueInterface
     {
         [SerializeField] private TextMeshProUGUI nameVisual;
         [SerializeField] private Canvas nodeToolBar;
@@ -79,6 +87,16 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             }
         }
 
+        public void SetAdditionalValue(string NewValue)
+        {
+            AdditionalValueController.SetValue(NewValue);
+        }
+
+        public void HideAdditionalValue()
+        {
+            AdditionalValueController.RemoveValue();
+        }
+
         
         public void MarkAsRootAnimation()
         {
@@ -135,13 +153,13 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             nodeSpriteRenderer.sortingOrder = baseVisualLayer;
         }
 
-        public void UpdateFrame()
+        public Vector3 GetCenterPosition()
         {
-            return;
+            return nodeToolBar.transform.position;
         }
 
 
-        public void MarkThisAnimation()
+        public void MarkThis()
         {
             if (markAnimator != null)
             {
@@ -149,7 +167,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             }
         }
 
-        public void RemoveMarkAnimation()
+        public void RemoveMark()
         {
             if (markAnimator != null)
             {

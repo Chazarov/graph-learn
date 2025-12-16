@@ -8,5 +8,6 @@ namespace GraphMaster
 {
     public interface GraphPartInterface
     {
+        public string GetName();
     }
 }

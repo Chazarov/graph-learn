@@ -144,19 +144,14 @@ namespace GraphMaster.UnityAdapter.UI
         }
 
 
-        public void MarkThis()
-        {
-            VisualEffects?.MarkThisAnimation();
-        }
-
-        public void RemoveMark()
-        {
-            VisualEffects?.RemoveMarkAnimation();
-        }
-
         public Vector3 GetCenterPosition()
         {
             return transform.position;
+        }
+
+        public GraphObjectVisualEffectsInterface GetVisualEffects()
+        {
+            return VisualEffects;
         }
 
     }
