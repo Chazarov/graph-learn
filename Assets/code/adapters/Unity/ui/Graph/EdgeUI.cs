@@ -1,6 +1,7 @@
 using Domain;
 using GraphMaster.UnityAdapter.UI;
 using GraphMaster.UnityAdapter.VisualEffects;
+using GraphMaster.Visualization;
 using System;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace GraphMaster.UnityAdapter
     public class EdgeUI : MonoBehaviour, Domain.GraphEdgeInterface<NodeUI>, GraphPartInterface, GraphObjectUiActionsInterface
     {
         [SerializeField] private EdgeVisualEffects visualEffects;
+        [SerializeField] private UiActionsManager uiActionsManager;
 
         private GraphEdgeInterface<NodeUI> sourse;
         private NodeUI sourceNode;
@@ -24,7 +26,11 @@ namespace GraphMaster.UnityAdapter
         {
             if (!isSelected)
             {
-                Select();
+                if (uiActionsManager.GetSelectGraphObjectsAllowed())
+                {
+                    Select();
+                }
+                
             }
             else
             {
@@ -76,7 +82,7 @@ namespace GraphMaster.UnityAdapter
             }
         }
 
-        public NodeUI GetSourceNode()
+        public NodeUI GetSourseNode()
         {
             return sourceNode;
         }
@@ -136,9 +142,19 @@ namespace GraphMaster.UnityAdapter
             visualEffects.SetDirectedView(value);
         }
 
-        public GraphObjectVisualEffectsInterface GetVisualEffects()
+        public VisualEffects.GraphObjectVisualEffectsInterface GetVisualEffects()
         {
             return visualEffects;
+        }
+
+        public string GetSourseName()
+        {
+            return sourse.GetSourseName();
+        }
+
+        public string GetTargetName()
+        {
+            return sourse.GetTargetName();
         }
     }
 

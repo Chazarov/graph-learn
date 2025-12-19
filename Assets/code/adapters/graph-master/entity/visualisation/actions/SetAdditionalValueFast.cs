@@ -1,13 +1,13 @@
 using UnityEngine;
 
-namespace GraphMaster.UnityAdapter.Visualization.Actions
+namespace GraphMaster.Visualization.Actions
 {
-    public class SetAdditionalValue : ActionInterface
+    public class SetAdditionalValueFast : ActionInterface
     {
         public string newValue;
         public GraphPartInterface target;
 
-        public SetAdditionalValue(string newValue, GraphPartInterface target)
+        public SetAdditionalValueFast(string newValue, GraphPartInterface target)
         {
             this.newValue = newValue;
             this.target = target;
@@ -17,14 +17,14 @@ namespace GraphMaster.UnityAdapter.Visualization.Actions
         {
             if (context is PerformerInterface performer)
             {
-                performer.SetAdditionalValue(target, newValue);
+                performer.SetAdditionalValueFast(target, newValue);
             }
         }
 
         public override string ToString()
         {
-            return "SetAdditionalValue" + "   " + target.GetName() + "  " + newValue;
+            return "SetAdditionalValueFast" + "   " + target.GetName() + "  " + newValue;
         }
     }
-      
+
 }

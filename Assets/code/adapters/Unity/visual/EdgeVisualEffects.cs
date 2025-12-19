@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using GraphMaster.UnityAdapter.UI;
+using GraphMaster.Visualization;
 
 namespace GraphMaster.UnityAdapter.VisualEffects
 {
@@ -15,12 +16,15 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         [Header("Select animation")]
         [SerializeField] private Color selectColor;
-        [SerializeField] private float selectAnimationDuraton = 0.3f;
+        [SerializeField] private float changeColorAnimationDuration = 0.3f;
 
         [Header("Mark Animation")]
         [SerializeField] private float markAnimationDuration = 0.5f;
         [SerializeField] private Color markColor;
-        
+
+        [Header("Hide it animation")]
+        [SerializeField] private Color hideColor;
+
 
         [Header("Directed View")]
         [SerializeField] private int edgeOffsetPositionNumber = 0;
@@ -179,7 +183,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             {
                 StopCoroutine(selectCoroutine);
             }
-            selectCoroutine = StartCoroutine(AnimateColorTransition(selectColor, selectAnimationDuraton));
+            selectCoroutine = StartCoroutine(AnimateColorTransition(selectColor, changeColorAnimationDuration));
         }
 
         public void DeselectThisAnimation()
@@ -188,7 +192,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             {
                 StopCoroutine(selectCoroutine);
             }
-            selectCoroutine = StartCoroutine(AnimateColorToInitial(selectAnimationDuraton));
+            selectCoroutine = StartCoroutine(AnimateColorToInitial(changeColorAnimationDuration));
         }
 
         public void UpdateWeightDisplay(float weight)
@@ -342,6 +346,44 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
             activeLine.startColor = initialStartColor;
             activeLine.endColor = initialEndColor;
+        }
+
+        public void SetColor(Color color)
+        {
+            if (selectCoroutine != null)
+            {
+                StopCoroutine(selectCoroutine);
+            }
+            selectCoroutine = StartCoroutine(AnimateColorTransition(color, changeColorAnimationDuration));
+        }
+
+        public void SetColorTobase()
+        {
+            if (selectCoroutine != null)
+            {
+                StopCoroutine(selectCoroutine);
+            }
+            selectCoroutine = StartCoroutine(AnimateColorToInitial(changeColorAnimationDuration));
+        }
+
+        public void HideIt()
+        {
+            this.SetColor(this.hideColor);
+        }
+
+        public void ShowIt()
+        {
+            this.SetColorTobase();
+        }
+
+        public void SetColor(System.Drawing.Color color)
+        {
+            this.SetColor(ToUnityColor(color));
+        }
+
+        private Color ToUnityColor(System.Drawing.Color sysColor)
+        {
+            return new Color(sysColor.R / 255f, sysColor.G / 255f, sysColor.B / 255f, sysColor.A / 255f);
         }
     }
 }

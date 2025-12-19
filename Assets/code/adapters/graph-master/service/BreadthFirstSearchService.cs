@@ -1,5 +1,5 @@
 using Domain;
-using GraphMaster.UnityAdapter.Visualization.Actions;
+using GraphMaster.Visualization.Actions;
 using System.Collections.Generic;
 
 namespace GraphMaster

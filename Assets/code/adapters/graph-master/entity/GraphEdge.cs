@@ -14,7 +14,7 @@ namespace GraphMaster
         private string name;
 
         private TNode targetNode;
-        private TNode sourceNode;
+        private TNode sourseNode;
 
         
 
@@ -24,7 +24,7 @@ namespace GraphMaster
         public GraphEdge(TNode sourceNode, TNode targetNode, float weight)
         {
             this.targetNode = targetNode;
-            this.sourceNode = sourceNode;
+            this.sourseNode = sourceNode;
             SetWeight(weight);
         }
         // Конструктор для невзвешенного ребра
@@ -47,14 +47,24 @@ namespace GraphMaster
             return hasWeight;
         }
 
-        public TNode GetSourceNode()
+        public TNode GetSourseNode()
         {
-            return this.sourceNode;
+            return this.sourseNode;
         }
 
         public TNode GetTargetNode()
         {
             return this.targetNode;
+        }
+
+        public string GetSourseName()
+        {
+            return this.sourseNode.GetName();
+        }
+
+        public string GetTargetName()
+        {
+            return this.targetNode.GetName();
         }
 
         public string GetName()
@@ -69,7 +79,7 @@ namespace GraphMaster
 
         public void SetSourseNode(TNode node)
         {
-            this.sourceNode = node;
+            this.sourseNode = node;
         }
 
         public void SetTargetNode(TNode node)

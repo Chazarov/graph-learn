@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: UiActionsManager
   m_EditorClassIdentifier: 
   rootReplacementIsAllowed: 1
+  selectGraphObjectsAllowed: 1

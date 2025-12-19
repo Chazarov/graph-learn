@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace GraphMaster.UnityAdapter.VisualEffects
 {
 
-    public interface GraphObjectVisualEffectsWithAdValueInterface: GraphObjectVisualEffectsInterface
+    public interface GraphObjectVisualEffectsWithAdValueInterface : GraphObjectVisualEffectsInterface
     {
         public void SetAdditionalValue(string NewValue);
 
@@ -24,14 +24,17 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         private Vector2 defaultScale;
 
         [SerializeField] private SpriteRenderer nodeSpriteRenderer;
-        
+
         [Header("Mark Animation")]
         [SerializeField] private SpriteRenderer markSpriteRenderer;
         [SerializeField] private Animator markAnimator;
-        
+
 
         [Header("Root Animation")]
         [SerializeField] private GameObject rootMark;
+
+        [Header("Hide it animation")]
+        [SerializeField] private Color hideColor;
 
 
         [Header("Additional Values")]
@@ -40,6 +43,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         private Vector3 startMarkRootScale;
         private bool isRoot = false;
+        private bool isMarked = false;
 
 
         private void Start()
@@ -97,7 +101,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
             AdditionalValueController.RemoveValue();
         }
 
-        
+
         public void MarkAsRootAnimation()
         {
 
@@ -112,14 +116,14 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void RemoveRootMarkAnimation()
         {
-            
-            if(isRoot)
-            {   
+
+            if (isRoot)
+            {
                 this.rootMark.transform.SetParent(null);
                 rootMark.transform.localScale = startMarkRootScale;
                 isRoot = false;
             }
-            
+
         }
 
         public void SelectThisAnimation()
@@ -161,6 +165,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void MarkThis()
         {
+            isMarked = true;
             if (markAnimator != null)
             {
                 markAnimator.SetBool("Mark", true);
@@ -169,13 +174,46 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         public void RemoveMark()
         {
+            isMarked = false;
             if (markAnimator != null)
             {
                 markAnimator.SetBool("Mark", false);
             }
         }
 
+        public void SetColor(System.Drawing.Color color)
+        {
+            this.SetColor( ToUnityColor(color));
+        }
 
+        public void SetColor(Color color)
+        {
+            if(this.isMarked)
+            {
+                RemoveMark();
+            }
+            this.nodeSpriteRenderer.color = color;
+        }
+
+        public void SetColorTobase()
+        {
+            this.nodeSpriteRenderer.color = this.defaultColor;
+        }
+
+        public void HideIt()
+        {
+            SetColor(this.hideColor);
+        }
+
+        public void ShowIt()
+        {
+            SetColorTobase();
+        }
+
+        private Color ToUnityColor(System.Drawing.Color sysColor)
+        {
+            return new Color(sysColor.R / 255f, sysColor.G / 255f, sysColor.B / 255f, sysColor.A / 255f);
+        }
 
     }
 }

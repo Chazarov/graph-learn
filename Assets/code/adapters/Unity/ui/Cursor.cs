@@ -3,6 +3,7 @@ using GraphMaster.UnityAdapter.VisualEffects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
@@ -27,10 +28,15 @@ namespace GraphMaster.UnityAdapter.Visualization
         private Coroutine currentMovementCoroutine = null;
 
         private List<GraphObjectVisualEffectsInterface> markedObjects = new();
+        private List<GraphObjectVisualEffectsInterface> hidedObjects = new();
+        private List<GraphObjectVisualEffectsInterface> paintedObjects = new();
+        private List<GraphObjectVisualEffectsWithAdValueInterface> addValuesObjects = new();
 
         [SerializeField] private CursorAnimationHandler cursorAnimationHandler;
         public event Action OnMovementComplete;
         private bool whitingTheAnimation = false;
+
+        public event Action OnAllActionsComplete;
 
         public bool IsMoving => currentMovementCoroutine != null;
 
@@ -39,6 +45,7 @@ namespace GraphMaster.UnityAdapter.Visualization
         {
             foreach (ActionInterface action in actions)
             {
+
                 action.Execute(this);
                 while (IsMoving)
                 {
@@ -46,6 +53,9 @@ namespace GraphMaster.UnityAdapter.Visualization
                 }
 
             }
+
+            OnAllActionsComplete.Invoke();
+
         }
 
 
@@ -132,6 +142,7 @@ namespace GraphMaster.UnityAdapter.Visualization
                 var visualEffects = uiActions.GetVisualEffects();
                 if (visualEffects is GraphObjectVisualEffectsWithAdValueInterface withAdValue)
                 {
+                    addValuesObjects.Add(withAdValue);
                     withAdValue.SetAdditionalValue(newValue);
                 }
                 else
@@ -151,7 +162,7 @@ namespace GraphMaster.UnityAdapter.Visualization
             {
                 StopCoroutine(currentMovementCoroutine);
             }
-
+            addValuesObjects.Add(graphObject);
             currentMovementCoroutine = StartCoroutine(SmoothHarassmentRoutine(moveDuration,
                 graphObject, new SetAdditionalValueVA(newValue)));
         }
@@ -165,13 +176,30 @@ namespace GraphMaster.UnityAdapter.Visualization
         }
 
 
-        public void UnmarkAll()
+        public void ClearAll()
         {
             foreach(var obj in markedObjects)
             {
                 obj.RemoveMark();
             }
             markedObjects.Clear();
+
+            foreach(var obj in hidedObjects)
+            {
+                obj.ShowIt();
+            }
+            hidedObjects.Clear();
+
+            foreach (var obj in this.paintedObjects)
+            {
+                obj.SetColorTobase();
+            }
+            paintedObjects.Clear();
+
+            foreach (var obj in this.addValuesObjects)
+            {
+                obj.HideAdditionalValue();
+            }
         }
 
 
@@ -261,6 +289,51 @@ namespace GraphMaster.UnityAdapter.Visualization
             OnMovementComplete?.Invoke();
         }
 
+        public void SetColor(GraphPartInterface target, System.Drawing.Color color)
+        {
+
+            if (target is GraphObjectUiActionsInterface uiActions)
+            {
+                var visualEffects = uiActions.GetVisualEffects();
+                if (currentMovementCoroutine != null)
+                {
+                    StopCoroutine(currentMovementCoroutine);
+                }
+
+                currentMovementCoroutine = StartCoroutine(SmoothHarassmentRoutine(moveDuration,
+                    visualEffects, new SetColorVA(color)));
+                paintedObjects.Add(visualEffects);
+
+            }
+            else
+            {
+                Debug.LogWarning("GraphPartInterface does not implement GraphObjectUiActionsInterface");
+            }
+
+
+        }
+
+        public void HideIt(GraphPartInterface target)
+        {
+            if (target is GraphObjectUiActionsInterface uiActions)
+            {
+                var visualEffects = uiActions.GetVisualEffects();
+                if (currentMovementCoroutine != null)
+                {
+                    StopCoroutine(currentMovementCoroutine);
+                }
+
+                currentMovementCoroutine = StartCoroutine(SmoothHarassmentRoutine(moveDuration,
+                    visualEffects, new HideItVA()));
+                hidedObjects.Add(visualEffects);
+
+            }
+            else
+            {
+                Debug.LogWarning("GraphPartInterface does not implement GraphObjectUiActionsInterface");
+            }
+        }
+
         private interface VisualAction<T> where T: GraphObjectVisualEffectsInterface
         {
             public void Execute(T obj);
@@ -286,6 +359,30 @@ namespace GraphMaster.UnityAdapter.Visualization
             public void Execute(GraphObjectVisualEffectsWithAdValueInterface performer)
             {
                 performer.SetAdditionalValue(newValue);
+            }
+        }
+
+        private class SetColorVA: VisualAction<GraphObjectVisualEffectsInterface>
+        {
+            private System.Drawing.Color color;
+            public SetColorVA(System.Drawing.Color color)
+            {
+                this.color = color;
+            }
+
+            public void Execute(GraphObjectVisualEffectsInterface performer)
+            {
+                performer.SetColor(color);
+            }
+        }
+
+        private class HideItVA : VisualAction<GraphObjectVisualEffectsInterface>
+        {
+            public HideItVA() { }
+
+            public void Execute(GraphObjectVisualEffectsInterface performer)
+            {
+                performer.HideIt();
             }
         }
     }

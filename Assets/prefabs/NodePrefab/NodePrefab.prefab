@@ -841,6 +841,7 @@ MonoBehaviour:
   markSpriteRenderer: {fileID: 8833711737606473896}
   markAnimator: {fileID: 9123510437589443513}
   rootMark: {fileID: 0}
+  hideColor: {r: 0, g: 0, b: 0, a: 0}
   AdditionalValueController: {fileID: 8120640754192914282}
 --- !u!95 &9123510437589443513
 Animator:

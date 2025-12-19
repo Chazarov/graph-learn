@@ -1,5 +1,5 @@
 using Domain;
-using GraphMaster.UnityAdapter.Visualization.Actions;
+using GraphMaster.Visualization.Actions;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
@@ -8,8 +8,8 @@ using UnityEngine;
 namespace GraphMaster
 {
     public class DijkstraVisualisationService<TNode, TEdge>
-        where TNode : GraphNodeInterface, GraphPartInterface, GraphObjectUiActionsInterface
-        where TEdge : GraphEdgeInterface<TNode>, GraphPartInterface, GraphObjectUiActionsInterface
+        where TNode : GraphNodeInterface, GraphPartInterface
+        where TEdge : GraphEdgeInterface<TNode>, GraphPartInterface
     {
         public List<ActionInterface> MakeDijkstra(GraphInterface<TNode, TEdge> graph)
         {

@@ -1,17 +1,14 @@
-using GraphMaster.UnityAdapter.UI;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using GraphMaster.UnityAdapter.VisualEffects;
 
-public interface GraphObjectUiActionsInterface
+namespace GraphMaster.UnityAdapter.VisualEffects
 {
-    public void Select();
+    public interface GraphObjectUiActionsInterface
+    {
+        public void Select();
 
-    public void Deselect();
+        public void Deselect();
 
-    public GraphObjectVisualEffectsInterface GetVisualEffects();
-
-
-
-
+        public GraphObjectVisualEffectsInterface GetVisualEffects();
+    }
 }
+

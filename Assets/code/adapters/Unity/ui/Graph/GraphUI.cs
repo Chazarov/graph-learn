@@ -301,7 +301,7 @@ namespace GraphMaster.UnityAdapter
             List<EdgeUI> edgesToDelete = new List<EdgeUI>();
             foreach (EdgeUI edge in sourse.GetEdges())
             {
-                if (edge.GetSourceNode().GetName() == nodeName || edge.GetTargetNode().GetName() == nodeName)
+                if (edge.GetSourseNode().GetName() == nodeName || edge.GetTargetNode().GetName() == nodeName)
                 {
                     edgesToDelete.Add(edge);
                 }
@@ -332,7 +332,7 @@ namespace GraphMaster.UnityAdapter
             this.selectedEdges.Remove(edge);
             sourse.DeleteEdge(edge);
             Destroy(edge.gameObject);
-            this.UpdateDirectedEdgesViews(edge.GetSourceNode(), edge.GetTargetNode());
+            this.UpdateDirectedEdgesViews(edge.GetSourseNode(), edge.GetTargetNode());
         }
 
 

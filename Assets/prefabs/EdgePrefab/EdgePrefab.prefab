@@ -562,6 +562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualEffects: {fileID: 3063531433152806472}
+  uiActionsManager: {fileID: 11400000, guid: 0827024b2db75c54791293b8d80c20fd, type: 2}
 --- !u!114 &3063531433152806472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -580,9 +581,10 @@ MonoBehaviour:
   weightText: {fileID: 1477226910510868275}
   edgeToolBar: {fileID: 3198972815900863546}
   selectColor: {r: 0.7921569, g: 0.5254902, b: 0.5254902, a: 1}
-  selectAnimationDuraton: 0.3
+  changeColorAnimationDuration: 0.3
   markAnimationDuration: 1
   markColor: {r: 0.70980394, g: 0.19339621, b: 0.20392157, a: 0.9137255}
+  hideColor: {r: 0, g: 0, b: 0, a: 0}
   edgeOffsetPositionNumber: 0
   spreadKof: 0.7
   directedLineSegmentsCount: 50

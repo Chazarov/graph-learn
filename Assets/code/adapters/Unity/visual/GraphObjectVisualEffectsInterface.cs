@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+using GraphMaster.Visualization.Actions;
 using UnityEngine;
 
-public interface GraphObjectVisualEffectsInterface
-{
-    public void SelectThisAnimation();
 
-    public void DeselectThisAnimation();
+namespace GraphMaster.UnityAdapter.VisualEffects 
+{ 
+    public interface GraphObjectVisualEffectsInterface : GraphMaster.Visualization.GraphObjectVisualEffectsInterface
+    {
 
-    public void MarkThis();
+        public void SetColor(Color color);
+        public Vector3 GetCenterPosition();
 
-    public void RemoveMark();
 
-    public Vector3 GetCenterPosition();
-
-    
+    }
 }
+
+
+

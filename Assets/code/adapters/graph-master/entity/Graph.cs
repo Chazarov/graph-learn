@@ -64,7 +64,7 @@ namespace GraphMaster
 
         public TEdge AddEdge(TEdge edge)
         {
-            string sourseName = edge.GetSourceNode().GetName();
+            string sourseName = edge.GetSourseNode().GetName();
             string targetName = edge.GetTargetNode().GetName();
             string edgeName = edge.GetName();
             float edgeWeight = edge.GetWeight();
@@ -96,7 +96,7 @@ namespace GraphMaster
 
             string edgeName = edge.GetName();
             float edgeWeight = edge.GetWeight();
-            string sourceName = edge.GetSourceNode().GetName();
+            string sourceName = edge.GetSourseNode().GetName();
             string targetName = edge.GetTargetNode().GetName();
 
             edgesMap.Remove(edgeName);

@@ -36,7 +36,11 @@ namespace GraphMaster.UnityAdapter.UI
             {
                 MarkAsRoot();
             }
-            this.Select();
+            if (uiActionsManager.GetSelectGraphObjectsAllowed())
+            {
+                this.Select();
+            }
+            
             prevPressTime = Time.time;
         }
 

@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace GraphMaster.UnityAdapter.Visualization.Actions
+namespace GraphMaster.Visualization.Actions
 {
     
     public class MarkThis : ActionInterface
