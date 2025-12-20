@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
-public class UnmarkThisFast : MonoBehaviour
+
+namespace GraphMaster.Visualization.Actions
 {
-    // Start is called before the first frame update
-    void Start()
+    public class UnmarkThisFast : ActionInterface
     {
-        
-    }
+        private GraphPartInterface part;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public UnmarkThisFast(GraphPartInterface part)
+        {
+            this.part = part;
+        }
+
+        public void Execute(object context)
+        {
+            if (context is PerformerInterface performer)
+            {
+                performer.UnmarkItFast(part);
+            }
+        }
     }
 }
+

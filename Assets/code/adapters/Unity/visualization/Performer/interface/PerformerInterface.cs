@@ -6,11 +6,15 @@ using UnityEngine;
 
 public interface PerformerInterface
 {
-    void MarkThis(GraphPartInterface graphObject);
-    void SetAdditionalValue(GraphPartInterface graphObject, string newValue);
-    void SetAdditionalValueFast(GraphPartInterface graphObject, string newValue);
+    public void MarkThis(GraphPartInterface graphObject);
+    public  void SetAdditionalValue(GraphPartInterface graphObject, string newValue);
+    public  void SetAdditionalValueFast(GraphPartInterface graphObject, string newValue);
 
-    void SetColor(GraphPartInterface target, System.Drawing.Color color);
+    public  void SetColor(GraphPartInterface target, System.Drawing.Color color);
 
-    void HideIt(GraphPartInterface target);
+    public void HideIt(GraphPartInterface target);
+
+    public void UnmarkItFast(GraphPartInterface target);
+
+    public void HideAdditionalValueFast(GraphPartInterface target);
 }

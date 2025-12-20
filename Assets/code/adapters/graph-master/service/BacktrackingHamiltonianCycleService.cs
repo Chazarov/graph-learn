@@ -4,24 +4,27 @@ using System.Collections.Generic;
 
 namespace GraphMaster
 {
-    public class BacktrackingService<TNode, TEdge>
+    public class BacktrackingHamiltonianCycleService<TNode, TEdge>
         where TNode : GraphNodeInterface, GraphPartInterface
         where TEdge : GraphEdgeInterface<TNode>, GraphPartInterface
     {
+        private HamiltonianCheckService<TNode, TEdge> hamiltonianCheck = new();
+
         public List<ActionInterface> FindHamiltonianPath(GraphInterface<TNode, TEdge> graph)
         {
             List<ActionInterface> actions = new();
 
-            if (!graph.HasNodes())
-                return actions;
+            hamiltonianCheck.CheckHamiltonian(graph);
 
             var adjMap = graph.GetAdjacencyMap();
             TNode startNode = graph.GetRoot();
             HashSet<string> visited = new();
             List<TNode> path = new();
+            List<TEdge> pathEdges = new();
 
             actions.Add(new MarkThis(startNode));
-            Backtrack(graph, adjMap, startNode, visited, path, actions);
+            actions.Add(new SetAdditionalValue("1", startNode));
+            Backtrack(graph, adjMap, startNode, visited, path, pathEdges, actions);
 
             return actions;
         }
@@ -32,6 +35,7 @@ namespace GraphMaster
             TNode currentNode,
             HashSet<string> visited,
             List<TNode> path,
+            List<TEdge> pathEdges,
             List<ActionInterface> actions)
         {
             string nodeName = currentNode.GetName();
@@ -47,7 +51,14 @@ namespace GraphMaster
             {
                 visited.Remove(nodeName);
                 path.RemoveAt(path.Count - 1);
-                actions.Add(new SetAdditionalValue("X", currentNode));
+                actions.Add(new UnmarkThisFast(currentNode));
+                actions.Add(new HideAdditionalValueFast(currentNode));
+                if (pathEdges.Count > 0)
+                {
+                    TEdge lastEdge = pathEdges[pathEdges.Count - 1];
+                    actions.Add(new UnmarkThisFast(lastEdge));
+                    pathEdges.RemoveAt(pathEdges.Count - 1);
+                }
                 return false;
             }
 
@@ -64,10 +75,12 @@ namespace GraphMaster
                     TEdge edge = edges[0];
                     TNode targetNode = graph.GetNode(targetName);
 
+                    pathEdges.Add(edge);
                     actions.Add(new MarkThis(edge));
                     actions.Add(new MarkThis(targetNode));
+                    actions.Add(new SetAdditionalValue((path.Count + 1).ToString(), targetNode));
 
-                    if (Backtrack(graph, adjMap, targetNode, visited, path, actions))
+                    if (Backtrack(graph, adjMap, targetNode, visited, path, pathEdges, actions))
                     {
                         return true;
                     }
@@ -76,10 +89,16 @@ namespace GraphMaster
 
             visited.Remove(nodeName);
             path.RemoveAt(path.Count - 1);
-            actions.Add(new SetAdditionalValue("X", currentNode));
+            actions.Add(new UnmarkThisFast(currentNode));
+            actions.Add(new HideAdditionalValueFast(currentNode));
+            if (pathEdges.Count > 0)
+            {
+                TEdge lastEdge = pathEdges[pathEdges.Count - 1];
+                actions.Add(new UnmarkThisFast(lastEdge));
+                pathEdges.RemoveAt(pathEdges.Count - 1);
+            }
 
             return false;
         }
     }
 }
-

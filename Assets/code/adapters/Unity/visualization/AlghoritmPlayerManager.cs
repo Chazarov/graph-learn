@@ -24,7 +24,7 @@ namespace GraphMaster.UnityAdapter.Visualization
         private BreadthFirstSearchService<NodeUI, EdgeUI> bfsService = new BreadthFirstSearchService<NodeUI, EdgeUI>();
         private DijkstraVisualisationService<NodeUI, EdgeUI> dijkstraService = new DijkstraVisualisationService<NodeUI, EdgeUI>();
         private HierholzerService<NodeUI, EdgeUI> heirholzerService = new HierholzerService<NodeUI, EdgeUI>();
-        private BacktrackingService<NodeUI, EdgeUI> backtrackingService = new BacktrackingService<NodeUI, EdgeUI>();
+        private BacktrackingHamiltonianCycleService<NodeUI, EdgeUI> backtrackingService = new BacktrackingHamiltonianCycleService<NodeUI, EdgeUI>();
 
         private void Awake()
         {
@@ -111,8 +111,17 @@ namespace GraphMaster.UnityAdapter.Visualization
             Graph<NodeUI, EdgeUI> graph = graphUI.GetGraph();
             if (!graph.HasNodes()) return;
 
-            List<ActionInterface> actions = backtrackingService.FindHamiltonianPath(graph);
-            this.StartVisualisation(actions);
+            try
+            {
+                List<ActionInterface> actions = backtrackingService.FindHamiltonianPath(graph);
+                this.StartVisualisation(actions);
+            }
+            catch (Exception e)
+            {
+                onVisualizationStart.Invoke();
+                rootExceptionHandler?.PublishError?.Invoke(e);
+                OnVisualisationEnd();
+            }
         }
 
         public void ClearVisualization()

@@ -250,7 +250,7 @@ namespace GraphMaster.UnityAdapter.Visualization
                 elapsedTime += Time.deltaTime;
                 float remainingTime = duration - elapsedTime;
             
-                if (!animationTriggered && pray != null && remainingTime <= pointAnimationDuration)
+                if (!animationTriggered  && ((remainingTime <= pointAnimationDuration) || (pointAnimationDuration == moveDuration)))
                 {
                     if (animator != null)
                     {
@@ -326,6 +326,40 @@ namespace GraphMaster.UnityAdapter.Visualization
                 currentMovementCoroutine = StartCoroutine(SmoothHarassmentRoutine(moveDuration,
                     visualEffects, new HideItVA()));
                 hidedObjects.Add(visualEffects);
+
+            }
+            else
+            {
+                Debug.LogWarning("GraphPartInterface does not implement GraphObjectUiActionsInterface");
+            }
+        }
+
+        public void UnmarkItFast(GraphPartInterface target)
+        {
+            if (target is GraphObjectUiActionsInterface uiActions)
+            {
+                var visualEffects = uiActions.GetVisualEffects();
+
+                visualEffects.RemoveMark();
+
+            }
+            else
+            {
+                Debug.LogWarning("GraphPartInterface does not implement GraphObjectUiActionsInterface");
+            }
+        }
+
+        public void HideAdditionalValueFast(GraphPartInterface target)
+        {
+            if (target is GraphObjectUiActionsInterface uiActions)
+            {
+                var visualEffects = uiActions.GetVisualEffects();
+
+                if (visualEffects is GraphObjectVisualEffectsWithAdValueInterface withAdValue)
+                {
+                    addValuesObjects.Add(withAdValue);
+                    withAdValue.HideAdditionalValue();
+                }
 
             }
             else

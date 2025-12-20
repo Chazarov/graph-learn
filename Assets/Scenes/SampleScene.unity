@@ -6695,7 +6695,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Backtracking
+  m_text: Backtracking for a Hamiltonian cycle
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 231ba5e3207953348b7cffb0c4c10f51, type: 2}
   m_sharedMaterial: {fileID: 7265750364243000807, guid: 231ba5e3207953348b7cffb0c4c10f51, type: 2}
@@ -7259,7 +7259,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2053126088}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.55569106
+  m_Size: 0.5112128
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10302,10 +10302,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a7cc482d842984bbbd33be2e27efc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 1.5
+  moveDuration: 0.5
   returnDuration: 5
   animator: {fileID: 6626313786153598647}
-  pointAnimationDuration: 1
+  pointAnimationDuration: 0.5
   cursorAnimationHandler: {fileID: 0}
 --- !u!222 &4223983612825973961
 CanvasRenderer:
