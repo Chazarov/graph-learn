@@ -25,6 +25,7 @@ namespace GraphMaster.UnityAdapter.Visualization
         private DijkstraVisualisationService<NodeUI, EdgeUI> dijkstraService = new DijkstraVisualisationService<NodeUI, EdgeUI>();
         private HierholzerService<NodeUI, EdgeUI> heirholzerService = new HierholzerService<NodeUI, EdgeUI>();
         private BacktrackingHamiltonianCycleService<NodeUI, EdgeUI> backtrackingService = new BacktrackingHamiltonianCycleService<NodeUI, EdgeUI>();
+        private LargestFirstColoringService<NodeUI, EdgeUI> coloringService = new LargestFirstColoringService<NodeUI, EdgeUI>();
 
         private void Awake()
         {
@@ -122,6 +123,17 @@ namespace GraphMaster.UnityAdapter.Visualization
                 rootExceptionHandler?.PublishError?.Invoke(e);
                 OnVisualisationEnd();
             }
+        }
+
+        public void StartLargestFirstColoring()
+        {
+            if (!ValidateComponents()) return;
+
+            Graph<NodeUI, EdgeUI> graph = graphUI.GetGraph();
+            if (!graph.HasNodes()) return;
+
+            List<ActionInterface> actions = coloringService.ColorGraph(graph);
+            this.StartVisualisation(actions);
         }
 
         public void ClearVisualization()
