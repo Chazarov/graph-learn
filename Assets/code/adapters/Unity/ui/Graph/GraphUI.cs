@@ -262,6 +262,24 @@ namespace GraphMaster.UnityAdapter
             EdgeDeselected.Invoke(edge.GetName());
         }
 
+        public void DeselectAll()
+        {
+            for (int i = 0; i < selectedEdges.Count; i++)
+            {
+                var edge = selectedEdges[i];
+                edge.Deselect();
+                EdgeDeselected.Invoke(edge.GetName());
+
+            }
+
+            for (int i = 0; i < selectedNodes.Count; i++)
+            {
+                var node = selectedNodes[i];
+                node.Deselect();
+
+            }
+
+        }
         public void CreateEdgeObject(NodeUI sourseNode, NodeUI targetNode)
         {
             CheckTheEdgePrefabContent(edgePrefab);
