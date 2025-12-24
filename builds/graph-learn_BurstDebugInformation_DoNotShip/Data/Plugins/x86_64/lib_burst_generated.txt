@@ -59,7 +59,7 @@ Library: C:\Users\andre\graph-learn\Temp\BurstOutput\Data\Plugins\x86_64\lib_bur
 --linker-options=PdbAltPath="graph-learn_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\andre\graph-learn\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.27f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
+--key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.27f1-x86_64/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=C:\Users\andre\graph-learn\Library\Burst
 --output=C:\Users\andre\graph-learn\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
@@ -160,7 +160,7 @@ Library: C:\Users\andre\graph-learn\Temp\BurstOutput\Data\Plugins\x86_64\lib_bur
 --linker-options=PdbAltPath="graph-learn_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\andre\graph-learn\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.27f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
+--key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.27f1-x86_64/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=C:\Users\andre\graph-learn\Library\Burst
 --output=C:\Users\andre\graph-learn\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
@@ -263,7 +263,7 @@ Library: C:\Users\andre\graph-learn\Temp\BurstOutput\Data\Plugins\x86_64\lib_bur
 --linker-options=PdbAltPath="graph-learn_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\andre\graph-learn\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.27f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
+--key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.27f1-x86_64/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=C:\Users\andre\graph-learn\Library\Burst
 --output=C:\Users\andre\graph-learn\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
@@ -332,7 +332,7 @@ Library: C:\Users\andre\graph-learn\Temp\BurstOutput\Data\Plugins\x86_64\lib_bur
 --linker-options=PdbAltPath="graph-learn_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\Users\andre\graph-learn\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.27f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
+--key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.27f1-x86_64/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=C:\Users\andre\graph-learn\Library\Burst
 --output=C:\Users\andre\graph-learn\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
