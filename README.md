@@ -2,9 +2,21 @@
 
 An educational **Unity** project for learning graphs and graph traversal/visualization algorithms.
 
+
 ---
-![demonstration](ffff.mp4)
+![presentation](demo/1.gif)
 ---
+![presentation](demo/2.gif)
+---
+![presentation](demo/3.gif)
+---
+![presentation](demo/4.gif)
+---
+![presentation](demo/5.gif)
+---
+![presentation](demo/6.gif)
+---
+
 
 
 ## Build
