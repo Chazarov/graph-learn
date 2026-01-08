@@ -19,8 +19,10 @@ namespace GraphMaster.UnityAdapter.VisualEffects
 
         [Header("Selection Animation")]
         [SerializeField] private Color selectedColor;
+        [SerializeField] private Color selectedTextColor;
         [SerializeField] private Vector2 selectedScale;
         private Color defaultColor;
+        private Color defaultTextColor;
         private Vector2 defaultScale;
 
         [SerializeField] private SpriteRenderer nodeSpriteRenderer;
@@ -49,6 +51,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         private void Start()
         {
             defaultColor = nodeSpriteRenderer.color;
+            defaultTextColor = nameVisual.color;
             defaultScale = transform.localScale;
         }
 
@@ -130,6 +133,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         {
 
             nodeSpriteRenderer.color = selectedColor;
+            nameVisual.color = selectedTextColor;
             transform.localScale = selectedScale;
 
 
@@ -138,6 +142,7 @@ namespace GraphMaster.UnityAdapter.VisualEffects
         public void DeselectThisAnimation()
         {
             nodeSpriteRenderer.color = defaultColor;
+            nameVisual.color = defaultTextColor;
             transform.localScale = defaultScale;
         }
 
