@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GraphMaster.UnityAdapter.UI
 {
-    public class NodeUI : MonoBehaviour, Domain.GraphNodeInterface, GraphPartInterface, GraphObjectUiActionsInterface
+    public class NodeUI : MonoBehaviour, Domain.IGraphNode, IGraphPart, GraphObjectUiActionsInterface
     {
         [SerializeField] public NodeVisualEffects VisualEffects;
 

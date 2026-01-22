@@ -90,7 +90,7 @@ namespace GraphMaster.UnityAdapter.Visualization
             currentMovementCoroutine = StartCoroutine(SmoothMoveRoutine(returnDuration, startPosition));
         }
 
-        public void MarkThis(GraphPartInterface graphObject)
+        public void MarkThis(IGraphPart graphObject)
         {
             if (graphObject is GraphObjectUiActionsInterface uiActions)
             {
@@ -115,7 +115,7 @@ namespace GraphMaster.UnityAdapter.Visualization
             markedObjects.Add(graphObject);
         }
 
-        public void SetAdditionalValue(GraphPartInterface graphObject, string newValue)
+        public void SetAdditionalValue(IGraphPart graphObject, string newValue)
         {
             if (graphObject is GraphObjectUiActionsInterface uiActions)
             {
@@ -135,7 +135,7 @@ namespace GraphMaster.UnityAdapter.Visualization
             }
         }
 
-        public void SetAdditionalValueFast(GraphPartInterface graphObject, string newValue)
+        public void SetAdditionalValueFast(IGraphPart graphObject, string newValue)
         {
             if (graphObject is GraphObjectUiActionsInterface uiActions)
             {
@@ -289,7 +289,7 @@ namespace GraphMaster.UnityAdapter.Visualization
             OnMovementComplete?.Invoke();
         }
 
-        public void SetColor(GraphPartInterface target, System.Drawing.Color color)
+        public void SetColor(IGraphPart target, System.Drawing.Color color)
         {
 
             if (target is GraphObjectUiActionsInterface uiActions)
@@ -313,7 +313,7 @@ namespace GraphMaster.UnityAdapter.Visualization
 
         }
 
-        public void HideIt(GraphPartInterface target)
+        public void HideIt(IGraphPart target)
         {
             if (target is GraphObjectUiActionsInterface uiActions)
             {
@@ -334,7 +334,7 @@ namespace GraphMaster.UnityAdapter.Visualization
             }
         }
 
-        public void UnmarkItFast(GraphPartInterface target)
+        public void UnmarkItFast(IGraphPart target)
         {
             if (target is GraphObjectUiActionsInterface uiActions)
             {
@@ -349,7 +349,7 @@ namespace GraphMaster.UnityAdapter.Visualization
             }
         }
 
-        public void HideAdditionalValueFast(GraphPartInterface target)
+        public void HideAdditionalValueFast(IGraphPart target)
         {
             if (target is GraphObjectUiActionsInterface uiActions)
             {

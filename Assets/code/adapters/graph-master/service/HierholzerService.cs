@@ -6,8 +6,8 @@ using System.Drawing;
 namespace GraphMaster
 {
     public class HierholzerService<TNode, TEdge>
-        where TNode : GraphNodeInterface, GraphPartInterface
-        where TEdge : GraphEdgeInterface<TNode>, GraphPartInterface
+        where TNode : IGraphNode, IGraphPart
+        where TEdge : IGraphEdge<TNode>, IGraphPart
     {
         public Color circuitColor = Color.LimeGreen;
         private EulerianCheckService<TNode, TEdge> eulerianCheck = new();

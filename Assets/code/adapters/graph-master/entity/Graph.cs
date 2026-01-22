@@ -1,16 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Domain;
-using System;
+using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using System.Xml.Linq;
-using Unity.Collections;
 
-namespace GraphMaster
+namespace GraphMaster.Entity
 {
-    public class Graph<TNode, TEdge> : GraphInterface<TNode, TEdge> where TNode : Domain.GraphNodeInterface where TEdge : Domain.GraphEdgeInterface<TNode>
+    public class Graph<TNode, TEdge> : GraphInterface<TNode, TEdge> where TNode : IGraphNode where TEdge : IGraphEdge<TNode>
     {
 
 
@@ -22,6 +16,7 @@ namespace GraphMaster
         // Algorithms with a directed weighed graph
         private Dictionary<string, Dictionary<string, List<TEdge>>> AdjacencyMap = new();
 
+        // Algorithms with a undirected graph
         private Dictionary<string, Dictionary<string, List<TEdge>>> ReversedAdjacencyMap = new();
 
         private bool parralelEdgesAreAllowed = false;
@@ -67,7 +62,6 @@ namespace GraphMaster
             string sourseName = edge.GetSourseNode().GetName();
             string targetName = edge.GetTargetNode().GetName();
             string edgeName = edge.GetName();
-            float edgeWeight = edge.GetWeight();
 
             CheckPossibilityOfAddingAnEdge(sourseName, targetName, edgeName);
             
@@ -95,7 +89,6 @@ namespace GraphMaster
             }
 
             string edgeName = edge.GetName();
-            float edgeWeight = edge.GetWeight();
             string sourceName = edge.GetSourseNode().GetName();
             string targetName = edge.GetTargetNode().GetName();
 
@@ -121,44 +114,6 @@ namespace GraphMaster
         }
 
        
-
-        public void CheckPossibilityOfAddingAnEdge(string sourseName, string targetName, string edgeName)
-        {
-
-            if (this.edgesMap.ContainsKey(edgeName))
-            {
-                throw new DublicateException("It is not possible to add the edge with same name twice.");
-            }
-
-            if (sourseName == targetName)
-            {
-                if(!this.loopsAreAllowed)
-                {
-                    throw new LoopsNotAllowed($"it is impossible to create an edge that starts and ends at the same vertex. Loops are not  allowed");
-                }
-            }
-
-            this.GetNode(sourseName);
-            this.GetNode(targetName);
-
-            if (!this.parralelEdgesAreAllowed)
-            {
-                if (AdjacencyMap[sourseName].ContainsKey(targetName))
-                {
-                    throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
-                }
-
-                if (!isDirected)
-                {
-                    if (ReversedAdjacencyMap[sourseName].ContainsKey(targetName))
-                    {
-                        throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
-                    }
-                }
-                
-                
-            }  
-        }
 
         public TNode AddNode(TNode node)
         {
@@ -216,6 +171,46 @@ namespace GraphMaster
             nodesMap.Remove(name);
             AdjacencyMap.Remove(name);
             ReversedAdjacencyMap.Remove(name);
+        }
+
+
+
+        public void CheckPossibilityOfAddingAnEdge(string sourseName, string targetName, string edgeName)
+        {
+
+            if (this.edgesMap.ContainsKey(edgeName))
+            {
+                throw new DublicateException("It is not possible to add the edge with same name twice.");
+            }
+
+            if (sourseName == targetName)
+            {
+                if (!this.loopsAreAllowed)
+                {
+                    throw new LoopsNotAllowed($"it is impossible to create an edge that starts and ends at the same vertex. Loops are not  allowed");
+                }
+            }
+
+            this.GetNode(sourseName);
+            this.GetNode(targetName);
+
+            if (!this.parralelEdgesAreAllowed)
+            {
+                if (AdjacencyMap[sourseName].ContainsKey(targetName))
+                {
+                    throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
+                }
+
+                if (!isDirected)
+                {
+                    if (ReversedAdjacencyMap[sourseName].ContainsKey(targetName))
+                    {
+                        throw new ParralelEdgesNotAllowed($" The graph already has an edge connecting nodes {sourseName} and {targetName}. Currently, parallel edges are prohibited in the graph.");
+                    }
+                }
+
+
+            }
         }
 
         public List<TEdge> GetEdgesBetween(string node1, string node2)

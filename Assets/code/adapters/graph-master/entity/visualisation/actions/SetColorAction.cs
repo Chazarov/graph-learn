@@ -7,10 +7,10 @@ namespace GraphMaster.Visualization.Actions
     public class SetColorAction: ActionInterface
     {
 
-        GraphPartInterface target;
+        IGraphPart target;
         Color color;
 
-        public SetColorAction(GraphPartInterface target, Color color)
+        public SetColorAction(IGraphPart target, Color color)
         {
             this.target = target;
             this.color = color;

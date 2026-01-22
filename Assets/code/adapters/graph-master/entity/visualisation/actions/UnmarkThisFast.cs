@@ -9,9 +9,9 @@ namespace GraphMaster.Visualization.Actions
 {
     public class UnmarkThisFast : ActionInterface
     {
-        private GraphPartInterface part;
+        private IGraphPart part;
 
-        public UnmarkThisFast(GraphPartInterface part)
+        public UnmarkThisFast(IGraphPart part)
         {
             this.part = part;
         }

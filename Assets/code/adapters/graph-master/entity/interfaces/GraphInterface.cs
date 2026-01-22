@@ -1,11 +1,12 @@
 using GraphMaster;
+using GraphMaster.Entity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Domain
 {
-    public interface GraphInterface <TNode, TEdge> where TNode : GraphNodeInterface where TEdge : GraphEdgeBaseInterface
+    public interface GraphInterface <TNode, TEdge> where TNode : IGraphNode where TEdge : IGraphEdge<TNode>
     {
         public bool HasNodes();
 
@@ -20,7 +21,6 @@ namespace Domain
         public int GetNodeCount();
 
         public void CheckPossibilityOfAddingAnEdge(string sourseName, string targetName, string edgeName);
-
 
 
         public TNode AddNode(TNode node);

@@ -5,9 +5,9 @@ namespace GraphMaster.Visualization.Actions
     public class SetAdditionalValueFast : ActionInterface
     {
         public string newValue;
-        public GraphPartInterface target;
+        public IGraphPart target;
 
-        public SetAdditionalValueFast(string newValue, GraphPartInterface target)
+        public SetAdditionalValueFast(string newValue, IGraphPart target)
         {
             this.newValue = newValue;
             this.target = target;

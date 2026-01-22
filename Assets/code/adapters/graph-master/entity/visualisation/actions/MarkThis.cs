@@ -7,9 +7,9 @@ namespace GraphMaster.Visualization.Actions
     
     public class MarkThis : ActionInterface
     {
-        private GraphPartInterface target;
+        private IGraphPart target;
 
-        public MarkThis(GraphPartInterface target)
+        public MarkThis(IGraphPart target)
         {
             this.target = target;
         }

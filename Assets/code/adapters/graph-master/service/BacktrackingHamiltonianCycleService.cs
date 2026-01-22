@@ -5,8 +5,8 @@ using System.Collections.Generic;
 namespace GraphMaster
 {
     public class BacktrackingHamiltonianCycleService<TNode, TEdge>
-        where TNode : GraphNodeInterface, GraphPartInterface
-        where TEdge : GraphEdgeInterface<TNode>, GraphPartInterface
+        where TNode : IGraphNode, IGraphPart
+        where TEdge : IGraphEdge<TNode>, IGraphPart
     {
         private HamiltonianCheckService<TNode, TEdge> hamiltonianCheck = new();
 

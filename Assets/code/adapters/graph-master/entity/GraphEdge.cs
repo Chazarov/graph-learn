@@ -1,57 +1,34 @@
 using Domain;
+using GraphMaster.Entity;
 
 namespace GraphMaster
 {
-    public class GraphEdge<TNode>: Domain.GraphEdgeInterface<TNode> where TNode : GraphNodeInterface
+    public class GraphEdge<TNode>: IGraphEdge<TNode> where TNode : IGraphNode
     {
-        private float weight;
-        private bool hasWeight = false;
-        private string name;
-
         private TNode targetNode;
         private TNode sourseNode;
 
+        private IEdgeData data;
+
+        private string name;
+
         
 
-
-        // Конструктор для взвешенного ребра
-        // 1: 
-        public GraphEdge(TNode sourceNode, TNode targetNode, float weight)
+ 
+        public GraphEdge(TNode sourceNode, TNode targetNode, string name, IEdgeData data)
         {
             this.targetNode = targetNode;
             this.sourseNode = sourceNode;
-            SetWeight(weight);
+            this.data = data;
+            this.name = name;
         }
-        // Конструктор для невзвешенного ребра
-        public GraphEdge(TNode sourceNode, TNode targetNode): this(sourceNode, targetNode, 1){}
+
    
-        public float GetWeight()
+
+        public IEdgeData GetData()
         {
-            return this.weight;
+            return data;
         }
-
-        public void SetWeight(float weight)
-        {
-            this.weight = weight;
-            this.hasWeight = true;
-        }
-
-
-        public bool HasWeight()
-        {
-            return hasWeight;
-        }
-
-        public TNode GetSourseNode()
-        {
-            return this.sourseNode;
-        }
-
-        public TNode GetTargetNode()
-        {
-            return this.targetNode;
-        }
-
         public string GetSourseName()
         {
             return this.sourseNode.GetName();
@@ -64,13 +41,9 @@ namespace GraphMaster
 
         public string GetName()
         {
-            return name;
+            return this.name;
         }
 
-        public void SetName(string name)
-        {
-            this.name = name;
-        }
 
         public void SetSourseNode(TNode node)
         {
@@ -79,7 +52,22 @@ namespace GraphMaster
 
         public void SetTargetNode(TNode node)
         {
-            this.targetNode= node;
+            this.targetNode = node;
+        }
+
+        public TNode GetSourseNode()
+        {
+            return sourseNode;
+        }
+
+        public TNode GetTargetNode()
+        {
+            return targetNode;
+        }
+
+        public IGraphPartData GetBaseData()
+        {
+            return data;
         }
     }
 

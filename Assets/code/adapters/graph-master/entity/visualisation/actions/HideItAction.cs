@@ -3,9 +3,9 @@ namespace GraphMaster.Visualization.Actions
 {
     public class HideItAction
     {
-        GraphPartInterface target;
+        IGraphPart target;
 
-        public HideItAction(GraphPartInterface target)
+        public HideItAction(IGraphPart target)
         {
             this.target = target;
         }

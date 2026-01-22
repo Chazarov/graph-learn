@@ -7,9 +7,9 @@ namespace GraphMaster.Visualization.Actions
 
     public class HideAdditionalValueFast : ActionInterface
     {
-        private GraphPartInterface target;
+        private IGraphPart target;
 
-        public HideAdditionalValueFast(GraphPartInterface target)
+        public HideAdditionalValueFast(IGraphPart target)
         {
             this.target = target;
         }

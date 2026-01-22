@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace GraphMaster.UnityAdapter
 {
-    public class Positioned2Node : MonoBehaviour, GraphNodeInterface
+    public class Positioned2Node : MonoBehaviour, IGraphNode
     {
 
         private GraphMaster.Positioned2Node sourse = new GraphMaster.Positioned2Node(new System.Numerics.Vector2(0, 0), "");
 
-        [SerializeField] private string nodeName;
+        private string nodeName;
 
 
         private void Start()
@@ -27,7 +27,6 @@ namespace GraphMaster.UnityAdapter
             }
             SetPosition(transform.position);
  
-            sourse.SetName(this.nodeName);
         }
 
 

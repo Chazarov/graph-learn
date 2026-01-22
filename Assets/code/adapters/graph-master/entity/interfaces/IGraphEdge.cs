@@ -1,6 +1,6 @@
-namespace Domain
+namespace GraphMaster.Entity
 {
-    public interface GraphEdgeInterface<TNode>:GraphEdgeBaseInterface where TNode : GraphNodeInterface
+    public interface IGraphEdge<TNode>: IGraphPart where TNode : IGraphNode
     {
        
         public TNode GetSourseNode();

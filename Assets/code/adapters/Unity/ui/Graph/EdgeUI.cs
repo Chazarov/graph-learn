@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace GraphMaster.UnityAdapter
 {
-    public class EdgeUI : MonoBehaviour, Domain.GraphEdgeInterface<NodeUI>, GraphPartInterface, GraphObjectUiActionsInterface
+    public class EdgeUI : MonoBehaviour, Domain.IGraphEdge<NodeUI>, IGraphPart, GraphObjectUiActionsInterface
     {
         [SerializeField] private EdgeVisualEffects visualEffects;
         [SerializeField] private UiActionsManager uiActionsManager;
 
-        private GraphEdgeInterface<NodeUI> sourse;
+        private IGraphEdge<NodeUI> sourse;
         private NodeUI sourceNode;
         private NodeUI targetNode;
 
@@ -56,7 +56,7 @@ namespace GraphMaster.UnityAdapter
         {
             CheckGameObjectContent();
             
-            GraphEdgeInterface<NodeUI> edge = new GraphEdge<NodeUI>(sourseNode, targetNode);
+            IGraphEdge<NodeUI> edge = new GraphEdge<NodeUI>(sourseNode, targetNode);
             
             this.sourse = edge;
             this.name = $"Edge {edgeName}";

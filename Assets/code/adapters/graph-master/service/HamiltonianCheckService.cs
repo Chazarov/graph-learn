@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace GraphMaster
 {
     public class HamiltonianCheckService<TNode, TEdge>
-        where TNode : GraphNodeInterface, GraphPartInterface
-        where TEdge : GraphEdgeInterface<TNode>, GraphPartInterface
+        where TNode : IGraphNode, IGraphPart
+        where TEdge : IGraphEdge<TNode>, IGraphPart
     {
         public void CheckHamiltonian(GraphInterface<TNode, TEdge> graph)
         {

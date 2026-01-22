@@ -5,9 +5,9 @@ namespace GraphMaster.Visualization.Actions
     public class SetAdditionalValue : ActionInterface
     {
         public string newValue;
-        public GraphPartInterface target;
+        public IGraphPart target;
 
-        public SetAdditionalValue(string newValue, GraphPartInterface target)
+        public SetAdditionalValue(string newValue, IGraphPart target)
         {
             this.newValue = newValue;
             this.target = target;

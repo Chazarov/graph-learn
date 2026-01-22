@@ -5,8 +5,8 @@ using System.Collections.Generic;
 namespace GraphMaster
 {
     public class DepthFirstSearchService<TNode, TEdge> : GraphTraversalServiceInterface<TNode, TEdge>
-        where TNode : GraphNodeInterface, GraphPartInterface
-        where TEdge : GraphEdgeInterface<TNode>, GraphPartInterface
+        where TNode : IGraphNode, IGraphPart
+        where TEdge : IGraphEdge<TNode>, IGraphPart
     {
         public List<ActionInterface> Traverse(GraphInterface<TNode, TEdge> graph)
         {

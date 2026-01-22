@@ -7,8 +7,8 @@ using System.Linq;
 namespace GraphMaster
 {
     public class LargestFirstColoringService<TNode, TEdge>
-        where TNode : GraphNodeInterface, GraphPartInterface
-        where TEdge : GraphEdgeInterface<TNode>, GraphPartInterface
+        where TNode : IGraphNode, IGraphPart
+        where TEdge : IGraphEdge<TNode>, IGraphPart
     {
         private List<Color> pastelColors = new List<Color>
         {

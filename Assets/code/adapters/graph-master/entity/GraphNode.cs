@@ -1,30 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
 using Domain;
+using GraphMaster.Entity;
 
 namespace GraphMaster
 {
 
-    public class GraphNode : GraphNodeInterface
+    public class GraphNode : IGraphNode
     {
+
+        private IGraphPartData data;
 
         private string name;
 
-        private string description = "";
-
-
-
-        public GraphNode(string name)
+        internal GraphNode(IGraphPartData data, string name)
         {
-            this.name = name;
+            this.data = data;
+            this.name = name;   
         }
 
-        public GraphNode(string name, string description) : this(name)
-        {
-            this.description = description;
-        }
 
 
         public string GetName()
@@ -32,20 +24,11 @@ namespace GraphMaster
             return name;
         }
 
-        public string GetDescription()
+        public IGraphPartData GetBaseData()
         {
-            return description;
+            return data;
         }
 
-        public void SetName(string name)
-        {
-            this.name = name;
-        }
-
-        public void SetDescription(string description)
-        {
-            this.description = description;
-        }
     }
 
 }
