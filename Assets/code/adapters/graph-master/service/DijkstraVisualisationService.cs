@@ -8,7 +8,7 @@ namespace GraphMaster
         where TNode : IGraphNode, IGraphPart
         where TEdge : IGraphEdge<TNode>, IGraphPart
     {
-        public List<ActionInterface> MakeDijkstra(GraphInterface<TNode, TEdge> graph)
+        public List<ActionInterface> MakeDijkstra(IGraph<TNode, TEdge> graph)
         {
             if (!graph.HasNodes())
             {
@@ -19,7 +19,7 @@ namespace GraphMaster
             return FindShortestPaths(graph, root);
         }
 
-        private List<ActionInterface> FindShortestPaths(GraphInterface<TNode, TEdge> graph, TNode startNode)
+        private List<ActionInterface> FindShortestPaths(IGraph<TNode, TEdge> graph, TNode startNode)
         {
             Dictionary<string, float> distances = new Dictionary<string, float>();
             HashSet<string> visitedNodes = new HashSet<string>();

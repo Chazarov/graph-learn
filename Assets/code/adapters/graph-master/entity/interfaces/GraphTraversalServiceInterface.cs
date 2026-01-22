@@ -7,6 +7,6 @@ namespace Domain
         where TNode : IGraphNode, IGraphPart
         where TEdge : IGraphEdge<TNode>, IGraphPart
     {
-        List<ActionInterface> Traverse(GraphInterface<TNode, TEdge> graph);
+        List<ActionInterface> Traverse(IGraph<TNode, TEdge> graph);
     }
 }

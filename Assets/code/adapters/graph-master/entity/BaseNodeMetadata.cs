@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.code.adapters.graph_master.entity
+namespace GraphMaster.Entity
 {
     internal class BaseNodeMetadata: IGraphPartData
     {

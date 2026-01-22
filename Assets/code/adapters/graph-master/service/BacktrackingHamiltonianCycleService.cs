@@ -10,7 +10,7 @@ namespace GraphMaster
     {
         private HamiltonianCheckService<TNode, TEdge> hamiltonianCheck = new();
 
-        public List<ActionInterface> FindHamiltonianPath(GraphInterface<TNode, TEdge> graph)
+        public List<ActionInterface> FindHamiltonianPath(IGraph<TNode, TEdge> graph)
         {
             List<ActionInterface> actions = new();
 
@@ -30,7 +30,7 @@ namespace GraphMaster
         }
 
         private bool Backtrack(
-            GraphInterface<TNode, TEdge> graph,
+            IGraph<TNode, TEdge> graph,
             Dictionary<string, Dictionary<string, List<TEdge>>> adjMap,
             TNode currentNode,
             HashSet<string> visited,

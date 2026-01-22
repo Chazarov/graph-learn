@@ -7,7 +7,7 @@ namespace GraphMaster
         where TNode : IGraphNode, IGraphPart
         where TEdge : IGraphEdge<TNode>, IGraphPart
     {
-        public void CheckEulerian(GraphInterface<TNode, TEdge> graph)
+        public void CheckEulerian(IGraph<TNode, TEdge> graph)
         {
             if (!graph.HasNodes())
                 throw new NotEulerianGraphException("Граф пуст");
@@ -63,7 +63,7 @@ namespace GraphMaster
                 throw new NotEulerianGraphException("Граф не связный");
         }
 
-        private bool IsConnected(GraphInterface<TNode, TEdge> graph, List<TNode> nodes, List<TEdge> edges, bool isDirected)
+        private bool IsConnected(IGraph<TNode, TEdge> graph, List<TNode> nodes, List<TEdge> edges, bool isDirected)
         {
             if (nodes.Count == 0) return true;
             if (edges.Count == 0 && nodes.Count > 1) return false;

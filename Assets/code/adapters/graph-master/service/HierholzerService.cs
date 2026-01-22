@@ -12,7 +12,7 @@ namespace GraphMaster
         public Color circuitColor = Color.LimeGreen;
         private EulerianCheckService<TNode, TEdge> eulerianCheck = new();
 
-        public List<ActionInterface> FindEulerianCycle(GraphInterface<TNode, TEdge> graph)
+        public List<ActionInterface> FindEulerianCycle(IGraph<TNode, TEdge> graph)
         {
             List<ActionInterface> actions = new();
 

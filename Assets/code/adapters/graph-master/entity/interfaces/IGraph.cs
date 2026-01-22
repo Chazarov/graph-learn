@@ -4,9 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Domain
+namespace GraphMaster.Entity
 {
-    public interface GraphInterface <TNode, TEdge> where TNode : IGraphNode where TEdge : IGraphEdge<TNode>
+    public interface IGraph <TNode, TEdge> where TNode : IGraphNode where TEdge : IGraphEdge<TNode>
     {
         public bool HasNodes();
 

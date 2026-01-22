@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Assets.code.adapters.graph_master.entity.interfaces
 {
-    internal interface IGraphObjectsCreator<TNode, TEdge> where TNode: IGraphNode where TEdge: IGraphEdge<TNode>
+    internal interface IGraphObjectsFabric<TNode, TEdge> where TNode: IGraphNode where TEdge: IGraphEdge<TNode>
     {
         public TNode CreateNode(IGraphPartData meta, string name);
 

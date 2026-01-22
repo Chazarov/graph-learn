@@ -8,7 +8,7 @@ namespace GraphMaster
         where TNode : IGraphNode, IGraphPart
         where TEdge : IGraphEdge<TNode>, IGraphPart
     {
-        public List<ActionInterface> Traverse(GraphInterface<TNode, TEdge> graph)
+        public List<ActionInterface> Traverse(IGraph<TNode, TEdge> graph)
         {
             List<ActionInterface> actions = new();
             

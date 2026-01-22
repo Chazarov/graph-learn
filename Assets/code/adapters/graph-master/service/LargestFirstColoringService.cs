@@ -30,7 +30,7 @@ namespace GraphMaster
             Color.FromArgb(221, 160, 221)
         };
 
-        public List<ActionInterface> ColorGraph(GraphInterface<TNode, TEdge> graph)
+        public List<ActionInterface> ColorGraph(IGraph<TNode, TEdge> graph)
         {
             List<ActionInterface> actions = new();
 

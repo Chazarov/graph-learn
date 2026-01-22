@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GraphMaster.Entity
 {
-    public class Graph<TNode, TEdge> : GraphInterface<TNode, TEdge> where TNode : IGraphNode where TEdge : IGraphEdge<TNode>
+    public class Graph<TNode, TEdge> : IGraph<TNode, TEdge> where TNode : IGraphNode where TEdge : IGraphEdge<TNode>
     {
 
 

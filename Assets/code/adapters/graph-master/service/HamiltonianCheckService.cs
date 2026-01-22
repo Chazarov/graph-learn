@@ -7,7 +7,7 @@ namespace GraphMaster
         where TNode : IGraphNode, IGraphPart
         where TEdge : IGraphEdge<TNode>, IGraphPart
     {
-        public void CheckHamiltonian(GraphInterface<TNode, TEdge> graph)
+        public void CheckHamiltonian(IGraph<TNode, TEdge> graph)
         {
             if (!graph.HasNodes())
                 throw new NotHamiltonianGraphException("Граф пуст");
@@ -45,7 +45,7 @@ namespace GraphMaster
                 throw new NotHamiltonianGraphException("Граф должен быть 2-вершинно-связным");
         }
 
-        private bool Is2VertexConnected(GraphInterface<TNode, TEdge> graph, List<TNode> nodes, List<TEdge> edges, bool isDirected)
+        private bool Is2VertexConnected(IGraph<TNode, TEdge> graph, List<TNode> nodes, List<TEdge> edges, bool isDirected)
         {
             if (nodes.Count < 3) return false;
 
